@@ -27,7 +27,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 <main class="main">
 <div class="top"><div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
-<div class="actions"><span id="who" class="muted"></span><button id="refresh" class="secondary" type="button">↻ Refresh</button><button id="logout" class="secondary" type="button">Log out</button></div></div>
+<div class="actions"><span id="who" class="muted"></span><button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="refresh" class="secondary" type="button">↻ Refresh</button><button id="logout" class="secondary" type="button">Log out</button></div></div>
 
 <section id="dashboard">
 <div class="cards">
@@ -39,6 +39,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 </div>
 <div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
 <div id="notice" class="notice">Connecting to Supabase...</div>
+<div id="batchNotice" class="notice" style="display:none"></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
@@ -119,8 +120,8 @@ async function load(){
  }
 }
 
-async function checkUSCIS(c,buttonEl=null){
- if(!c?.receipt_number)return;
+async function checkUSCIS(c,buttonEl=null,showAlert=true){
+ if(!c?.receipt_number)return {ok:false,receipt:c?.receipt_number||"",error:"Missing receipt number"};
  if(buttonEl){buttonEl.disabled=true;buttonEl.textContent="Checking...";}
  try{
    const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:c.receipt_number}});
@@ -148,28 +149,42 @@ async function checkUSCIS(c,buttonEl=null){
    const up=await db.from("cases").update(payload).eq("id",c.id);
    if(up.error)throw up.error;
 
-   await load();
-   setNotice("USCIS check completed for "+c.receipt_number+".");
+   return {ok:true,receipt:c.receipt_number,status:statusText};
  }catch(err){
-   alert("USCIS check failed for "+c.receipt_number+": "+(err.message||err));
+   const message=err.message||String(err);
+   if(showAlert)alert("USCIS check failed for "+c.receipt_number+": "+message);
+   return {ok:false,receipt:c.receipt_number,error:message};
  }finally{
    if(buttonEl){buttonEl.disabled=false;buttonEl.textContent="Check USCIS";}
  }
 }
 
 async function checkAllUSCIS(){
- const btn=$("checkAllBtn");
+ const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
  if(!rows.length){alert("There are no cases to check.");return;}
  if(!confirm("Check USCIS for all "+rows.length+" case(s)?"))return;
- btn.disabled=true;btn.textContent="Checking USCIS...";
+ buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
+ const batch=$("batchNotice");
+ if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Starting USCIS checks for "+rows.length+" case(s)...";}
+ let checked=0,failed=0,approved=0,rfe=0,denied=0;
  try{
-   for(const c of rows){
-     await checkUSCIS(c);
+   for(let i=0;i<rows.length;i++){
+     const result=await checkUSCIS(rows[i],null,false);
+     if(result.ok){
+       checked++;
+       if(/approved/i.test(result.status||""))approved++;
+       if(/rfe|noid/i.test(result.status||""))rfe++;
+       if(/denied/i.test(result.status||""))denied++;
+     }else{failed++;}
+     if(batch)batch.textContent="Checking USCIS: "+(i+1)+" of "+rows.length+"...";
      await new Promise(resolve=>setTimeout(resolve,250));
    }
-   alert("USCIS checking completed for all cases.");
+   await load();
+   const msg="USCIS batch check completed — Checked: "+checked+" | Failed: "+failed+" | Approved: "+approved+" | RFE/NOID: "+rfe+" | Denied: "+denied;
+   if(batch){batch.textContent=msg;batch.className=failed?"notice error":"notice";}
+   else alert(msg);
  }finally{
-   btn.disabled=false;btn.textContent="↻ Check All USCIS";
+   buttons.forEach(b=>{b.disabled=false;b.textContent="↻ Check All USCIS";});
  }
 }
 
@@ -227,6 +242,7 @@ $("addNav").addEventListener("click",()=>openModal(null));
 $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
 $("refresh").addEventListener("click",load);
+$("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
 $("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
