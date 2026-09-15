@@ -20,6 +20,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <aside class="side"><div class="brand">Immigrants <span>Guide</span></div><div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
+<button data-view="history">◷ Case History</button>
 <button id="addNav">＋ Add Case</button>
 <button data-view="alerts">⚑ Alerts</button>
 </div></aside>
@@ -43,6 +44,10 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 <section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search cases..."><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>Filed</th><th>Priority</th><th>Manager</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
+
+<section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."></div>
+<div class="notice" id="historyNotice">Loading history...</div>
+<div class="table-wrap"><table><thead><tr><th>Date / Time</th><th>Receipt</th><th>Beneficiary</th><th>Previous Status</th><th>New Status</th><th>Changed By</th></tr></thead><tbody id="historyBody"></tbody></table></div></div></section>
 
 <section id="alerts" style="display:none"><div class="panel"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div></section>
@@ -91,10 +96,10 @@ function draw(){
  $("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")).length;
 
  const a=filt(rows,$("dashSearch").value);
- $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.filing_date)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">No cases found.</td></tr>';
+ $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.filing_date)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">No cases found.</td></tr>';
 
  const b=filt(rows,$("caseSearch").value);
- $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="9" class="empty">No cases found.</td></tr>';
+ $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="9" class="empty">No cases found.</td></tr>';
 
  const z=rows.filter(isRfe);
  $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -109,6 +114,26 @@ async function load(){
  }catch(e){
    setNotice("Database error: "+(e.message||e),true);
    draw();
+ }
+}
+
+async function loadHistory(caseId=null){
+ if(!db)return;
+ $("historyNotice").textContent="Loading case history...";
+ $("historyNotice").className="notice";
+ try{
+  let q=db.from("case_history").select("*").order("created_at",{ascending:false}).limit(500);
+  if(caseId) q=q.eq("case_id",caseId);
+  const r=await q;
+  if(r.error) throw r.error;
+  let h=r.data||[];
+  const search=($("historySearch").value||"").toLowerCase().trim();
+  if(search) h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
+  $("historyNotice").textContent=h.length?"Showing "+h.length+" history record(s).":"No history records yet.";
+  $("historyBody").innerHTML=h.length?h.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status||"—")+'</td><td>'+badge(x.new_status||"—")+'</td><td>'+esc(x.changed_by||"—")+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
+ }catch(e){
+  $("historyNotice").textContent="History error: "+(e.message||e);
+  $("historyNotice").className="notice error";
  }
 }
 
@@ -136,7 +161,9 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
  $("dashboard").style.display=v==="dashboard"?"block":"none";
  $("cases").style.display=v==="cases"?"block":"none";
  $("alerts").style.display=v==="alerts"?"block":"none";
- $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":"RFE / NOID Alerts";
+ $("history").style.display=v==="history"?"block":"none";
+ $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":"RFE / NOID Alerts";
+ if(v==="history") loadHistory();
 }));
 
 $("addBtn").addEventListener("click",()=>openModal(null));
@@ -146,10 +173,19 @@ $("cancel").addEventListener("click",closeModal);
 $("refresh").addEventListener("click",load);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
+$("historySearch").addEventListener("input",()=>loadHistory());
 
 document.addEventListener("click",async e=>{
  const edit=e.target.closest(".editBtn"), del=e.target.closest(".deleteBtn");
  if(edit){const c=rows.find(x=>String(x.id)===String(edit.dataset.id));if(c)openModal(c)}
+ const hist=e.target.closest(".historyBtn");
+ if(hist){
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+  document.querySelector('.nav button[data-view="history"]').classList.add("active");
+  $("dashboard").style.display="none";$("cases").style.display="none";$("alerts").style.display="none";$("history").style.display="block";
+  $("title").textContent="Case History"; $("historySearch").value="";
+  loadHistory(hist.dataset.id);
+ }
  if(del){const c=rows.find(x=>String(x.id)===String(del.dataset.id));if(!c)return;if(confirm("Delete case "+c.receipt_number+"?")){const r=await db.from("cases").delete().eq("id",c.id);if(r.error)alert("Delete failed: "+r.error.message);else load()}}
 });
 
