@@ -27,7 +27,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 <main class="main">
 <div class="top"><div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
-<div class="actions"><span id="who" class="muted"></span><button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="refresh" class="secondary" type="button">↻ Refresh</button><button id="logout" class="secondary" type="button">Log out</button></div></div>
+<div class="actions"><span id="who" class="muted"></span><button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="sandboxTestBtn" class="secondary" type="button">🧪 Test Sandbox</button><button id="refresh" class="secondary" type="button">↻ Refresh</button><button id="logout" class="secondary" type="button">Log out</button></div></div>
 
 <section id="dashboard">
 <div class="cards">
@@ -120,12 +120,33 @@ async function load(){
  }
 }
 
+async function readFunctionError(err){
+ let status=null, body=null;
+ try{
+   status=err?.context?.status||null;
+   if(err?.context?.json) body=await err.context.json();
+ }catch(_){}
+ const apiError=body?.errors?.[0];
+ const raw=apiError?.message||body?.error||body?.message||err?.message||"USCIS function failed";
+ let message=raw;
+ if(status===404 && /staging|sandbox|receipt|not found/i.test(raw)){
+   message="This receipt number is not supported by the USCIS Sandbox. Use an official staging receipt for testing, or use Production access for live receipts.";
+ }else if(status===400 && /receipt|invalid/i.test(raw)){
+   message="USCIS rejected this receipt number. Please verify the receipt number and environment.";
+ }
+ return {status,body,message};
+}
+
 async function checkUSCIS(c,buttonEl=null,showAlert=true){
  if(!c?.receipt_number)return {ok:false,receipt:c?.receipt_number||"",error:"Missing receipt number"};
  if(buttonEl){buttonEl.disabled=true;buttonEl.textContent="Checking...";}
  try{
    const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:c.receipt_number}});
-   if(r.error)throw new Error(r.error.message||"USCIS function failed");
+   if(r.error){
+     const info=await readFunctionError(r.error);
+     if(showAlert)alert("USCIS check failed for "+c.receipt_number+"\n\n"+info.message+(info.status?"\n\nHTTP status: "+info.status:""));
+     return {ok:false,receipt:c.receipt_number,error:info.message,httpStatus:info.status};
+   }
    const cs=r.data?.case_status;
    if(!cs)throw new Error("USCIS returned no case status.");
 
@@ -159,6 +180,28 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
  }
 }
 
+async function testSandbox(){
+ const btn=$("sandboxTestBtn");
+ const batch=$("batchNotice");
+ const sandboxReceipt="EAC9999103402";
+ if(btn){btn.disabled=true;btn.textContent="Testing Sandbox...";}
+ if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Testing USCIS Sandbox with official staging receipt "+sandboxReceipt+"...";}
+ try{
+   const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:sandboxReceipt}});
+   if(r.error){
+     const info=await readFunctionError(r.error);
+     if(batch){batch.className="notice error";batch.textContent="Sandbox test failed: "+info.message+(info.status?" (HTTP "+info.status+")":"");}
+     return;
+   }
+   const cs=r.data?.case_status;
+   if(batch){batch.className="notice";batch.textContent="Sandbox test successful — "+sandboxReceipt+" → "+(cs?.current_case_status_text_en||"Status received")+". This test does not modify any case.";}
+ }catch(err){
+   if(batch){batch.className="notice error";batch.textContent="Sandbox test failed: "+(err.message||String(err));}
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent="🧪 Test Sandbox";}
+ }
+}
+
 async function checkAllUSCIS(){
  const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
  if(!rows.length){alert("There are no cases to check.");return;}
@@ -166,7 +209,7 @@ async function checkAllUSCIS(){
  buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
  const batch=$("batchNotice");
  if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Starting USCIS checks for "+rows.length+" case(s)...";}
- let checked=0,failed=0,approved=0,rfe=0,denied=0;
+ let checked=0,failed=0,unsupported=0,approved=0,rfe=0,denied=0;
  try{
    for(let i=0;i<rows.length;i++){
      const result=await checkUSCIS(rows[i],null,false);
@@ -175,12 +218,15 @@ async function checkAllUSCIS(){
        if(/approved/i.test(result.status||""))approved++;
        if(/rfe|noid/i.test(result.status||""))rfe++;
        if(/denied/i.test(result.status||""))denied++;
-     }else{failed++;}
+     }else{
+       failed++;
+       if(result.httpStatus===404)unsupported++;
+     }
      if(batch)batch.textContent="Checking USCIS: "+(i+1)+" of "+rows.length+"...";
      await new Promise(resolve=>setTimeout(resolve,250));
    }
    await load();
-   const msg="USCIS batch check completed — Checked: "+checked+" | Failed: "+failed+" | Approved: "+approved+" | RFE/NOID: "+rfe+" | Denied: "+denied;
+   const msg="USCIS batch check completed — Checked: "+checked+" | Failed: "+failed+" | Sandbox unsupported: "+unsupported+" | Approved: "+approved+" | RFE/NOID: "+rfe+" | Denied: "+denied;
    if(batch){batch.textContent=msg;batch.className=failed?"notice error":"notice";}
    else alert(msg);
  }finally{
