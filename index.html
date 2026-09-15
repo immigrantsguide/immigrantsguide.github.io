@@ -7,79 +7,75 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.login{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(420px,100%);background:#fff;padding:34px;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 15px 40px #0001}
-.logo{font-size:25px;font-weight:800}.logo span,.link{color:#2563eb}.muted{color:#64748b}
-label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}
-input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:9px;background:#fff}textarea{min-height:100px}
-.primary{border:0;border-radius:9px;padding:11px 16px;background:#2563eb;color:#fff;font-weight:700}.secondary{border:1px solid #cbd5e1;border-radius:9px;padding:10px 14px;background:#fff;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}
-.error,.success{margin-top:14px;padding:10px;border-radius:9px;font-size:13px}.error{color:#b91c1c;background:#fef2f2;border:1px solid #fecaca}.success{color:#166534;background:#f0fdf4;border:1px solid #bbf7d0}
-.app{display:none;min-height:100vh}.side{position:fixed;inset:0 auto 0 0;width:220px;background:#0f172a;color:#fff;padding:22px 12px}.brand{font-size:20px;font-weight:800;padding:10px 12px 28px}.brand span{color:#60a5fa}.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cbd5e1;padding:12px;border-radius:9px;margin:3px 0}.nav button.active,.nav button:hover{background:#1e293b;color:#fff}
-.main{margin-left:220px;padding:30px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.top h1{margin:0 0 5px;font-size:29px}.actions{display:flex;gap:9px;align-items:center}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}.card,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}.card{padding:18px}.num{font-size:28px;font-weight:800;margin-top:8px}.red{color:#dc2626}.green{color:#059669}.panel{overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h2{margin:0;font-size:17px}.search{max-width:330px}
-.notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:950px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}
-.modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}.card{width:min(430px,100%);background:#fff;padding:34px;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 15px 40px #0001}
+.logo{font-size:26px;font-weight:800}.blue{color:#2563eb}.muted{color:#64748b}
+label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}
+input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px}
+button{width:100%;margin-top:20px;padding:12px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+button:disabled{opacity:.65;cursor:wait}
+.msg{margin-top:14px;padding:11px;border-radius:9px;font-size:13px;line-height:1.45;display:none}
+.err{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.ok{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.info{display:block;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
 </style>
 </head>
 <body>
-<div id="login" class="login"><div class="login-card">
-<div class="logo">Immigrants <span>Guide</span></div><p class="muted">USCIS Case Tracker — secure staff login</p>
-<form id="loginForm"><label>Email</label><input id="email" type="email" required><label>Password</label><input id="password" type="password" required><button class="primary" style="width:100%;margin-top:20px">Log In</button></form><div id="loginMsg"></div>
-</div></div>
-
-<div id="app" class="app">
-<aside class="side"><div class="brand">Immigrants <span>Guide</span></div><div class="nav">
-<button class="active" data-v="dashboard">▦ Dashboard</button><button data-v="cases">▣ All Cases</button><button id="addNav">＋ Add Case</button><button data-v="alerts">⚑ Alerts</button>
-</div></aside>
-<main class="main">
-<div class="top"><div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div><div class="actions"><span id="who" class="muted"></span><button id="refresh" class="secondary">↻ Refresh</button><button id="logout" class="secondary">Log out</button></div></div>
-
-<section id="dashboard">
-<div class="cards"><div class="card">Total Cases<div id="total" class="num">0</div></div><div class="card">Pending<div id="pending" class="num">0</div></div><div class="card">RFE / NOID<div id="rfe" class="num red">0</div></div><div class="card">Approved<div id="approved" class="num green">0</div></div><div class="card">Denied<div id="denied" class="num red">0</div></div></div>
-<div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div><div class="notice">Connected to Supabase cloud database.</div><div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
-</section>
-
-<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search cases..."><button id="addBtn" class="primary">＋ Add Case</button></div></div><div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>Filed</th><th>Priority</th><th>Manager</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
-
-<section id="alerts" style="display:none"><div class="panel"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div><div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div></section>
-</main></div>
-
-<div id="modal" class="modal"><div class="modal-box"><div class="modal-head"><h2 id="modalTitle">Add Case</h2><button id="close" class="close">×</button></div>
-<form id="caseForm"><input id="caseId" type="hidden"><div class="grid">
-<div><label>Receipt Number *</label><input id="receipt" required placeholder="IOE1234567890"></div><div><label>Beneficiary Name *</label><input id="beneficiary" required></div>
-<div><label>Employer</label><input id="employer"></div><div><label>Form Type</label><input id="formType" placeholder="I-129"></div>
-<div><label>Filing Date</label><input id="filingDate" type="date"></div><div><label>Priority Date</label><input id="priorityDate" type="date"></div>
-<div><label>Current Status</label><select id="status"><option>Case Was Received</option><option>Case Is Being Actively Reviewed</option><option>RFE Sent</option><option>NOID Sent</option><option>Approved</option><option>Denied</option><option>Case Was Transferred</option><option>Other</option></select></div>
-<div><label>Status Date</label><input id="statusDate" type="date"></div><div><label>Case Manager</label><input id="manager"></div><div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
-</div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button class="primary">Save Case</button></div></form>
-</div></div>
-
+<div class="login">
+<div class="card">
+<div class="logo">Immigrants <span class="blue">Guide</span></div>
+<p class="muted">USCIS Case Tracker — secure staff login</p>
+<form id="loginForm">
+<label>Email</label><input id="email" type="email" autocomplete="username" required>
+<label>Password</label><input id="password" type="password" autocomplete="current-password" required>
+<button id="loginBtn" type="submit">Log In</button>
+</form>
+<div id="msg" class="msg"></div>
+</div>
+</div>
 <script>
-const URL="https://euzifpjzeuqdznkelxdq.supabase.co";
-const KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
-const db=supabase.createClient(URL,KEY); let rows=[]; let user=null;
-const $=x=>document.getElementById(x);
-const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-US"):"—";
-const rfe=x=>/rfe|noid/i.test(x.current_status||"");
-const pending=x=>!/approved|denied/i.test(x.current_status||"");
-function badge(s){let t=(s||"").toLowerCase(),c=t.includes("approved")?"approved":t.includes("denied")?"denied":t.includes("rfe")||t.includes("noid")?"rfe":"";return `<span class="badge ${c}">${esc(s||"—")}</span>`}
-function filt(a,q){q=(q||"").toLowerCase().trim();return q?a.filter(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.current_status,c.case_manager].some(v=>String(v||"").toLowerCase().includes(q))):a}
-function draw(){
- $("total").textContent=rows.length;$("pending").textContent=rows.filter(pending).length;$("rfe").textContent=rows.filter(rfe).length;$("approved").textContent=rows.filter(x=>/approved/i.test(x.current_status||"")).length;$("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")).length;
- let a=filt(rows,$("dashSearch").value);$("dashBody").innerHTML=a.length?a.map(c=>`<tr><td><b>${esc(c.receipt_number)}</b></td><td>${esc(c.beneficiary_name)}</td><td>${esc(c.employer)}</td><td>${esc(c.form_type)}</td><td>${badge(c.current_status)}</td><td>${date(c.filing_date)}</td><td><button class="link" onclick="edit(${c.id})">Edit</button> <button class="danger" onclick="del(${c.id})">Delete</button></td></tr>`).join(""):`<tr><td colspan="7" class="empty">No cases found.</td></tr>`;
- let b=filt(rows,$("caseSearch").value);$("caseBody").innerHTML=b.length?b.map(c=>`<tr><td><b>${esc(c.receipt_number)}</b></td><td>${esc(c.beneficiary_name)}</td><td>${esc(c.employer)}</td><td>${esc(c.form_type)}</td><td>${badge(c.current_status)}</td><td>${date(c.filing_date)}</td><td>${date(c.priority_date)}</td><td>${esc(c.case_manager)}</td><td><button class="link" onclick="edit(${c.id})">Edit</button> <button class="danger" onclick="del(${c.id})">Delete</button></td></tr>`).join(""):`<tr><td colspan="9" class="empty">No cases found.</td></tr>`;
- let z=rows.filter(rfe);$("alertBody").innerHTML=z.length?z.map(c=>`<tr><td><b>${esc(c.receipt_number)}</b></td><td>${esc(c.beneficiary_name)}</td><td>${badge(c.current_status)}</td><td>${date(c.status_date)}</td><td>${esc(c.notes)}</td><td><button class="link" onclick="edit(${c.id})">Open</button></td></tr>`).join(""):`<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>`;
+const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
+const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
+
+const msg=document.getElementById("msg");
+const btn=document.getElementById("loginBtn");
+
+function show(text,type="info"){
+  msg.className="msg "+type;
+  msg.textContent=text;
 }
-async function load(){let r=await db.from("cases").select("*").order("created_at",{ascending:false});if(r.error){alert("Database error: "+r.error.message);return}rows=r.data||[];draw()}
-function modal(c){$("modal").style.display="grid";$("modalTitle").textContent=c?"Edit Case":"Add Case";$("caseId").value=c?.id||"";$("receipt").value=c?.receipt_number||"";$("beneficiary").value=c?.beneficiary_name||"";$("employer").value=c?.employer||"";$("formType").value=c?.form_type||"";$("filingDate").value=c?.filing_date||"";$("priorityDate").value=c?.priority_date||"";$("status").value=c?.current_status||"Case Was Received";$("statusDate").value=c?.status_date||"";$("manager").value=c?.case_manager||"";$("notes").value=c?.notes||"";$("formMsg").innerHTML=""}
-window.edit=id=>{let c=rows.find(x=>x.id===id);if(c)modal(c)};
-window.del=async id=>{let c=rows.find(x=>x.id===id);if(c&&confirm("Delete case "+c.receipt_number+"?")){let r=await db.from("cases").delete().eq("id",id);if(r.error)alert(r.error.message);else load()}};
-$("caseForm").onsubmit=async e=>{e.preventDefault();let id=$("caseId").value,p={receipt_number:$("receipt").value.trim(),beneficiary_name:$("beneficiary").value.trim(),employer:$("employer").value.trim()||null,form_type:$("formType").value.trim()||null,filing_date:$("filingDate").value||null,priority_date:$("priorityDate").value||null,current_status:$("status").value,status_date:$("statusDate").value||null,case_manager:$("manager").value.trim()||null,notes:$("notes").value.trim()||null};let r=id?await db.from("cases").update(p).eq("id",id):await db.from("cases").insert(p);if(r.error){$("formMsg").innerHTML=`<div class="error">${esc(r.error.message)}</div>`}else{$("formMsg").innerHTML='<div class="success">Case saved successfully.</div>';setTimeout(()=>{$("modal").style.display="none";load()},400)}};
-$("loginForm").onsubmit=async e=>{e.preventDefault();let r=await db.auth.signInWithPassword({email:$("email").value,password:$("password").value});if(r.error)$("loginMsg").innerHTML=`<div class="error">${esc(r.error.message)}</div>`;else{user=r.data.user;show()}};
-$("logout").onclick=async()=>{await db.auth.signOut();location.reload()};$("refresh").onclick=load;$("addBtn").onclick=()=>modal();$("addNav").onclick=()=>modal();$("close").onclick=$("cancel").onclick=()=>{$("modal").style.display="none"};$("dashSearch").oninput=draw;$("caseSearch").oninput=draw;
-document.querySelectorAll(".nav button[data-v]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["dashboard","cases","alerts"].forEach(v=>$(v).style.display=b.dataset.v===v?"block":"none");$("title").textContent=b.dataset.v==="dashboard"?"USCIS Case Tracker":b.dataset.v==="cases"?"All USCIS Cases":"RFE / NOID Alerts"});
-async function show(){$("login").style.display="none";$("app").style.display="block";$("who").textContent=user?.email||"";await load()}
-(async()=>{let r=await db.auth.getSession();if(r.data.session){user=r.data.session.user;show()}})();
+function clear(){msg.className="msg";msg.textContent=""}
+
+window.addEventListener("error", e=>{
+  show("Website error: "+(e.message||"Unknown JavaScript error"),"err");
+});
+
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  clear();
+  btn.disabled=true;
+  btn.textContent="Connecting...";
+  try{
+    if(!window.supabase){
+      throw new Error("Supabase library did not load. Please refresh the page.");
+    }
+    show("Connecting to Supabase...","info");
+    const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+    const email=document.getElementById("email").value.trim();
+    const password=document.getElementById("password").value;
+
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    if(error) throw error;
+
+    show("Login successful. Opening dashboard...","ok");
+    sessionStorage.setItem("ig_logged_in","1");
+    setTimeout(()=>location.href="dashboard.html",500);
+  }catch(err){
+    console.error(err);
+    show((err && err.message) ? err.message : "Login failed. Please try again.","err");
+    btn.disabled=false;
+    btn.textContent="Log In";
+  }
+});
 </script>
-</body></html>
+</body>
+</html>
