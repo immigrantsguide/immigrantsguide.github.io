@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Immigrants Guide — USCIS Case Tracker</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f7fb;color:#172033}
+.app{display:flex;min-height:100vh}.side{width:235px;background:#111827;color:#dbe3ef;padding:22px 14px;position:fixed;inset:0 auto 0 0}
+.brand{font-size:20px;font-weight:800;color:#fff;padding:8px 12px 28px}.brand span{color:#60a5fa}
+.nav{display:block;padding:12px 14px;border-radius:9px;margin:5px 0;color:#cbd5e1;text-decoration:none}.nav.active,.nav:hover{background:#1e293b;color:#fff}
+.main{margin-left:235px;width:calc(100% - 235px);padding:28px 34px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{margin:0;font-size:26px}.top p{margin:5px 0 0;color:#667085}.actions{display:flex;gap:10px}.btn{border:0;border-radius:8px;padding:11px 15px;font-weight:700;cursor:pointer}.primary{background:#2563eb;color:#fff}.secondary{background:#fff;border:1px solid #dbe2ea;color:#344054}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}.card{background:#fff;border:1px solid #e6eaf0;border-radius:12px;padding:18px}.label{font-size:13px;color:#667085}.num{font-size:27px;font-weight:800;margin-top:8px}.green{color:#15905b}.red{color:#d92d20}.yellow{color:#b7791f}
+.panel{background:#fff;border:1px solid #e6eaf0;border-radius:12px;margin-top:20px;overflow:hidden}.panelhead{padding:17px 18px;border-bottom:1px solid #eef1f5;display:flex;justify-content:space-between;align-items:center}.panelhead h2{font-size:16px;margin:0}.search{padding:9px 11px;border:1px solid #d0d5dd;border-radius:7px;width:270px}
+table{width:100%;border-collapse:collapse}th,td{padding:14px 16px;text-align:left;border-bottom:1px solid #eef1f5;font-size:13px}th{color:#667085;background:#fafbfc}.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700}.received{background:#eef4ff;color:#175cd3}.review{background:#ecfdf3;color:#067647}.rfe{background:#fff4ed;color:#c4320a}.approved{background:#ecfdf3;color:#067647}.denied{background:#fef3f2;color:#b42318}
+.notice{padding:14px 18px;background:#fff8eb;color:#8a5a00;font-size:13px}.small{color:#667085}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.side{width:190px}.main{margin-left:190px;width:calc(100% - 190px);padding:20px}.top{gap:15px;align-items:flex-start}.actions{flex-wrap:wrap}}
+@media(max-width:650px){.side{display:none}.main{margin:0;width:100%;padding:16px}.cards{grid-template-columns:1fr 1fr}.top{display:block}.actions{margin-top:14px}.search{width:100%}.panel{overflow:auto}table{min-width:900px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">Immigrants <span>Guide</span></div>
+  <a class="nav active" href="#">▦ Dashboard</a>
+  <a class="nav" href="#">▣ All Cases</a>
+  <a class="nav" href="#">＋ Add Case</a>
+  <a class="nav" href="#">↥ Import Cases</a>
+  <a class="nav" href="#">◷ Case History</a>
+  <a class="nav" href="#">⚑ Alerts</a>
+  <a class="nav" href="#">⚙ Settings</a>
+</aside>
+<main class="main">
+  <div class="top">
+    <div><h1>USCIS Case Tracker</h1><p>Monitor your immigration cases in one place.</p></div>
+    <div class="actions"><button class="btn secondary" onclick="alert('Import CSV/Excel will be connected in the next version.')">Import Cases</button><button class="btn primary" onclick="refresh()">↻ Refresh All</button></div>
+  </div>
+  <section class="cards">
+    <div class="card"><div class="label">Total Cases</div><div class="num">247</div></div>
+    <div class="card"><div class="label">Pending</div><div class="num">189</div></div>
+    <div class="card"><div class="label">RFE / NOID</div><div class="num red">21</div></div>
+    <div class="card"><div class="label">Approved</div><div class="num green">32</div></div>
+    <div class="card"><div class="label">Denied</div><div class="num red">5</div></div>
+  </section>
+  <div class="panel">
+    <div class="panelhead">
+      <h2>Recent Cases</h2>
+      <input class="search" id="search" placeholder="Search receipt, beneficiary, employer…" oninput="filterRows()">
+    </div>
+    <div class="notice" id="notice">Sandbox prototype — USCIS API is not connected yet.</div>
+    <table><thead><tr><th>Receipt Number</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>Filed</th><th>Pending</th></tr></thead>
+    <tbody id="rows">
+      <tr><td>IOE1234567890</td><td>John Smith</td><td>ABC Technologies</td><td>I-129</td><td><span class="status review">Actively Reviewed</span></td><td>05/10/2026</td><td>128 days</td></tr>
+      <tr><td>IOE2345678901</td><td>Ravi Kumar</td><td>XYZ Solutions</td><td>I-140</td><td><span class="status received">Case Received</span></td><td>04/20/2026</td><td>148 days</td></tr>
+      <tr><td>LIN3456789012</td><td>Priya Reddy</td><td>Global Tech LLC</td><td>I-765</td><td><span class="status rfe">RFE Sent</span></td><td>03/17/2026</td><td>182 days</td></tr>
+      <tr><td>EAC4567890123</td><td>Mike Johnson</td><td>Northstar Inc.</td><td>I-485</td><td><span class="status approved">Approved</span></td><td>11/09/2025</td><td>310 days</td></tr>
+      <tr><td>IOE5678901234</td><td>Sarah Lee</td><td>FirstNet Global</td><td>I-539</td><td><span class="status denied">Denied</span></td><td>01/12/2026</td><td>246 days</td></tr>
+    </tbody></table>
+  </div>
+</main>
+</div>
+<script>
+function refresh(){const n=document.getElementById('notice');n.textContent='Refreshing cases… (demo mode)';setTimeout(()=>n.textContent='Last refresh completed just now. USCIS Sandbox API will be connected next.',900)}
+function filterRows(){const q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('#rows tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
+</script>
+</body>
+</html>
