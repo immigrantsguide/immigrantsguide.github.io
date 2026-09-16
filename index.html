@@ -28,7 +28,7 @@ th{background:#f8fafc;color:#64748b}
 .badge.approved{background:#ecfdf5;color:#059669}
 .badge.denied{background:#fef2f2;color:#dc2626}
 .empty{text-align:center;color:#64748b;padding:45px}
-.footer{text-align:center;color:#64748b;font-size:12px;padding:25px}
+.lookup{margin-bottom:22px;padding:22px}.lookup-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:10px}.lookup-head h2{margin:0;font-size:18px}.lookup-form{display:flex;gap:10px;margin-top:15px}.lookup-input{flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:9px;text-transform:uppercase}.lookup-btn{border:0;background:#2563eb;color:#fff;padding:12px 18px;border-radius:9px;font-weight:700;cursor:pointer;white-space:nowrap}.lookup-btn:disabled{opacity:.65;cursor:wait}.lookup-result{margin-top:15px;display:none;padding:14px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0}.lookup-result.show{display:block}.lookup-status{font-size:16px;font-weight:800;margin-bottom:5px}.lookup-meta{font-size:12px;color:#64748b;line-height:1.5}.footer{text-align:center;color:#64748b;font-size:12px;padding:25px}
 .login-modal{display:none;position:fixed;inset:0;background:#0f172a99;place-items:center;padding:20px;z-index:10}
 .login-card{width:min(430px,100%);background:#fff;padding:32px;border-radius:16px;box-shadow:0 20px 60px #0003}
 .login-head{display:flex;justify-content:space-between;align-items:center}
@@ -51,13 +51,27 @@ input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}
 
 <section class="hero">
   <h1>USCIS Case Status</h1>
-  <p>View the latest available USCIS status for tracked receipt numbers.</p>
+  <p>View receipt numbers and the latest available USCIS status for tracked cases.</p>
 </section>
 
 <main class="wrap">
+
+  <section class="panel lookup">
+    <div class="lookup-head">
+      <h2>USCIS Case Status Check</h2>
+      <span class="muted">No login required</span>
+    </div>
+    <div class="muted">Enter any USCIS receipt number to check the latest status available through the USCIS case-status service.</div>
+    <form id="lookupForm" class="lookup-form">
+      <input id="lookupReceipt" class="lookup-input" maxlength="13" autocomplete="off" placeholder="Example: IOE1234567890" required>
+      <button id="lookupBtn" class="lookup-btn" type="submit">Check USCIS Status</button>
+    </form>
+    <div id="lookupResult" class="lookup-result"></div>
+  </section>
+
   <section class="panel">
     <div class="panel-head">
-      <h2>Case Status</h2>
+      <h2>Tracked Case Status</h2>
       <input id="search" class="search" placeholder="Search receipt number...">
     </div>
     <div id="notice" class="notice">Loading case statuses...</div>
@@ -116,6 +130,54 @@ function draw(){
     :'<tr><td colspan="3" class="empty">No public case statuses available.</td></tr>';
 }
 
+async function checkRandomUSCIS(receipt){
+  const btn=$("lookupBtn");
+  const result=$("lookupResult");
+  btn.disabled=true;
+  btn.textContent="Checking...";
+  result.className="lookup-result show";
+  result.innerHTML='<div class="muted">Checking USCIS...</div>';
+
+  try{
+    if(!db)throw new Error("USCIS service is not ready. Please refresh the page.");
+
+    const r=await db.functions.invoke("smart-service",{body:{receiptNumber:receipt}});
+    if(r.error){
+      let message=r.error.message||"USCIS status check failed.";
+      try{
+        if(r.error.context?.json){
+          const body=await r.error.context.json();
+          message=body?.errors?.[0]?.message||body?.error||body?.message||message;
+        }
+      }catch(_){}
+      throw new Error(message);
+    }
+
+    const cs=r.data?.case_status;
+    if(!cs)throw new Error("USCIS returned no case status.");
+
+    const returned=String(cs.receiptNumber||"").trim().toUpperCase();
+    if(returned&&returned!==receipt)throw new Error("USCIS returned a different receipt number.");
+
+    const status=cs.current_case_status_text_en||"Status unavailable";
+    const desc=cs.current_case_status_desc_en||"";
+    const modified=cs.modifiedDate||"";
+    const form=cs.formType||"";
+
+    result.innerHTML=
+      '<div class="lookup-status">'+badge(status)+'</div>'+
+      '<div class="lookup-meta"><b>Receipt Number:</b> '+esc(receipt)+'</div>'+
+      (form?'<div class="lookup-meta"><b>Form Type:</b> '+esc(form)+'</div>':'')+
+      (modified?'<div class="lookup-meta"><b>USCIS Modified Date:</b> '+esc(modified)+'</div>':'')+
+      (desc?'<div class="lookup-meta" style="margin-top:8px">'+esc(desc)+'</div>':'');
+  }catch(err){
+    result.innerHTML='<div style="color:#991b1b;font-weight:700">Unable to retrieve the USCIS status.</div><div class="lookup-meta" style="margin-top:5px">'+esc(err.message||String(err))+'</div>';
+  }finally{
+    btn.disabled=false;
+    btn.textContent="Check USCIS Status";
+  }
+}
+
 async function loadPublicCases(){
   try{
     if(!window.supabase)throw new Error("Supabase library did not load. Please refresh.");
@@ -129,7 +191,7 @@ async function loadPublicCases(){
   }catch(e){
     publicRows=[];
     draw();
-    showNotice("Public case status is not configured yet. Please run the Supabase SQL setup provided with this update.",true);
+    showNotice("Public case status is not configured yet. Please run the updated Supabase SQL setup provided with this update.",true);
     console.error(e);
   }
 }
@@ -162,6 +224,21 @@ $("loginForm").addEventListener("submit",async e=>{
 });
 
 window.addEventListener("error",e=>console.error(e));
+$("lookupForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const receipt=$("lookupReceipt").value.trim().toUpperCase().replace(/\s+/g,"");
+  if(!/^[A-Z]{3}\d{10}$/.test(receipt)){
+    $("lookupResult").className="lookup-result show";
+    $("lookupResult").innerHTML='<div style="color:#991b1b;font-weight:700">Please enter a valid USCIS receipt number.</div><div class="lookup-meta">Example format: IOE1234567890</div>';
+    return;
+  }
+  checkRandomUSCIS(receipt);
+});
+
+$("lookupReceipt").addEventListener("input",e=>{
+  e.target.value=e.target.value.toUpperCase().replace(/\s+/g,"");
+});
+
 loadPublicCases();
 })();
 </script>
