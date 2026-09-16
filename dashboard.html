@@ -3,166 +3,547 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Immigrants Guide — USCIS Case Status</title>
+<title>Immigrants Guide — USCIS Case Tracker</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
-.header{background:#0f172a;color:#fff;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.logo{font-size:22px;font-weight:800}.logo span{color:#60a5fa}
-.login-btn{border:0;background:#2563eb;color:#fff;padding:10px 18px;border-radius:9px;font-weight:700;cursor:pointer}
-.hero{padding:48px 20px 28px;text-align:center}.hero h1{margin:0 0 10px;font-size:34px}.hero p{margin:0;color:#64748b}
-.wrap{width:min(1100px,94%);margin:0 auto 50px}
-.panel{background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden}
-.panel-head{padding:18px 20px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:15px}
-.panel-head h2{margin:0;font-size:18px}
-.search{width:min(350px,100%);padding:11px;border:1px solid #cbd5e1;border-radius:9px}
-.notice{padding:11px 20px;background:#eff6ff;color:#1d4ed8;font-size:13px}
-.notice.error{background:#fef2f2;color:#991b1b}
-.table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{padding:14px 16px;border-bottom:1px solid #eef2f7;text-align:left;font-size:14px}
-th{background:#f8fafc;color:#64748b}
-.badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#eff6ff;color:#2563eb}
-.badge.rfe{background:#fff7ed;color:#ea580c}
-.badge.approved{background:#ecfdf5;color:#059669}
-.badge.denied{background:#fef2f2;color:#dc2626}
-.empty{text-align:center;color:#64748b;padding:45px}
-.footer{text-align:center;color:#64748b;font-size:12px;padding:25px}
-.login-modal{display:none;position:fixed;inset:0;background:#0f172a99;place-items:center;padding:20px;z-index:10}
-.login-card{width:min(430px,100%);background:#fff;padding:32px;border-radius:16px;box-shadow:0 20px 60px #0003}
-.login-head{display:flex;justify-content:space-between;align-items:center}
-.close{border:0;background:#f1f5f9;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer}
-label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}
-input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}
-.submit{width:100%;margin-top:20px;padding:12px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}
-.submit:disabled{opacity:.65}
-.msg{margin-top:14px;padding:11px;border-radius:9px;font-size:13px;display:none}
-.msg.err{display:block;background:#fef2f2;color:#991b1b}
-.msg.info{display:block;background:#eff6ff;color:#1d4ed8}
-@media(max-width:700px){.header{padding:15px 4%}.hero h1{font-size:27px}.panel-head{align-items:flex-start;flex-direction:column}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.side{position:fixed;inset:0 auto 0 0;width:220px;background:#0f172a;color:#fff;padding:22px 12px}.brand{font-size:20px;font-weight:800;padding:10px 12px 28px}.brand span{color:#60a5fa}.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cbd5e1;padding:12px;border-radius:9px;margin:3px 0}.nav button.active,.nav button:hover{background:#1e293b;color:#fff}
+.main{margin-left:220px;padding:30px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.top h1{margin:0 0 5px;font-size:29px}.muted{color:#64748b}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}.card,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}.card{padding:18px}.num{font-size:28px;font-weight:800;margin-top:8px}.red{color:#dc2626}.green{color:#059669}
+.panel{overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h2{margin:0;font-size:17px}.search{max-width:330px;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px}
+.notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.notice.error{background:#fef2f2;color:#991b1b}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}.link{border:0;background:none;color:#2563eb;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}.primary,.secondary,.check-btn{border-radius:9px;padding:9px 12px;font-weight:700}.primary{border:0;background:#2563eb;color:white}.secondary{border:1px solid #cbd5e1;background:#fff}.check-btn{border:1px solid #2563eb;background:#fff;color:#2563eb;font-size:12px}.check-btn:disabled{opacity:.55;cursor:wait}.uscis-cell{max-width:280px;white-space:normal}.uscis-desc{font-size:11px;color:#64748b;margin-top:4px;line-height:1.35}.last-check{font-size:11px;color:#64748b;margin-top:3px}
+.modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}textarea{min-height:100px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.msg{padding:10px;border-radius:9px;margin-top:12px;font-size:13px}.msg.error{background:#fef2f2;color:#991b1b}.msg.success{background:#f0fdf4;color:#166534}
+@media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
 <body>
-<header class="header">
-  <div class="logo">Immigrants <span>Guide</span></div>
-  <button id="loginOpen" class="login-btn" type="button">🔐 Login</button>
-</header>
+<aside class="side">
+<div class="brand">Immigrants <span>Guide</span></div>
+<div class="nav">
+<button class="active" data-view="dashboard">▦ Dashboard</button>
+<button data-view="cases">▣ All Cases</button>
+<button data-view="history">◷ Case History</button>
+<button id="addNav">＋ Add Case</button>
+<button data-view="alerts">⚑ Alerts</button>
+</div>
+</aside>
 
-<section class="hero">
-  <h1>USCIS Case Status</h1>
-  <p>View receipt numbers and the latest available USCIS status for tracked cases.</p>
+<main class="main">
+<div class="top">
+<div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
+<div class="actions">
+<span id="who" class="muted"></span>
+<button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button>
+
+<button id="refresh" class="secondary" type="button">↻ Refresh</button>
+<button id="logout" class="secondary" type="button">Log out</button>
+</div>
+</div>
+
+<section id="dashboard">
+<div class="cards">
+<div class="card">Total Cases<div id="total" class="num">0</div></div>
+<div class="card">Pending<div id="pending" class="num">0</div></div>
+<div class="card">RFE / NOID<div id="rfe" class="num red">0</div></div>
+<div class="card">Approved<div id="approved" class="num green">0</div></div>
+<div class="card">Denied<div id="denied" class="num red">0</div></div>
+<div class="card">Total Amount<div id="totalAmount" class="num">$0</div></div>
+<div class="card">Premium Cases<div id="premiumCount" class="num">0</div></div>
+<div class="card">Avg. Duration<div id="avgDuration" class="num">0 days</div></div>
+<div class="card">Case Managers<div id="managerCount" class="num">0</div></div>
+</div>
+<div class="panel" style="margin-bottom:20px">
+<div class="panel-head"><h2>Case Manager Statistics</h2></div>
+<div class="table-wrap">
+<table style="min-width:700px">
+<thead><tr><th>Case Manager</th><th>Total Cases</th><th>Total Amount</th><th>Premium Cases</th><th>Avg. Duration</th></tr></thead>
+<tbody id="managerStatsBody"></tbody>
+</table>
+</div>
+</div>
+<div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
+<div id="notice" class="notice">Checking authentication...</div>
+<div id="batchNotice" class="notice" style="display:none"></div>
+<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
-<main class="wrap">
-  <section class="panel">
-    <div class="panel-head">
-      <h2>Tracked Case Status</h2>
-      <input id="search" class="search" placeholder="Search receipt number...">
-    </div>
-    <div id="notice" class="notice">Loading case statuses...</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Receipt Number</th><th>USCIS Status</th><th>Last Updated</th></tr></thead>
-        <tbody id="body"><tr><td colspan="3" class="empty">Loading...</td></tr></tbody>
-      </table>
-    </div>
-  </section>
+<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search cases..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
+<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
+
+<section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."></div>
+<div class="notice" id="historyNotice">Loading history...</div>
+<div class="table-wrap"><table><thead><tr><th>Date / Time</th><th>Receipt</th><th>Beneficiary</th><th>Previous Status</th><th>New Status</th><th>Changed By</th></tr></thead><tbody id="historyBody"></tbody></table></div></div></section>
+
+<section id="alerts" style="display:none"><div class="panel"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div>
+<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div></section>
 </main>
 
-<div class="footer">Immigrants Guide — USCIS Case Tracker</div>
-
-<div id="loginModal" class="login-modal">
-  <div class="login-card">
-    <div class="login-head">
-      <div><div class="logo">Immigrants <span>Guide</span></div><p style="color:#64748b;margin:7px 0 0">Secure staff login</p></div>
-      <button id="loginClose" class="close" type="button">×</button>
-    </div>
-    <form id="loginForm">
-      <label>Email</label><input id="email" type="email" autocomplete="username" required>
-      <label>Password</label><input id="password" type="password" autocomplete="current-password" required>
-      <button id="loginBtn" class="submit" type="submit">Log In</button>
-    </form>
-    <div id="msg" class="msg"></div>
-  </div>
-</div>
+<div id="modal" class="modal"><div class="modal-box">
+<div class="modal-head"><h2 id="modalTitle">Add Case</h2><button id="close" class="close" type="button">×</button></div>
+<form id="caseForm"><input id="caseId" type="hidden"><div class="grid">
+<div><label>Receipt Number *</label><input id="receipt" required placeholder="IOE1234567890"></div>
+<div><label>Beneficiary Name *</label><input id="beneficiary" required></div>
+<div><label>Employer</label><input id="employer"></div>
+<div><label>Form Type</label><input id="formType" placeholder="I-129"></div>
+<div><label>Filing Date</label><input id="filingDate" type="date"></div>
+<div><label>Priority Date</label><input id="priorityDate" type="date"></div>
+<div><label>Current Status</label><select id="status">
+<option>Case Was Received</option><option>Case Is Being Actively Reviewed</option><option>RFE Sent</option><option>NOID Sent</option><option>Approved</option><option>Denied</option><option>Case Was Transferred</option><option>Other</option>
+</select></div>
+<div><label>Status Date</label><input id="statusDate" type="date"></div>
+<div><label>Case Manager</label><input id="manager"></div>
+<div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div><label>Premium Processing</label><select id="premium"><option value="false">No</option><option value="true">Yes</option></select></div>
+<div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="Auto from Filing Date"></div>
+<div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
+</div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
+</div></div>
 
 <script>
 (function(){
 "use strict";
+
 const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
-let db=null, publicRows=[];
+const USCIS_FUNCTION="smart-service";
+
+let db=null, rows=[], signingOut=false, initialized=false;
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const badge=s=>{
-  const t=String(s||"").toLowerCase();
-  const c=t.includes("approved")?"approved":t.includes("denied")?"denied":t.includes("rfe")||t.includes("noid")?"rfe":"";
-  return '<span class="badge '+c+'">'+esc(s||"Status unavailable")+'</span>';
-};
-const last=x=>x?new Date(x).toLocaleString():"—";
+const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-US"):"—";
+const isRfe=x=>/rfe|noid/i.test(x.current_status||"")||/rfe|noid/i.test(x.uscis_status_text||"");
+const isPending=x=>!/approved|denied/i.test(x.current_status||"");
 
-function showNotice(text,error=false){
+function setNotice(text,error=false){
   $("notice").textContent=text;
   $("notice").className=error?"notice error":"notice";
 }
+function badge(s){
+  let t=(s||"").toLowerCase();
+  let c=t.includes("approved")?"approved":t.includes("denied")?"denied":t.includes("rfe")||t.includes("noid")?"rfe":"";
+  return '<span class="badge '+c+'">'+esc(s||"—")+"</span>";
+}
+function filt(a,q){
+  q=(q||"").toLowerCase().trim();
+  return q?a.filter(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.current_status,c.uscis_status_text,c.case_manager].some(v=>String(v||"").toLowerCase().includes(q))):a;
+}
+function lastChecked(x){return x?new Date(x).toLocaleString():"—";}
+function money(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString("en-US",{style:"currency",currency:"USD"}):"—";}
+function premiumLabel(x){return x===true||x==="true"||x===1||x==="1"?'<span class="badge approved">Yes</span>':'<span class="badge">No</span>';}
+function durationDays(c){
+  const raw=c?.time_duration_days;
+  if(raw!==null&&raw!==undefined&&String(raw).trim()!==""){
+    const explicit=Number(raw);
+    if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
+  }
+  if(!c?.filing_date)return null;
+  const start=new Date(c.filing_date+"T00:00:00");
+  const end=c.status_date?new Date(c.status_date+"T00:00:00"):new Date();
+  const d=Math.max(0,Math.floor((end-start)/86400000));
+  return Number.isFinite(d)?d:null;
+}
+function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
 
-function draw(){
-  const q=($("search").value||"").toLowerCase().trim();
-  const rows=q?publicRows.filter(x=>String(x.receipt_number||"").toLowerCase().includes(q)):publicRows;
-  $("body").innerHTML=rows.length
-    ?rows.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+badge(c.uscis_status_text||c.current_status)+'</td><td>'+esc(last(c.last_checked_at))+'</td></tr>').join("")
-    :'<tr><td colspan="3" class="empty">No public case statuses available.</td></tr>';
+function drawManagerStats(){
+  const map=new Map();
+  rows.forEach(c=>{
+    const name=String(c.case_manager||"Unassigned").trim()||"Unassigned";
+    if(!map.has(name))map.set(name,{count:0,amount:0,premium:0,durations:[]});
+    const m=map.get(name);
+    m.count++;
+    m.amount+=Number(c.amount)||0;
+    if(c.premium_processing===true||c.premium_processing==="true"||c.premium_processing===1||c.premium_processing==="1")m.premium++;
+    const d=durationDays(c);
+    if(d!==null)m.durations.push(d);
+  });
+  const list=[...map.entries()].sort((a,b)=>b[1].count-a[1].count||a[0].localeCompare(b[0]));
+  $("managerStatsBody").innerHTML=list.length?list.map(([name,m])=>{
+    const avg=m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length)+" days":"—";
+    return '<tr><td><b>'+esc(name)+'</b></td><td>'+m.count+'</td><td>'+money(m.amount)+'</td><td>'+m.premium+'</td><td>'+avg+'</td></tr>';
+  }).join(""):'<tr><td colspan="5" class="empty">No case manager data yet.</td></tr>';
 }
 
-async function loadPublicCases(){
+function draw(){
+  $("total").textContent=rows.length;
+  $("pending").textContent=rows.filter(isPending).length;
+  $("rfe").textContent=rows.filter(isRfe).length;
+  $("approved").textContent=rows.filter(x=>/approved/i.test(x.current_status||"")||/approved/i.test(x.uscis_status_text||"")).length;
+  $("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")||/denied/i.test(x.uscis_status_text||"")).length;
+  $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
+  $("premiumCount").textContent=rows.filter(x=>x.premium_processing===true||x.premium_processing==="true"||x.premium_processing===1||x.premium_processing==="1").length;
+  const durations=rows.map(durationDays).filter(x=>x!==null);
+  $("avgDuration").textContent=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length)+" days":"—";
+  const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
+  $("managerCount").textContent=managers.size;
+  drawManagerStats();
+
+  const a=filt(rows,$("dashSearch").value);
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td>'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
+
+  const b=filt(rows,$("caseSearch").value);
+  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td>'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
+
+  const z=rows.filter(isRfe);
+  $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
+}
+
+async function load(){
+  if(!db)return;
+  setNotice("Loading cases from Supabase...");
   try{
-    if(!window.supabase)throw new Error("Supabase library did not load. Please refresh.");
-    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-    // This query MUST be backed by the restricted public view/RLS policy below.
-    const r=await db.from("public_case_status").select("receipt_number,uscis_status_text,current_status,last_checked_at").order("last_checked_at",{ascending:false});
+    const r=await db.from("cases").select("*").order("created_at",{ascending:false});
     if(r.error)throw r.error;
-    publicRows=r.data||[];
+    rows=r.data||[];
     draw();
-    showNotice(publicRows.length+" case status record(s) available.");
+    setNotice("Connected to Supabase. "+rows.length+" case(s) loaded.");
   }catch(e){
-    publicRows=[];
+    setNotice("Database error: "+(e.message||e),true);
     draw();
-    showNotice("Public case status is not configured yet. Please run the updated Supabase SQL setup provided with this update.",true);
-    console.error(e);
   }
 }
 
-function openLogin(){$("loginModal").style.display="grid";$("email").focus();}
-function closeLogin(){$("loginModal").style.display="none";$("msg").className="msg";$("msg").textContent="";}
-
-$("loginOpen").addEventListener("click",openLogin);
-$("loginClose").addEventListener("click",closeLogin);
-$("loginModal").addEventListener("click",e=>{if(e.target===$("loginModal"))closeLogin();});
-$("search").addEventListener("input",draw);
-
-$("loginForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const btn=$("loginBtn");
-  btn.disabled=true;btn.textContent="Connecting...";
-  $("msg").className="msg info";$("msg").textContent="Signing in...";
+async function readFunctionError(err){
+  let status=null,body=null;
   try{
-    const {error}=await db.auth.signInWithPassword({
-      email:$("email").value.trim(),
-      password:$("password").value
-    });
-    if(error)throw error;
-    window.location.replace("dashboard.html");
+    status=err?.context?.status||null;
+    if(err?.context?.json)body=await err.context.json();
+  }catch(_){}
+  const apiError=body?.errors?.[0];
+  const raw=apiError?.message||body?.error||body?.message||err?.message||"USCIS function failed";
+  let message=raw;
+  if(status===404&&/staging|sandbox|receipt|not found/i.test(raw)){
+    message="This receipt number is not supported by the USCIS Sandbox. Use an official staging receipt for testing, or use Production access for live receipts.";
+  }else if(status===400&&/receipt|invalid/i.test(raw)){
+    message="USCIS rejected this receipt number. Please verify the receipt number and environment.";
+  }
+  return {status,body,message};
+}
+
+async function checkUSCIS(c,buttonEl=null,showAlert=true){
+  if(!c?.receipt_number)return {ok:false,receipt:c?.receipt_number||"",error:"Missing receipt number"};
+  if(buttonEl){buttonEl.disabled=true;buttonEl.textContent="Checking...";}
+  try{
+    const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:c.receipt_number}});
+    if(r.error){
+      const info=await readFunctionError(r.error);
+      if(showAlert)alert("USCIS check failed for "+c.receipt_number+"\n\n"+info.message+(info.status?"\n\nHTTP status: "+info.status:""));
+      return {ok:false,receipt:c.receipt_number,error:info.message,httpStatus:info.status};
+    }
+    const cs=r.data?.case_status;
+    if(!cs)throw new Error("USCIS returned no case status.");
+
+    const returnedReceipt=String(cs.receiptNumber||"").trim().toUpperCase();
+    const requestedReceipt=String(c.receipt_number||"").trim().toUpperCase();
+    if(!returnedReceipt||returnedReceipt!==requestedReceipt){
+      throw new Error("USCIS returned a different receipt number ("+(returnedReceipt||"missing")+") than the case requested ("+requestedReceipt+"). No case data was changed.");
+    }
+
+    const modified=cs.modifiedDate||null;
+    const statusText=cs.current_case_status_text_en||"Unknown USCIS status";
+    const statusDesc=cs.current_case_status_desc_en||null;
+    const statusDate=modified&&/^\d{2}-\d{2}-\d{4}/.test(modified)?modified.slice(6,10)+"-"+modified.slice(0,2)+"-"+modified.slice(3,5):null;
+
+    const payload={
+      uscis_status_text:statusText,
+      uscis_status_desc:statusDesc,
+      uscis_modified_date:modified,
+      uscis_submitted_date:cs.submittedDate||null,
+      uscis_form_type:cs.formType||null,
+      last_checked_at:new Date().toISOString(),
+      status_date:statusDate,
+      form_type:cs.formType||c.form_type||null
+    };
+
+    const up=await db.from("cases").update(payload).eq("id",c.id);
+    if(up.error)throw up.error;
+
+    return {ok:true,receipt:c.receipt_number,status:statusText};
   }catch(err){
-    $("msg").className="msg err";
-    $("msg").textContent=err?.message||"Login failed. Please try again.";
-    btn.disabled=false;btn.textContent="Log In";
+    const message=err.message||String(err);
+    if(showAlert)alert("USCIS check failed for "+c.receipt_number+": "+message);
+    return {ok:false,receipt:c.receipt_number,error:message};
+  }finally{
+    if(buttonEl){buttonEl.disabled=false;buttonEl.textContent="Check USCIS";}
+  }
+}
+
+async function checkAllUSCIS(){
+  const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
+  if(!rows.length){alert("There are no cases to check.");return;}
+  if(!confirm("Check USCIS for all "+rows.length+" case(s)?"))return;
+  buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
+  const batch=$("batchNotice");
+  if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Starting USCIS checks for "+rows.length+" case(s)...";}
+  let checked=0,failed=0,unsupported=0,approved=0,rfe=0,denied=0;
+  try{
+    for(let i=0;i<rows.length;i++){
+      const result=await checkUSCIS(rows[i],null,false);
+      if(result.ok){
+        checked++;
+        if(/approved/i.test(result.status||""))approved++;
+        if(/rfe|noid/i.test(result.status||""))rfe++;
+        if(/denied/i.test(result.status||""))denied++;
+      }else{
+        failed++;
+        if(result.httpStatus===404)unsupported++;
+      }
+      if(batch)batch.textContent="Checking USCIS: "+(i+1)+" of "+rows.length+"...";
+      await new Promise(resolve=>setTimeout(resolve,250));
+    }
+    await load();
+    const message="USCIS batch check completed — Checked: "+checked+" | Failed: "+failed+" | Sandbox unsupported: "+unsupported+" | Approved: "+approved+" | RFE/NOID: "+rfe+" | Denied: "+denied;
+    if(batch){batch.textContent=message;batch.className=failed?"notice error":"notice";}else alert(message);
+  }finally{
+    buttons.forEach(b=>{b.disabled=false;b.textContent="↻ Check All USCIS";});
+  }
+}
+
+async function loadHistory(caseId=null){
+  if(!db)return;
+  $("historyNotice").textContent="Loading case history...";
+  $("historyNotice").className="notice";
+  try{
+    let q=db.from("case_history").select("*").order("created_at",{ascending:false}).limit(500);
+    if(caseId)q=q.eq("case_id",caseId);
+    const r=await q;
+    if(r.error)throw r.error;
+    let h=r.data||[];
+    const search=($("historySearch").value||"").toLowerCase().trim();
+    if(search)h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
+    $("historyNotice").textContent=h.length?"Showing "+h.length+" history record(s).":"No history records yet.";
+    $("historyBody").innerHTML=h.length?h.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status||"—")+'</td><td>'+badge(x.new_status||"—")+'</td><td>'+esc(x.changed_by||"—")+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
+  }catch(e){
+    $("historyNotice").textContent="History error: "+(e.message||e);
+    $("historyNotice").className="notice error";
+  }
+}
+
+function openModal(c){
+  $("modal").style.display="grid";
+  $("modalTitle").textContent=c?"Edit Case":"Add Case";
+  $("caseId").value=c?.id||"";
+  $("receipt").value=c?.receipt_number||"";
+  $("beneficiary").value=c?.beneficiary_name||"";
+  $("employer").value=c?.employer||"";
+  $("formType").value=c?.form_type||"";
+  $("filingDate").value=c?.filing_date||"";
+  $("priorityDate").value=c?.priority_date||"";
+  $("status").value=c?.current_status||"Case Was Received";
+  $("statusDate").value=c?.status_date||"";
+  $("manager").value=c?.case_manager||"";
+  $("amount").value=c?.amount??"";
+  $("premium").value=(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false";
+  $("duration").value=c?.time_duration_days??"";
+  $("notes").value=c?.notes||"";
+  $("formMsg").innerHTML="";
+}
+function closeModal(){$("modal").style.display="none";}
+
+document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  const v=btn.dataset.view;
+  $("dashboard").style.display=v==="dashboard"?"block":"none";
+  $("cases").style.display=v==="cases"?"block":"none";
+  $("alerts").style.display=v==="alerts"?"block":"none";
+  $("history").style.display=v==="history"?"block":"none";
+  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":"RFE / NOID Alerts";
+  if(v==="history")loadHistory();
+}));
+
+$("addBtn").addEventListener("click",()=>openModal(null));
+$("addNav").addEventListener("click",()=>openModal(null));
+$("close").addEventListener("click",closeModal);
+$("cancel").addEventListener("click",closeModal);
+$("refresh").addEventListener("click",load);
+$("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
+$("checkAllBtn").addEventListener("click",checkAllUSCIS);
+$("dashSearch").addEventListener("input",draw);
+$("caseSearch").addEventListener("input",draw);
+$("historySearch").addEventListener("input",()=>loadHistory());
+
+document.addEventListener("click",async e=>{
+  const check=e.target.closest(".checkOneBtn");
+  if(check){
+    const c=rows.find(x=>String(x.id)===String(check.dataset.id));
+    if(c){
+      await checkUSCIS(c,check);
+      await load();
+    }
+    return;
+  }
+
+  const edit=e.target.closest(".editBtn"),del=e.target.closest(".deleteBtn");
+  if(edit){
+    const c=rows.find(x=>String(x.id)===String(edit.dataset.id));
+    if(c)openModal(c);
+    return;
+  }
+
+  const hist=e.target.closest(".historyBtn");
+  if(hist){
+    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+    document.querySelector('.nav button[data-view="history"]').classList.add("active");
+    $("dashboard").style.display="none";
+    $("cases").style.display="none";
+    $("alerts").style.display="none";
+    $("history").style.display="block";
+    $("title").textContent="Case History";
+    $("historySearch").value="";
+    loadHistory(hist.dataset.id);
+    return;
+  }
+
+  if(del){
+    const c=rows.find(x=>String(x.id)===String(del.dataset.id));
+    if(!c)return;
+    if(confirm("Delete case "+c.receipt_number+"?")){
+      const r=await db.from("cases").delete().eq("id",c.id);
+      if(r.error)alert("Delete failed: "+r.error.message);
+      else await load();
+    }
   }
 });
 
-window.addEventListener("error",e=>console.error(e));
-loadPublicCases();
+$("logout").addEventListener("click",async()=>{
+  if(signingOut)return;
+  signingOut=true;
+  const btn=$("logout");
+  btn.disabled=true;
+  btn.textContent="Logging out...";
+  try{
+    if(db)await db.auth.signOut({scope:"local"});
+  }catch(e){
+    console.error("Logout error:",e);
+  }finally{
+    window.location.replace("index.html?logout=1");
+  }
+});
+
+$("caseForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  $("formMsg").innerHTML="";
+  const id=$("caseId").value;
+  const payload={
+    receipt_number:$("receipt").value.trim(),
+    beneficiary_name:$("beneficiary").value.trim(),
+    employer:$("employer").value.trim()||null,
+    form_type:$("formType").value.trim()||null,
+    filing_date:$("filingDate").value||null,
+    priority_date:$("priorityDate").value||null,
+    current_status:$("status").value,
+    status_date:$("statusDate").value||null,
+    case_manager:$("manager").value.trim()||null,
+    amount:$("amount").value===""?null:Number($("amount").value),
+    premium_processing:$("premium").value==="true",
+    time_duration_days:$("duration").value===""?null:Number($("duration").value),
+    notes:$("notes").value.trim()||null
+  };
+  try{
+    const r=id?await db.from("cases").update(payload).eq("id",id):await db.from("cases").insert(payload);
+    if(r.error)throw r.error;
+    $("formMsg").innerHTML='<div class="msg success">Case saved successfully.</div>';
+    setTimeout(()=>{closeModal();load();},500);
+  }catch(e){
+    $("formMsg").innerHTML='<div class="msg error">'+esc(e.message||e)+'</div>';
+  }
+});
+
+window.addEventListener("error",e=>{
+  if($("notice"))setNotice("Website error: "+e.message,true);
+});
+
+/* Only react to an actual Supabase sign-out.
+   We deliberately do not redirect on generic auth events,
+   which prevents the login/dashboard redirect loop. */
+async function init(){
+  try{
+    if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
+
+    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:false
+      }
+    });
+
+    /*
+      Authentication bootstrap:
+      The login page may have authenticated through Supabase Auth REST.
+      In that case it stores a short-lived bootstrap session here.
+      We hand that session to the official Supabase client using setSession().
+      This makes the dashboard and all database requests use the same
+      Supabase Auth session.
+    */
+    let session=null;
+
+    const bootstrapKey="immigrants_guide_auth_bootstrap";
+    const bootstrapRaw=sessionStorage.getItem(bootstrapKey) || localStorage.getItem(bootstrapKey);
+
+    if(bootstrapRaw){
+      try{
+        const bootstrap=JSON.parse(bootstrapRaw);
+        if(bootstrap?.access_token && bootstrap?.refresh_token){
+          const setResult=await db.auth.setSession({
+            access_token:bootstrap.access_token,
+            refresh_token:bootstrap.refresh_token
+          });
+          if(setResult.error)throw setResult.error;
+          session=setResult.data?.session||null;
+
+          sessionStorage.removeItem(bootstrapKey);
+          localStorage.removeItem(bootstrapKey);
+        }
+      }catch(bootstrapError){
+        console.error("Auth bootstrap error:",bootstrapError);
+      }
+    }
+
+    if(!session){
+      const result=await db.auth.getSession();
+      if(result.error)throw result.error;
+      session=result?.data?.session||null;
+    }
+
+    if(!session){
+      setNotice("Authentication session not found. Please log in again.",true);
+      setTimeout(()=>window.location.replace("login.html?auth_required=1"),700);
+      return;
+    }
+
+    /*
+      Confirm the token with Supabase Auth. This also prevents us from
+      treating stale/tampered local session data as an authenticated user.
+    */
+    const userResult=await db.auth.getUser(session.access_token);
+    if(userResult.error || !userResult.data?.user){
+      console.error("Authenticated user verification failed:",userResult.error);
+      await db.auth.signOut({scope:"local"});
+      setNotice("Your login session could not be verified. Please log in again.",true);
+      setTimeout(()=>window.location.replace("login.html?auth_required=1"),700);
+      return;
+    }
+
+    initialized=true;
+    $("who").textContent=userResult.data.user.email||session.user?.email||"";
+    await load();
+
+    db.auth.onAuthStateChange((event)=>{
+      if(event==="SIGNED_OUT"&&!signingOut){
+        window.location.replace("index.html?logout=1");
+      }
+    });
+
+  }catch(e){
+    console.error("Dashboard startup error:",e);
+    setNotice("Startup error: "+(e.message||e),true);
+  }
+}
+
+init();
+
 })();
 </script>
 </body>
