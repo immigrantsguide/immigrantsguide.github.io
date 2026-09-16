@@ -94,7 +94,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><label>Case Manager</label><input id="manager"></div>
 <div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
 <div><label>Premium Processing</label><select id="premium"><option value="false">No</option><option value="true">Yes</option></select></div>
-<div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="0"></div>
+<div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="Auto from Filing Date"></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -132,13 +132,16 @@ function lastChecked(x){return x?new Date(x).toLocaleString():"—";}
 function money(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString("en-US",{style:"currency",currency:"USD"}):"—";}
 function premiumLabel(x){return x===true||x==="true"||x===1||x==="1"?'<span class="badge approved">Yes</span>':'<span class="badge">No</span>';}
 function durationDays(c){
-  const explicit=Number(c.time_duration_days);
-  if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
-  if(!c.filing_date)return null;
+  const raw=c?.time_duration_days;
+  if(raw!==null&&raw!==undefined&&String(raw).trim()!==""){
+    const explicit=Number(raw);
+    if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
+  }
+  if(!c?.filing_date)return null;
   const start=new Date(c.filing_date+"T00:00:00");
   const end=c.status_date?new Date(c.status_date+"T00:00:00"):new Date();
-  const d=Math.floor((end-start)/86400000);
-  return Number.isFinite(d)&&d>=0?d:null;
+  const d=Math.max(0,Math.floor((end-start)/86400000));
+  return Number.isFinite(d)?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
 
@@ -156,7 +159,7 @@ function drawManagerStats(){
   });
   const list=[...map.entries()].sort((a,b)=>b[1].count-a[1].count||a[0].localeCompare(b[0]));
   $("managerStatsBody").innerHTML=list.length?list.map(([name,m])=>{
-    const avg=m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length)+" days":"0 days";
+    const avg=m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length)+" days":"—";
     return '<tr><td><b>'+esc(name)+'</b></td><td>'+m.count+'</td><td>'+money(m.amount)+'</td><td>'+m.premium+'</td><td>'+avg+'</td></tr>';
   }).join(""):'<tr><td colspan="5" class="empty">No case manager data yet.</td></tr>';
 }
@@ -170,7 +173,7 @@ function draw(){
   $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
   $("premiumCount").textContent=rows.filter(x=>x.premium_processing===true||x.premium_processing==="true"||x.premium_processing===1||x.premium_processing==="1").length;
   const durations=rows.map(durationDays).filter(x=>x!==null);
-  $("avgDuration").textContent=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length)+" days":"0 days";
+  $("avgDuration").textContent=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length)+" days":"—";
   const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
   $("managerCount").textContent=managers.size;
   drawManagerStats();
