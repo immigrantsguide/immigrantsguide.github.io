@@ -8,17 +8,19 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{width:min(430px,100%);background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 15px 45px #0f172a18}
-.logo{font-size:23px;font-weight:800;color:#172033}.logo span{color:#2563eb}
-.subtitle{color:#64748b;margin:8px 0 28px}
+.card{width:min(450px,100%);background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 15px 45px #0f172a18}
+.logo{font-size:23px;font-weight:800}.logo span{color:#2563eb}
+.subtitle{color:#64748b;margin:8px 0 25px}
 label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}
 input{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px}
 button{width:100%;margin-top:20px;padding:13px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
 button:disabled{opacity:.65;cursor:wait}
 .back{display:block;text-align:center;margin-top:18px;color:#2563eb;text-decoration:none;font-size:14px}
-.msg{display:none;margin-top:15px;padding:11px;border-radius:9px;font-size:13px;line-height:1.45}
+.msg{margin-top:15px;padding:12px;border-radius:9px;font-size:13px;line-height:1.5;display:none}
 .msg.err{display:block;background:#fef2f2;color:#991b1b}
+.msg.ok{display:block;background:#ecfdf5;color:#166534}
 .msg.info{display:block;background:#eff6ff;color:#1d4ed8}
+.debug{margin-top:15px;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;font-size:12px;color:#475569;display:none}
 </style>
 </head>
 <body>
@@ -37,90 +39,127 @@ button:disabled{opacity:.65;cursor:wait}
   </form>
 
   <div id="msg" class="msg"></div>
+  <div id="debug" class="debug"></div>
   <a class="back" href="index.html">← Back to USCIS Case Status</a>
 </div>
 
 <script>
 (function(){
-  "use strict";
+"use strict";
 
-  const SUPABASE_URL = "https://euzifpjzeuqdznkelxdq.supabase.co".replace("xdxq","xdxq");
-  const SUPABASE_KEY = "sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
+const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
+const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 
-  const db = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        autoRefreshToken:true,
-        persistSession:true,
-        detectSessionInUrl:true
-      }
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+  auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+  }
+});
+
+const $=id=>document.getElementById(id);
+
+function show(text,type){
+  $("msg").className="msg "+type;
+  $("msg").textContent=text;
+}
+
+function debug(text){
+  $("debug").style.display="block";
+  $("debug").textContent=text;
+}
+
+// IMPORTANT: Do not redirect before the login result is known.
+// This lets us see exactly what Supabase returns.
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+
+  const email=$("email").value.trim();
+  const password=$("password").value;
+  const btn=$("loginBtn");
+
+  btn.disabled=true;
+  btn.textContent="Signing in...";
+  show("Connecting to Supabase...","info");
+  $("debug").style.display="none";
+
+  try{
+    const result=await db.auth.signInWithPassword({email,password});
+
+    console.log("Supabase signIn result:",result);
+
+    if(result.error){
+      throw result.error;
     }
-  );
 
-  const $ = id => document.getElementById(id);
+    if(!result.data?.session){
+      throw new Error("Supabase accepted the login but did not return a session.");
+    }
 
-  function message(text,type){
-    $("msg").className="msg "+type;
-    $("msg").textContent=text;
+    show("Login successful. Verifying browser session...","ok");
+
+    // Explicitly persist the returned session.
+    const session=result.data.session;
+
+    const setResult=await db.auth.setSession({
+      access_token:session.access_token,
+      refresh_token:session.refresh_token
+    });
+
+    if(setResult.error){
+      throw setResult.error;
+    }
+
+    const check=await db.auth.getSession();
+
+    if(!check.data?.session){
+      throw new Error("Login succeeded, but the browser could not persist the Supabase session.");
+    }
+
+    debug(
+      "Authentication successful.\n"+
+      "User: "+(check.data.session.user?.email||email)+"\n"+
+      "Session: ACTIVE\n"+
+      "Opening dashboard..."
+    );
+
+    setTimeout(()=>{
+      window.location.assign("dashboard.html?auth=1");
+    },700);
+
+  }catch(err){
+    console.error("LOGIN ERROR:",err);
+
+    let text=err?.message||"Login failed.";
+
+    if(text.toLowerCase().includes("invalid login credentials")){
+      text="Invalid email or password.";
+    }
+
+    if(text.toLowerCase().includes("email not confirmed")){
+      text="Your Supabase account email is not confirmed. Confirm the email in Supabase Authentication first.";
+    }
+
+    show(text,"err");
+    debug("Supabase authentication did not complete. Check the error above.");
+    btn.disabled=false;
+    btn.textContent="Log In";
+  }
+});
+
+// Show existing session without redirecting automatically.
+db.auth.getSession().then(({data,error})=>{
+  if(error){
+    console.error(error);
+    return;
   }
 
-  // If already logged in, go directly to dashboard.
-  db.auth.getSession().then(({data,error})=>{
-    if(error){
-      console.error("Session check:",error);
-      return;
-    }
-    if(data?.session){
-      window.location.replace("dashboard.html");
-    }
-  });
-
-  $("loginForm").addEventListener("submit",async function(e){
-    e.preventDefault();
-
-    const email=$("email").value.trim();
-    const password=$("password").value;
-    const btn=$("loginBtn");
-
-    btn.disabled=true;
-    btn.textContent="Signing in...";
-    message("Signing in...","info");
-
-    try{
-      const {data,error}=await db.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if(error) throw error;
-
-      if(!data?.session){
-        throw new Error("Login succeeded, but no session was created. Please try again.");
-      }
-
-      message("Login successful. Opening dashboard...","info");
-
-      // Give Supabase a moment to persist the session.
-      setTimeout(()=>{
-        window.location.href="dashboard.html";
-      },300);
-
-    }catch(err){
-      console.error("Login error:",err);
-
-      let text=err?.message || "Login failed. Please try again.";
-
-      if(text.toLowerCase().includes("invalid login credentials")){
-        text="Invalid email or password.";
-      }
-
-      message(text,"err");
-      btn.disabled=false;
-      btn.textContent="Log In";
-    }
-  });
+  if(data?.session){
+    show("A Supabase session is already active. You can open the dashboard.","ok");
+    debug("Existing session: ACTIVE");
+  }
+});
 })();
 </script>
 </body>
