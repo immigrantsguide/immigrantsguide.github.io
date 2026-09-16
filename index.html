@@ -16,7 +16,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
-<body>
+<body style="visibility:hidden">
 <aside class="side"><div class="brand">Immigrants <span>Guide</span></div><div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
@@ -27,7 +27,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 <main class="main">
 <div class="top"><div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
-<div class="actions"><span id="who" class="muted"></span><button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="sandboxTestBtn" class="secondary" type="button" onclick="testSandbox()">🧪 Test Sandbox</button><button id="refresh" class="secondary" type="button">↻ Refresh</button><button id="logout" class="secondary" type="button">Log out</button></div></div>
+<div class="actions"><span id="who" class="muted"></span><button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="sandboxTestBtn" class="secondary" type="button">🧪 Test Sandbox</button><button id="refresh" class="secondary" type="button">↻ Refresh</button><button id="logout" class="secondary" type="button">Log out</button></div></div>
 
 <section id="dashboard">
 <div class="cards">
@@ -413,7 +413,17 @@ document.addEventListener("click",async e=>{
  }
 });
 
-$("logout").addEventListener("click",async()=>{await db.auth.signOut();location.href="index.html"});
+$("logout").addEventListener("click",async()=>{
+  try{
+    $("logout").disabled=true;
+    $("logout").textContent="Logging out...";
+    if(db) await db.auth.signOut({scope:"local"});
+  }catch(e){
+    console.warn("Logout error:",e);
+  }finally{
+    window.location.replace("index.html");
+  }
+});location.href="index.html"});
 
 $("caseForm").addEventListener("submit",async e=>{
  e.preventDefault();$("formMsg").innerHTML="";
@@ -441,14 +451,33 @@ $("caseForm").addEventListener("submit",async e=>{
 window.addEventListener("error",e=>setNotice("Website error: "+e.message,true));
 
 (async function init(){
- try{
-   if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
-   db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-   const s=await db.auth.getSession();
-   if(!s.data.session){location.href="index.html";return}
-   $("who").textContent=s.data.session.user.email||"";
-   await load();
- }catch(e){setNotice("Startup error: "+(e.message||e),true)}
+  try{
+    if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
+
+    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    });
+
+    const {data,error}=await db.auth.getSession();
+    if(error)throw error;
+
+    if(!data?.session){
+      window.location.replace("index.html");
+      return;
+    }
+
+    $("who").textContent=data.session.user.email||"";
+    document.body.style.visibility="visible";
+    await load();
+  }catch(e){
+    document.body.style.visibility="visible";
+    setNotice("Startup error: "+(e.message||e),true);
+    console.error("Dashboard startup error:",e);
+  }
 })();
 })();
 </script>
