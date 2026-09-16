@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -12,7 +11,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .side{position:fixed;inset:0 auto 0 0;width:220px;background:#0f172a;color:#fff;padding:22px 12px}.brand{font-size:20px;font-weight:800;padding:10px 12px 28px}.brand span{color:#60a5fa}.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cbd5e1;padding:12px;border-radius:9px;margin:3px 0}.nav button.active,.nav button:hover{background:#1e293b;color:#fff}
 .main{margin-left:220px;padding:30px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.top h1{margin:0 0 5px;font-size:29px}.muted{color:#64748b}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}.card,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}.card{padding:18px}.num{font-size:28px;font-weight:800;margin-top:8px}.red{color:#dc2626}.green{color:#059669}
 .panel{overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h2{margin:0;font-size:17px}.search{max-width:330px;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px}
-.notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.notice.error{background:#fef2f2;color:#991b1b}.sandbox-panel{margin-top:14px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden}.sandbox-head{padding:15px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.sandbox-head h2{margin:0;font-size:16px}.sandbox-body{padding:14px 18px}.sandbox-help{font-size:12px;color:#64748b;line-height:1.5;margin-bottom:12px}.sandbox-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}.sandbox-table{width:100%;min-width:700px;border-collapse:collapse}.sandbox-table th,.sandbox-table td{padding:9px 10px;border-bottom:1px solid #eef2f7;font-size:12px;text-align:left}.sandbox-table th{background:#f8fafc;color:#64748b}.sb-ok{color:#166534;font-weight:700}.sb-fail{color:#991b1b;font-weight:700}.sb-running{color:#1d4ed8;font-weight:700}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}.link{border:0;background:none;color:#2563eb;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}.primary,.secondary,.check-btn{border-radius:9px;padding:9px 12px;font-weight:700}.primary{border:0;background:#2563eb;color:white}.secondary{border:1px solid #cbd5e1;background:#fff}.check-btn{border:1px solid #2563eb;background:#fff;color:#2563eb;font-size:12px}.check-btn:disabled{opacity:.55;cursor:wait}.uscis-cell{max-width:280px;white-space:normal}.uscis-desc{font-size:11px;color:#64748b;margin-top:4px;line-height:1.35}.last-check{font-size:11px;color:#64748b;margin-top:3px}
+.notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.notice.error{background:#fef2f2;color:#991b1b}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}.link{border:0;background:none;color:#2563eb;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}.primary,.secondary,.check-btn{border-radius:9px;padding:9px 12px;font-weight:700}.primary{border:0;background:#2563eb;color:white}.secondary{border:1px solid #cbd5e1;background:#fff}.check-btn{border:1px solid #2563eb;background:#fff;color:#2563eb;font-size:12px}.check-btn:disabled{opacity:.55;cursor:wait}.uscis-cell{max-width:280px;white-space:normal}.uscis-desc{font-size:11px;color:#64748b;margin-top:4px;line-height:1.35}.last-check{font-size:11px;color:#64748b;margin-top:3px}
 .modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}textarea{min-height:100px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.msg{padding:10px;border-radius:9px;margin-top:12px;font-size:13px}.msg.error{background:#fef2f2;color:#991b1b}.msg.success{background:#f0fdf4;color:#166534}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
@@ -41,47 +40,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
 <div id="notice" class="notice">Connecting to Supabase...</div>
 <div id="batchNotice" class="notice" style="display:none"></div>
-<div class="sandbox-panel">
-  <div class="sandbox-head">
-    <h2>🧪 USCIS Sandbox Test Suite</h2>
-    <div class="sandbox-actions">
-      <button id="sandboxTestBtn" class="secondary" type="button">🧪 Test Sandbox</button>
-      <button id="runSandboxSuite" class="secondary" type="button">Run Sandbox Suite</button>
-      <button id="runSandboxError" class="secondary" type="button">Test 4xx Error</button>
-    </div>
-  </div>
-  <div class="sandbox-body">
-    <div class="sandbox-help">
-      This test uses official USCIS staging receipt numbers only.
-      It calls the USCIS Sandbox through your Supabase backend and does
-      <b>not</b> create, update, or delete any case in your database.
-    </div>
-    <div id="sandboxResult" class="notice" style="display:none"></div>
-    <div class="table-wrap">
-      <table class="sandbox-table">
-        <thead>
-          <tr>
-            <th>Receipt</th>
-            <th>Expected</th>
-            <th>Result</th>
-            <th>HTTP</th>
-            <th>USCIS Status</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-        <tbody id="sandboxBody">
-          <tr>
-            <td colspan="6" class="empty">No Sandbox test run yet.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<div class="sandbox-body">
-<div class="sandbox-help">This test uses official USCIS staging receipt numbers only. It calls the USCIS Sandbox through your Supabase backend and does <b>not</b> update, create, or delete any case in your database.</div>
-<div class="table-wrap"><table class="sandbox-table"><thead><tr><th>Receipt</th><th>Expected</th><th>Result</th><th>USCIS Status</th></tr></thead><tbody id="sandboxBody"><tr><td colspan="4" class="empty">No Sandbox suite run yet.</td></tr></tbody></table></div>
-</div></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
@@ -134,566 +92,195 @@ function filt(a,q){q=(q||"").toLowerCase().trim();return q?a.filter(c=>[c.receip
 function lastChecked(x){return x?new Date(x).toLocaleString():"—"}
 
 function draw(){
-&#x20;$("total").textContent=rows.length;
-&#x20;$("pending").textContent=rows.filter(isPending).length;
-&#x20;$("rfe").textContent=rows.filter(isRfe).length;
-&#x20;$("approved").textContent=rows.filter(x=>/approved/i.test(x.current_status||"")||/approved/i.test(x.uscis_status_text||"")).length;
-&#x20;$("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")||/denied/i.test(x.uscis_status_text||"")).length;
+ $("total").textContent=rows.length;
+ $("pending").textContent=rows.filter(isPending).length;
+ $("rfe").textContent=rows.filter(isRfe).length;
+ $("approved").textContent=rows.filter(x=>/approved/i.test(x.current_status||"")||/approved/i.test(x.uscis_status_text||"")).length;
+ $("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")||/denied/i.test(x.uscis_status_text||"")).length;
 
-&#x20;const a=filt(rows,$("dashSearch").value);
-&#x20;$("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="8" class="empty">No cases found.</td></tr>';
+ const a=filt(rows,$("dashSearch").value);
+ $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="8" class="empty">No cases found.</td></tr>';
 
-&#x20;const b=filt(rows,$("caseSearch").value);
-&#x20;$("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager)+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="11" class="empty">No cases found.</td></tr>';
+ const b=filt(rows,$("caseSearch").value);
+ $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager)+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="11" class="empty">No cases found.</td></tr>';
 
-&#x20;const z=rows.filter(isRfe);
-&#x20;$("alertBody").innerHTML=z.length?z.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
+ const z=rows.filter(isRfe);
+ $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
 }
 
 async function load(){
-&#x20;setNotice("Loading cases from Supabase...");
-&#x20;try{
-&#x20;  const r=await db.from("cases").select("*").order("created_at",{ascending:false});
-&#x20;  if(r.error) throw r.error;
-&#x20;  rows=r.data||[]; draw(); setNotice("Connected to Supabase. "+rows.length+" case(s) loaded.");
-&#x20;}catch(e){
-&#x20;  setNotice("Database error: "+(e.message||e),true);
-&#x20;  draw();
-&#x20;}
+ setNotice("Loading cases from Supabase...");
+ try{
+   const r=await db.from("cases").select("*").order("created_at",{ascending:false});
+   if(r.error) throw r.error;
+   rows=r.data||[]; draw(); setNotice("Connected to Supabase. "+rows.length+" case(s) loaded.");
+ }catch(e){
+   setNotice("Database error: "+(e.message||e),true);
+   draw();
+ }
 }
 
 async function readFunctionError(err){
-&#x20;let status=null, body=null;
-&#x20;try{
-&#x20;  status=err?.context?.status||null;
-&#x20;  if(err?.context?.json) body=await err.context.json();
-&#x20;}catch(_){}
-&#x20;const apiError=body?.errors?.[0];
-&#x20;const raw=apiError?.message||body?.error||body?.message||err?.message||"USCIS function failed";
-&#x20;let message=raw;
-&#x20;if(status===404 && /staging|sandbox|receipt|not found/i.test(raw)){
-&#x20;  message="This receipt number is not supported by the USCIS Sandbox. Use an official staging receipt for testing, or use Production access for live receipts.";
-&#x20;}else if(status===400 && /receipt|invalid/i.test(raw)){
-&#x20;  message="USCIS rejected this receipt number. Please verify the receipt number and environment.";
-&#x20;}
-&#x20;return {status,body,message};
+ let status=null, body=null;
+ try{
+   status=err?.context?.status||null;
+   if(err?.context?.json) body=await err.context.json();
+ }catch(_){}
+ const apiError=body?.errors?.[0];
+ const raw=apiError?.message||body?.error||body?.message||err?.message||"USCIS function failed";
+ let message=raw;
+ if(status===404 && /staging|sandbox|receipt|not found/i.test(raw)){
+   message="This receipt number is not supported by the USCIS Sandbox. Use an official staging receipt for testing, or use Production access for live receipts.";
+ }else if(status===400 && /receipt|invalid/i.test(raw)){
+   message="USCIS rejected this receipt number. Please verify the receipt number and environment.";
+ }
+ return {status,body,message};
 }
 
 async function checkUSCIS(c,buttonEl=null,showAlert=true){
-&#x20;if(!c?.receipt_number)return {ok:false,receipt:c?.receipt_number||"",error:"Missing receipt number"};
-&#x20;if(buttonEl){buttonEl.disabled=true;buttonEl.textContent="Checking...";}
-&#x20;try{
-&#x20;  const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:c.receipt_number}});
-&#x20;  if(r.error){
-&#x20;    const info=await readFunctionError(r.error);
-&#x20;    if(showAlert)alert("USCIS check failed for "+c.receipt_number+"\n\n"+info.message+(info.status?"\n\nHTTP status: "+info.status:""));
-&#x20;    return {ok:false,receipt:c.receipt_number,error:info.message,httpStatus:info.status};
-&#x20;  }
-&#x20;  const cs=r.data?.case_status;
-&#x20;  if(!cs)throw new Error("USCIS returned no case status.");
+ if(!c?.receipt_number)return {ok:false,receipt:c?.receipt_number||"",error:"Missing receipt number"};
+ if(buttonEl){buttonEl.disabled=true;buttonEl.textContent="Checking...";}
+ try{
+   const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:c.receipt_number}});
+   if(r.error){
+     const info=await readFunctionError(r.error);
+     if(showAlert)alert("USCIS check failed for "+c.receipt_number+"\n\n"+info.message+(info.status?"\n\nHTTP status: "+info.status:""));
+     return {ok:false,receipt:c.receipt_number,error:info.message,httpStatus:info.status};
+   }
+   const cs=r.data?.case_status;
+   if(!cs)throw new Error("USCIS returned no case status.");
 
-&#x20;  const returnedReceipt=String(cs.receiptNumber||"").trim().toUpperCase();
-&#x20;  const requestedReceipt=String(c.receipt_number||"").trim().toUpperCase();
-&#x20;  if(!returnedReceipt || returnedReceipt!==requestedReceipt){
-&#x20;    throw new Error("USCIS returned a different receipt number ("+(returnedReceipt||"missing")+") than the case requested ("+requestedReceipt+"). No case data was changed.");
-&#x20;  }
+   const modified=cs.modifiedDate||null;
+   const statusText=cs.current_case_status_text_en||"Unknown USCIS status";
+   const statusDesc=cs.current_case_status_desc_en||null;
+   const statusDate=modified&&/^\d{2}-\d{2}-\d{4}/.test(modified)?modified.slice(6,10)+"-"+modified.slice(0,2)+"-"+modified.slice(3,5):null;
 
-&#x20;  const modified=cs.modifiedDate||null;
-&#x20;  const statusText=cs.current_case_status_text_en||"Unknown USCIS status";
-&#x20;  const statusDesc=cs.current_case_status_desc_en||null;
-&#x20;  const statusDate=modified&&/^\d{2}-\d{2}-\d{4}/.test(modified)?modified.slice(6,10)+"-"+modified.slice(0,2)+"-"+modified.slice(3,5):null;
+   const payload={
+     uscis_status_text:statusText,
+     uscis_status_desc:statusDesc,
+     uscis_modified_date:modified,
+     uscis_submitted_date:cs.submittedDate||null,
+     uscis_form_type:cs.formType||null,
+     last_checked_at:new Date().toISOString(),
+     current_status:statusText,
+     status_date:statusDate,
+     form_type:cs.formType||c.form_type||null
+   };
 
-&#x20;  const payload={
-&#x20;    uscis_status_text:statusText,
-&#x20;    uscis_status_desc:statusDesc,
-&#x20;    uscis_modified_date:modified,
-&#x20;    uscis_submitted_date:cs.submittedDate||null,
-&#x20;    uscis_form_type:cs.formType||null,
-&#x20;    last_checked_at:new Date().toISOString(),
-&#x20;    // Keep the internal case status separate from the USCIS API status.
-&#x20;    // USCIS status is stored only in the dedicated USCIS fields.
-&#x20;    status_date:statusDate,
-&#x20;    form_type:cs.formType||c.form_type||null
-&#x20;  };
+   const up=await db.from("cases").update(payload).eq("id",c.id);
+   if(up.error)throw up.error;
 
-&#x20;  const up=await db.from("cases").update(payload).eq("id",c.id);
-&#x20;  if(up.error)throw up.error;
-
-&#x20;  return {ok:true,receipt:c.receipt_number,status:statusText};
-&#x20;}catch(err){
-&#x20;  const message=err.message||String(err);
-&#x20;  if(showAlert)alert("USCIS check failed for "+c.receipt_number+": "+message);
-&#x20;  return {ok:false,receipt:c.receipt_number,error:message};
-&#x20;}finally{
-&#x20;  if(buttonEl){buttonEl.disabled=false;buttonEl.textContent="Check USCIS";}
-&#x20;}
+   return {ok:true,receipt:c.receipt_number,status:statusText};
+ }catch(err){
+   const message=err.message||String(err);
+   if(showAlert)alert("USCIS check failed for "+c.receipt_number+": "+message);
+   return {ok:false,receipt:c.receipt_number,error:message};
+ }finally{
+   if(buttonEl){buttonEl.disabled=false;buttonEl.textContent="Check USCIS";}
+ }
 }
 
-function showSandboxResult(message, error = false) {
-  const el = $("sandboxResult");
-  if (!el) return;
-  el.style.display = "block";
-  el.className = error ? "notice error" : "notice";
-  el.textContent = message;
-}
-
-function sandboxRow(receipt, expected, result, httpStatus, status, details) {
-  const cls =
-    result === "PASS" ? "sb-ok" :
-    result === "RUNNING" ? "sb-running" : "sb-fail";
-
-  return '<tr>' +
-    '<td><b>' + esc(receipt) + '</b></td>' +
-    '<td>' + esc(expected) + '</td>' +
-    '<td class="' + cls + '">' + esc(result) + '</td>' +
-    '<td>' + esc(httpStatus || "—") + '</td>' +
-    '<td>' + esc(status || "—") + '</td>' +
-    '<td>' + esc(details || "—") + '</td>' +
-    '</tr>';
-}
-
-async function testSandbox() {
-  const btn = $("sandboxTestBtn");
-  const body = $("sandboxBody");
-  const receipt = "EAC9999103402";
-
-  if (!db) {
-    showSandboxResult("Supabase is not ready. Please refresh the page.", true);
-    return;
-  }
-
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = "Testing Sandbox...";
-  }
-
-  body.innerHTML = sandboxRow(
-    receipt, "200 success", "RUNNING", "", "",
-    "Calling USCIS Sandbox..."
-  );
-
-  showSandboxResult(
-    "Testing USCIS Sandbox with staging receipt " + receipt + "..."
-  );
-
-  try {
-    const r = await db.functions.invoke(
-      USCIS_FUNCTION,
-      { body: { receiptNumber: receipt } }
-    );
-
-    if (r.error) {
-      const info = await readFunctionError(r.error);
-
-      body.innerHTML = sandboxRow(
-        receipt, "200 success", "FAIL",
-        info.status || "", "", info.message
-      );
-
-      showSandboxResult(
-        "Sandbox test failed — HTTP " +
-        (info.status || "unknown") + ": " + info.message,
-        true
-      );
-      return;
-    }
-
-    const cs = r.data?.case_status;
-    if (!cs) throw new Error("USCIS returned no case_status object.");
-
-    const returnedReceipt =
-      String(cs.receiptNumber || "").trim().toUpperCase();
-
-    if (returnedReceipt !== receipt) {
-      body.innerHTML = sandboxRow(
-        receipt, "200 success", "FAIL", "200", "",
-        "Unexpected receipt returned: " +
-        (returnedReceipt || "missing")
-      );
-
-      showSandboxResult(
-        "Sandbox failed receipt validation. USCIS returned " +
-        (returnedReceipt || "no receipt") + " instead of " +
-        receipt + ". No database case was modified.",
-        true
-      );
-      return;
-    }
-
-    const statusText =
-      cs.current_case_status_text_en || "Status received";
-
-    body.innerHTML = sandboxRow(
-      receipt,
-      "200 success",
-      "PASS",
-      "200",
-      statusText,
-      cs.current_case_status_desc_en || ""
-    );
-
-    showSandboxResult(
-      "Sandbox test successful — " + receipt + " → " +
-      statusText + ". No database case was modified."
-    );
-
-  } catch (err) {
-    body.innerHTML = sandboxRow(
-      receipt, "200 success", "FAIL", "", "",
-      err.message || String(err)
-    );
-
-    showSandboxResult(
-      "Sandbox test failed: " + (err.message || String(err)),
-      true
-    );
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = "🧪 Test Sandbox";
-    }
-  }
-}
-
-const SANDBOX_RECEIPTS = [
-  "EAC9999103402",
-  "EAC9999103403",
-  "EAC9999103404",
-  "EAC9999103405",
-  "EAC9999103410",
-  "EAC9999103411"
-];
-
-const SANDBOX_ERROR_RECEIPT = "IOE0000000000";
-
-async function runSandboxSuite() {
-  const btn = $("runSandboxSuite");
-  const errorBtn = $("runSandboxError");
-  const singleBtn = $("sandboxTestBtn");
-  const body = $("sandboxBody");
-
-  if (!db) {
-    showSandboxResult("Supabase is not ready. Please refresh the page.", true);
-    return;
-  }
-
-  btn.disabled = true;
-  errorBtn.disabled = true;
-  singleBtn.disabled = true;
-  btn.textContent = "Running...";
-
-  body.innerHTML = SANDBOX_RECEIPTS.map(receipt =>
-    sandboxRow(receipt, "200 success", "RUNNING", "", "", "Testing...")
-  ).join("");
-
-  let passed = 0;
-  let failed = 0;
-
-  showSandboxResult(
-    "Running USCIS Sandbox Suite — " +
-    SANDBOX_RECEIPTS.length + " staging receipts..."
-  );
-
-  try {
-    for (let i = 0; i < SANDBOX_RECEIPTS.length; i++) {
-      const receipt = SANDBOX_RECEIPTS[i];
-
-      try {
-        const r = await db.functions.invoke(
-          USCIS_FUNCTION,
-          { body: { receiptNumber: receipt } }
-        );
-
-        if (r.error) {
-          const info = await readFunctionError(r.error);
-          failed++;
-
-          body.rows[i].outerHTML = sandboxRow(
-            receipt, "200 success", "FAIL",
-            info.status || "", "", info.message
-          );
-        } else {
-          const cs = r.data?.case_status;
-          const returned =
-            String(cs?.receiptNumber || "").trim().toUpperCase();
-
-          if (!cs || returned !== receipt) {
-            failed++;
-
-            body.rows[i].outerHTML = sandboxRow(
-              receipt, "200 success", "FAIL", "200", "",
-              "Unexpected receipt returned: " +
-              (returned || "missing")
-            );
-          } else {
-            passed++;
-
-            body.rows[i].outerHTML = sandboxRow(
-              receipt,
-              "200 success",
-              "PASS",
-              "200",
-              cs.current_case_status_text_en || "Status received",
-              cs.current_case_status_desc_en || ""
-            );
-          }
-        }
-      } catch (err) {
-        failed++;
-
-        body.rows[i].outerHTML = sandboxRow(
-          receipt, "200 success", "FAIL", "", "",
-          err.message || String(err)
-        );
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 300));
-    }
-
-    showSandboxResult(
-      "Sandbox suite completed — Passed: " + passed +
-      " | Failed: " + failed +
-      " | Database cases changed: 0",
-      failed > 0
-    );
-  } finally {
-    btn.disabled = false;
-    errorBtn.disabled = false;
-    singleBtn.disabled = false;
-    btn.textContent = "Run Sandbox Suite";
-  }
-}
-
-async function runSandboxError() {
-  const btn = $("runSandboxError");
-  const suiteBtn = $("runSandboxSuite");
-  const singleBtn = $("sandboxTestBtn");
-  const body = $("sandboxBody");
-  const receipt = SANDBOX_ERROR_RECEIPT;
-
-  if (!db) {
-    showSandboxResult("Supabase is not ready. Please refresh the page.", true);
-    return;
-  }
-
-  btn.disabled = true;
-  suiteBtn.disabled = true;
-  singleBtn.disabled = true;
-  btn.textContent = "Testing 4xx...";
-
-  body.innerHTML = sandboxRow(
-    receipt, "4xx error expected", "RUNNING", "", "",
-    "Testing invalid receipt..."
-  );
-
-  showSandboxResult("Testing USCIS 4xx error handling...");
-
-  try {
-    const r = await db.functions.invoke(
-      USCIS_FUNCTION,
-      { body: { receiptNumber: receipt } }
-    );
-
-    if (r.error) {
-      const info = await readFunctionError(r.error);
-      const passed =
-        Number(info.status) >= 400 &&
-        Number(info.status) < 500;
-
-      body.innerHTML = sandboxRow(
-        receipt,
-        "4xx error expected",
-        passed ? "PASS" : "FAIL",
-        info.status || "",
-        "",
-        info.message
-      );
-
-      showSandboxResult(
-        passed
-          ? "4xx test passed — HTTP " + info.status +
-            ". Database cases changed: 0."
-          : "4xx test failed — expected a 4xx response but received HTTP " +
-            (info.status || "unknown") + ".",
-        !passed
-      );
-    } else {
-      body.innerHTML = sandboxRow(
-        receipt,
-        "4xx error expected",
-        "FAIL",
-        "200",
-        r.data?.case_status?.current_case_status_text_en || "",
-        "USCIS unexpectedly returned success."
-      );
-
-      showSandboxResult(
-        "4xx test failed — USCIS unexpectedly returned success.",
-        true
-      );
-    }
-  } catch (err) {
-    body.innerHTML = sandboxRow(
-      receipt, "4xx error expected", "FAIL", "", "",
-      err.message || String(err)
-    );
-
-    showSandboxResult(
-      "4xx test failed: " + (err.message || String(err)),
-      true
-    );
-  } finally {
-    btn.disabled = false;
-    suiteBtn.disabled = false;
-    singleBtn.disabled = false;
-    btn.textContent = "Test 4xx Error";
-  }
-}
-
-const SANDBOX_RECEIPTS=[
-&#x20;"EAC9999103402","EAC9999103403","EAC9999103404","EAC9999103405","EAC9999103410","EAC9999103411"
-];
-
-function sandboxRow(receipt,expected,result,status){
-&#x20;const cls=result==="PASS"?"sb-ok":result==="RUNNING"?"sb-running":"sb-fail";
-&#x20;return '<tr><td><b>'+esc(receipt)+'</b></td><td>'+esc(expected)+'</td><td class="'+cls+'">'+esc(result)+'</td><td>'+esc(status||"—")+'</td></tr>';
-}
-
-async function runSandboxSuite(){
-&#x20;const btn=$("runSandboxSuite"), errBtn=$("runSandboxError"), body=$("sandboxBody");
-&#x20;if(!db){alert("Supabase is not ready. Please refresh the page.");return;}
-&#x20;btn.disabled=true;errBtn.disabled=true;btn.textContent="Running...";
-&#x20;body.innerHTML=SANDBOX_RECEIPTS.map(r=>sandboxRow(r,"200 success","RUNNING","Testing...")).join("");
-&#x20;let passed=0,failed=0;
-&#x20;for(let i=0;i<SANDBOX_RECEIPTS.length;i++){
-&#x20;  const receipt=SANDBOX_RECEIPTS[i];
-&#x20;  try{
-&#x20;    const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:receipt}});
-&#x20;    if(r.error){
-&#x20;      const info=await readFunctionError(r.error);
-&#x20;      failed++;
-&#x20;      body.rows[i].outerHTML=sandboxRow(receipt,"200 success","FAIL",info.message+(info.status?" (HTTP "+info.status+")":""));
-&#x20;    }else{
-&#x20;      const cs=r.data?.case_status;
-&#x20;      const returned=String(cs?.receiptNumber||"").trim().toUpperCase();
-&#x20;      if(!cs || returned!==receipt){
-&#x20;        failed++;
-&#x20;        body.rows[i].outerHTML=sandboxRow(receipt,"200 success","FAIL","Unexpected receipt returned: "+(returned||"missing"));
-&#x20;      }else{
-&#x20;        passed++;
-&#x20;        body.rows[i].outerHTML=sandboxRow(receipt,"200 success","PASS",cs.current_case_status_text_en||"Status received");
-&#x20;      }
-&#x20;    }
-&#x20;  }catch(e){
-&#x20;    failed++;
-&#x20;    body.rows[i].outerHTML=sandboxRow(receipt,"200 success","FAIL",e.message||String(e));
-&#x20;  }
-&#x20;  await new Promise(resolve=>setTimeout(resolve,250));
-&#x20;}
-&#x20;const batch=$("batchNotice");
-&#x20;if(batch){batch.style.display="block";batch.className=failed?"notice error":"notice";batch.textContent="Sandbox suite completed — Passed: "+passed+" | Failed: "+failed+" | Database cases changed: 0";}
-&#x20;btn.disabled=false;errBtn.disabled=false;btn.textContent="Run Sandbox Suite";
-}
-
-async function runSandboxError(){
-&#x20;const btn=$("runSandboxError"), suite=$("runSandboxSuite"), body=$("sandboxBody");
-&#x20;if(!db){alert("Supabase is not ready. Please refresh the page.");return;}
-&#x20;btn.disabled=true;suite.disabled=true;btn.textContent="Testing 4xx...";
-&#x20;const receipt="IOE0000000000";
-&#x20;body.innerHTML=sandboxRow(receipt,"4xx error expected","RUNNING","Testing...");
-&#x20;try{
-&#x20;  const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:receipt}});
-&#x20;  if(r.error){
-&#x20;    const info=await readFunctionError(r.error);
-&#x20;    body.innerHTML=sandboxRow(receipt,"4xx error expected",info.status>=400?"PASS":"FAIL",info.message+(info.status?" (HTTP "+info.status+")":""));
-&#x20;    const batch=$("batchNotice");
-&#x20;    if(batch){batch.style.display="block";batch.className=info.status>=400?"notice":"notice error";batch.textContent="Sandbox 4xx test completed — HTTP "+(info.status||"unknown")+". Database cases changed: 0";}
-&#x20;  }else{
-&#x20;    body.innerHTML=sandboxRow(receipt,"4xx error expected","FAIL","USCIS unexpectedly returned success.");
-&#x20;  }
-&#x20;}catch(e){body.innerHTML=sandboxRow(receipt,"4xx error expected","FAIL",e.message||String(e));}
-&#x20;btn.disabled=false;suite.disabled=false;btn.textContent="Test 4xx Error";
+async function testSandbox(){
+ const btn=$("sandboxTestBtn");
+ const batch=$("batchNotice");
+ const sandboxReceipt="EAC9999103402";
+ if(btn){btn.disabled=true;btn.textContent="Testing Sandbox...";}
+ if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Testing USCIS Sandbox with official staging receipt "+sandboxReceipt+"...";}
+ try{
+   const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:sandboxReceipt}});
+   if(r.error){
+     const info=await readFunctionError(r.error);
+     if(batch){batch.className="notice error";batch.textContent="Sandbox test failed: "+info.message+(info.status?" (HTTP "+info.status+")":"");}
+     return;
+   }
+   const cs=r.data?.case_status;
+   if(batch){batch.className="notice";batch.textContent="Sandbox test successful — "+sandboxReceipt+" → "+(cs?.current_case_status_text_en||"Status received")+". This test does not modify any case.";}
+ }catch(err){
+   if(batch){batch.className="notice error";batch.textContent="Sandbox test failed: "+(err.message||String(err));}
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent="🧪 Test Sandbox";}
+ }
 }
 
 async function checkAllUSCIS(){
-&#x20;const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
-&#x20;if(!rows.length){alert("There are no cases to check.");return;}
-&#x20;if(!confirm("Check USCIS for all "+rows.length+" case(s)?"))return;
-&#x20;buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
-&#x20;const batch=$("batchNotice");
-&#x20;if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Starting USCIS checks for "+rows.length+" case(s)...";}
-&#x20;let checked=0,failed=0,unsupported=0,approved=0,rfe=0,denied=0;
-&#x20;try{
-&#x20;  for(let i=0;i<rows.length;i++){
-&#x20;    const result=await checkUSCIS(rows[i],null,false);
-&#x20;    if(result.ok){
-&#x20;      checked++;
-&#x20;      if(/approved/i.test(result.status||""))approved++;
-&#x20;      if(/rfe|noid/i.test(result.status||""))rfe++;
-&#x20;      if(/denied/i.test(result.status||""))denied++;
-&#x20;    }else{
-&#x20;      failed++;
-&#x20;      if(result.httpStatus===404)unsupported++;
-&#x20;    }
-&#x20;    if(batch)batch.textContent="Checking USCIS: "+(i+1)+" of "+rows.length+"...";
-&#x20;    await new Promise(resolve=>setTimeout(resolve,250));
-&#x20;  }
-&#x20;  await load();
-&#x20;  const msg="USCIS batch check completed — Checked: "+checked+" | Failed: "+failed+" | Sandbox unsupported: "+unsupported+" | Approved: "+approved+" | RFE/NOID: "+rfe+" | Denied: "+denied;
-&#x20;  if(batch){batch.textContent=msg;batch.className=failed?"notice error":"notice";}
-&#x20;  else alert(msg);
-&#x20;}finally{
-&#x20;  buttons.forEach(b=>{b.disabled=false;b.textContent="↻ Check All USCIS";});
-&#x20;}
+ const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
+ if(!rows.length){alert("There are no cases to check.");return;}
+ if(!confirm("Check USCIS for all "+rows.length+" case(s)?"))return;
+ buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
+ const batch=$("batchNotice");
+ if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Starting USCIS checks for "+rows.length+" case(s)...";}
+ let checked=0,failed=0,unsupported=0,approved=0,rfe=0,denied=0;
+ try{
+   for(let i=0;i<rows.length;i++){
+     const result=await checkUSCIS(rows[i],null,false);
+     if(result.ok){
+       checked++;
+       if(/approved/i.test(result.status||""))approved++;
+       if(/rfe|noid/i.test(result.status||""))rfe++;
+       if(/denied/i.test(result.status||""))denied++;
+     }else{
+       failed++;
+       if(result.httpStatus===404)unsupported++;
+     }
+     if(batch)batch.textContent="Checking USCIS: "+(i+1)+" of "+rows.length+"...";
+     await new Promise(resolve=>setTimeout(resolve,250));
+   }
+   await load();
+   const msg="USCIS batch check completed — Checked: "+checked+" | Failed: "+failed+" | Sandbox unsupported: "+unsupported+" | Approved: "+approved+" | RFE/NOID: "+rfe+" | Denied: "+denied;
+   if(batch){batch.textContent=msg;batch.className=failed?"notice error":"notice";}
+   else alert(msg);
+ }finally{
+   buttons.forEach(b=>{b.disabled=false;b.textContent="↻ Check All USCIS";});
+ }
 }
 
 async function loadHistory(caseId=null){
-&#x20;if(!db)return;
-&#x20;$("historyNotice").textContent="Loading case history...";
-&#x20;$("historyNotice").className="notice";
-&#x20;try{
-&#x20; let q=db.from("case_history").select("*").order("created_at",{ascending:false}).limit(500);
-&#x20; if(caseId)q=q.eq("case_id",caseId);
-&#x20; const r=await q;
-&#x20; if(r.error)throw r.error;
-&#x20; let h=r.data||[];
-&#x20; const search=($("historySearch").value||"").toLowerCase().trim();
-&#x20; if(search)h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
-&#x20; $("historyNotice").textContent=h.length?"Showing "+h.length+" history record(s).":"No history records yet.";
-&#x20; $("historyBody").innerHTML=h.length?h.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status||"—")+'</td><td>'+badge(x.new_status||"—")+'</td><td>'+esc(x.changed_by||"—")+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
-&#x20;}catch(e){
-&#x20; $("historyNotice").textContent="History error: "+(e.message||e);
-&#x20; $("historyNotice").className="notice error";
-&#x20;}
+ if(!db)return;
+ $("historyNotice").textContent="Loading case history...";
+ $("historyNotice").className="notice";
+ try{
+  let q=db.from("case_history").select("*").order("created_at",{ascending:false}).limit(500);
+  if(caseId)q=q.eq("case_id",caseId);
+  const r=await q;
+  if(r.error)throw r.error;
+  let h=r.data||[];
+  const search=($("historySearch").value||"").toLowerCase().trim();
+  if(search)h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
+  $("historyNotice").textContent=h.length?"Showing "+h.length+" history record(s).":"No history records yet.";
+  $("historyBody").innerHTML=h.length?h.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status||"—")+'</td><td>'+badge(x.new_status||"—")+'</td><td>'+esc(x.changed_by||"—")+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
+ }catch(e){
+  $("historyNotice").textContent="History error: "+(e.message||e);
+  $("historyNotice").className="notice error";
+ }
 }
 
 function openModal(c){
-&#x20;$("modal").style.display="grid";
-&#x20;$("modalTitle").textContent=c?"Edit Case":"Add Case";
-&#x20;$("caseId").value=c?.id||"";
-&#x20;$("receipt").value=c?.receipt_number||"";
-&#x20;$("beneficiary").value=c?.beneficiary_name||"";
-&#x20;$("employer").value=c?.employer||"";
-&#x20;$("formType").value=c?.form_type||"";
-&#x20;$("filingDate").value=c?.filing_date||"";
-&#x20;$("priorityDate").value=c?.priority_date||"";
-&#x20;$("status").value=c?.current_status||"Case Was Received";
-&#x20;$("statusDate").value=c?.status_date||"";
-&#x20;$("manager").value=c?.case_manager||"";
-&#x20;$("notes").value=c?.notes||"";
-&#x20;$("formMsg").innerHTML="";
+ $("modal").style.display="grid";
+ $("modalTitle").textContent=c?"Edit Case":"Add Case";
+ $("caseId").value=c?.id||"";
+ $("receipt").value=c?.receipt_number||"";
+ $("beneficiary").value=c?.beneficiary_name||"";
+ $("employer").value=c?.employer||"";
+ $("formType").value=c?.form_type||"";
+ $("filingDate").value=c?.filing_date||"";
+ $("priorityDate").value=c?.priority_date||"";
+ $("status").value=c?.current_status||"Case Was Received";
+ $("statusDate").value=c?.status_date||"";
+ $("manager").value=c?.case_manager||"";
+ $("notes").value=c?.notes||"";
+ $("formMsg").innerHTML="";
 }
 function closeModal(){$("modal").style.display="none"}
 
 document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventListener("click",()=>{
-&#x20;document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
-&#x20;const v=btn.dataset.view;
-&#x20;$("dashboard").style.display=v==="dashboard"?"block":"none";
-&#x20;$("cases").style.display=v==="cases"?"block":"none";
-&#x20;$("alerts").style.display=v==="alerts"?"block":"none";
-&#x20;$("history").style.display=v==="history"?"block":"none";
-&#x20;$("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":"RFE / NOID Alerts";
-&#x20;if(v==="history")loadHistory();
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");
+ const v=btn.dataset.view;
+ $("dashboard").style.display=v==="dashboard"?"block":"none";
+ $("cases").style.display=v==="cases"?"block":"none";
+ $("alerts").style.display=v==="alerts"?"block":"none";
+ $("history").style.display=v==="history"?"block":"none";
+ $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":"RFE / NOID Alerts";
+ if(v==="history")loadHistory();
 }));
 
 $("addBtn").addEventListener("click",()=>openModal(null));
@@ -703,79 +290,76 @@ $("cancel").addEventListener("click",closeModal);
 $("refresh").addEventListener("click",load);
 $("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
 $("sandboxTestBtn").addEventListener("click",testSandbox);
-$("runSandboxSuite").addEventListener("click",runSandboxSuite);
-$("runSandboxError").addEventListener("click",runSandboxError);
 $("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
 $("historySearch").addEventListener("input",()=>loadHistory());
 
 document.addEventListener("click",async e=>{
-&#x20;const check=e.target.closest(".checkOneBtn");
-&#x20;if(check){
-&#x20;  const c=rows.find(x=>String(x.id)===String(check.dataset.id));
-&#x20;  if(c)await checkUSCIS(c,check);
-&#x20;  return;
-&#x20;}
-&#x20;const edit=e.target.closest(".editBtn"),del=e.target.closest(".deleteBtn");
-&#x20;if(edit){const c=rows.find(x=>String(x.id)===String(edit.dataset.id));if(c)openModal(c)}
-&#x20;const hist=e.target.closest(".historyBtn");
-&#x20;if(hist){
-&#x20;  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
-&#x20;  document.querySelector('.nav button[data-view="history"]').classList.add("active");
-&#x20;  $("dashboard").style.display="none";$("cases").style.display="none";$("alerts").style.display="none";$("history").style.display="block";
-&#x20;  $("title").textContent="Case History";$("historySearch").value="";
-&#x20;  loadHistory(hist.dataset.id);
-&#x20;}
-&#x20;if(del){
-&#x20;  const c=rows.find(x=>String(x.id)===String(del.dataset.id));
-&#x20;  if(!c)return;
-&#x20;  if(confirm("Delete case "+c.receipt_number+"?")){
-&#x20;    const r=await db.from("cases").delete().eq("id",c.id);
-&#x20;    if(r.error)alert("Delete failed: "+r.error.message);else load();
-&#x20;  }
-&#x20;}
+ const check=e.target.closest(".checkOneBtn");
+ if(check){
+   const c=rows.find(x=>String(x.id)===String(check.dataset.id));
+   if(c)await checkUSCIS(c,check);
+   return;
+ }
+ const edit=e.target.closest(".editBtn"),del=e.target.closest(".deleteBtn");
+ if(edit){const c=rows.find(x=>String(x.id)===String(edit.dataset.id));if(c)openModal(c)}
+ const hist=e.target.closest(".historyBtn");
+ if(hist){
+   document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+   document.querySelector('.nav button[data-view="history"]').classList.add("active");
+   $("dashboard").style.display="none";$("cases").style.display="none";$("alerts").style.display="none";$("history").style.display="block";
+   $("title").textContent="Case History";$("historySearch").value="";
+   loadHistory(hist.dataset.id);
+ }
+ if(del){
+   const c=rows.find(x=>String(x.id)===String(del.dataset.id));
+   if(!c)return;
+   if(confirm("Delete case "+c.receipt_number+"?")){
+     const r=await db.from("cases").delete().eq("id",c.id);
+     if(r.error)alert("Delete failed: "+r.error.message);else load();
+   }
+ }
 });
 
 $("logout").addEventListener("click",async()=>{await db.auth.signOut();location.href="index.html"});
 
 $("caseForm").addEventListener("submit",async e=>{
-&#x20;e.preventDefault();$("formMsg").innerHTML="";
-&#x20;const id=$("caseId").value;
-&#x20;const payload={
-&#x20; receipt_number:$("receipt").value.trim(),
-&#x20; beneficiary_name:$("beneficiary").value.trim(),
-&#x20; employer:$("employer").value.trim()||null,
-&#x20; form_type:$("formType").value.trim()||null,
-&#x20; filing_date:$("filingDate").value||null,
-&#x20; priority_date:$("priorityDate").value||null,
-&#x20; current_status:$("status").value,
-&#x20; status_date:$("statusDate").value||null,
-&#x20; case_manager:$("manager").value.trim()||null,
-&#x20; notes:$("notes").value.trim()||null
-&#x20;};
-&#x20;try{
-&#x20;  const r=id?await db.from("cases").update(payload).eq("id",id):await db.from("cases").insert(payload);
-&#x20;  if(r.error)throw r.error;
-&#x20;  $("formMsg").innerHTML='<div class="msg success">Case saved successfully.</div>';
-&#x20;  setTimeout(()=>{closeModal();load()},500);
-&#x20;}catch(e){$("formMsg").innerHTML='<div class="msg error">'+esc(e.message||e)+'</div>'}
+ e.preventDefault();$("formMsg").innerHTML="";
+ const id=$("caseId").value;
+ const payload={
+  receipt_number:$("receipt").value.trim(),
+  beneficiary_name:$("beneficiary").value.trim(),
+  employer:$("employer").value.trim()||null,
+  form_type:$("formType").value.trim()||null,
+  filing_date:$("filingDate").value||null,
+  priority_date:$("priorityDate").value||null,
+  current_status:$("status").value,
+  status_date:$("statusDate").value||null,
+  case_manager:$("manager").value.trim()||null,
+  notes:$("notes").value.trim()||null
+ };
+ try{
+   const r=id?await db.from("cases").update(payload).eq("id",id):await db.from("cases").insert(payload);
+   if(r.error)throw r.error;
+   $("formMsg").innerHTML='<div class="msg success">Case saved successfully.</div>';
+   setTimeout(()=>{closeModal();load()},500);
+ }catch(e){$("formMsg").innerHTML='<div class="msg error">'+esc(e.message||e)+'</div>'}
 });
 
-window\.addEventListener("error",e=>setNotice("Website error: "+e.message,true));
+window.addEventListener("error",e=>setNotice("Website error: "+e.message,true));
 
 (async function init(){
-&#x20;try{
-&#x20;  if(!window\.supabase)throw new Error("Supabase library did not load. Refresh the page.");
-&#x20;  db=window\.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-&#x20;  const s=await db.auth.getSession();
-&#x20;  if(!s.data.session){location.href="index.html";return}
-&#x20;  $("who").textContent=s.data.session.user.email||"";
-&#x20;  await load();
-&#x20;}catch(e){setNotice("Startup error: "+(e.message||e),true)}
+ try{
+   if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
+   db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+   const s=await db.auth.getSession();
+   if(!s.data.session){location.href="index.html";return}
+   $("who").textContent=s.data.session.user.email||"";
+   await load();
+ }catch(e){setNotice("Startup error: "+(e.message||e),true)}
 })();
 })();
 </script>
-
 </body>
 </html>
