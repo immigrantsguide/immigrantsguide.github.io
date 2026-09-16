@@ -34,7 +34,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="actions">
 <span id="who" class="muted"></span>
 <button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button>
-<button id="sandboxTestBtn" class="secondary" type="button">🧪 Test Sandbox</button>
+
 <button id="refresh" class="secondary" type="button">↻ Refresh</button>
 <button id="logout" class="secondary" type="button">Log out</button>
 </div>
@@ -211,32 +211,6 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
   }
 }
 
-async function testSandbox(){
-  const btn=$("sandboxTestBtn"),batch=$("batchNotice"),sandboxReceipt="EAC9999103402";
-  if(btn){btn.disabled=true;btn.textContent="Testing Sandbox...";}
-  if(batch){batch.style.display="block";batch.className="notice";batch.textContent="Testing USCIS Sandbox with official staging receipt "+sandboxReceipt+"...";}
-  try{
-    if(!db)throw new Error("Supabase is not ready. Please refresh the page and try again.");
-    const r=await db.functions.invoke(USCIS_FUNCTION,{body:{receiptNumber:sandboxReceipt}});
-    if(r.error){
-      const info=await readFunctionError(r.error);
-      const message="Sandbox test failed: "+info.message+(info.status?" (HTTP "+info.status+")":"");
-      if(batch){batch.className="notice error";batch.textContent=message;}else alert(message);
-      return;
-    }
-    const cs=r.data?.case_status;
-    if(!cs)throw new Error("USCIS returned no case status.");
-    if(String(cs.receiptNumber||"").trim().toUpperCase()!==sandboxReceipt)throw new Error("USCIS returned an unexpected receipt number. No case was changed.");
-    const message="Sandbox test successful — "+sandboxReceipt+" → "+(cs.current_case_status_text_en||"Status received")+". This was only a test; none of your cases were modified.";
-    if(batch){batch.className="notice";batch.textContent=message;}else alert(message);
-  }catch(err){
-    const message="Sandbox test failed: "+(err.message||String(err));
-    if(batch){batch.className="notice error";batch.textContent=message;}else alert(message);
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent="🧪 Test Sandbox";}
-  }
-}
-
 async function checkAllUSCIS(){
   const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
   if(!rows.length){alert("There are no cases to check.");return;}
@@ -324,7 +298,6 @@ $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
 $("refresh").addEventListener("click",load);
 $("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
-$("sandboxTestBtn").addEventListener("click",testSandbox);
 $("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
