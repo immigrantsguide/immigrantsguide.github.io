@@ -432,6 +432,9 @@ $("caseForm").addEventListener("submit",async e=>{
     current_status:$("status").value,
     status_date:$("statusDate").value||null,
     case_manager:$("manager").value.trim()||null,
+    amount:$("amount").value===""?null:Number($("amount").value),
+    premium_processing:$("premium").value==="true",
+    time_duration_days:$("duration").value===""?null:Number($("duration").value),
     notes:$("notes").value.trim()||null
   };
   try{
