@@ -16,7 +16,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
-<body style="visibility:hidden">
+<body>
 <aside class="side"><div class="brand">Immigrants <span>Guide</span></div><div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
@@ -424,6 +424,12 @@ $("logout").addEventListener("click",async()=>{
     window.location.replace("index.html");
   }
 });
+  }catch(e){
+    console.warn("Logout error:",e);
+  }finally{
+    window.location.replace("index.html");
+  }
+});
 
 $("caseForm").addEventListener("submit",async e=>{
  e.preventDefault();$("formMsg").innerHTML="";
@@ -471,14 +477,12 @@ window.addEventListener("error",e=>setNotice("Website error: "+e.message,true));
     }
 
     $("who").textContent=data.session.user.email||"";
-    document.body.style.visibility="visible";
     await load();
   }catch(e){
-    document.body.style.visibility="visible";
     setNotice("Startup error: "+(e.message||e),true);
     console.error("Dashboard startup error:",e);
   }
-})();
+})();;
 })();
 </script>
 </body>
