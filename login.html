@@ -1,156 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Immigrants Guide — Login</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#172033}
-.card{width:min(430px,92vw);background:#fff;border:1px solid #e3e8f0;border-radius:18px;
-padding:32px;box-shadow:0 15px 45px rgba(20,35,60,.10)}
-h1{margin:0 0 8px;font-size:27px}.sub{margin:0 0 25px;color:#667085}
-label{display:block;font-size:14px;font-weight:700;margin:16px 0 7px}
-input{width:100%;padding:13px 14px;border:1px solid #ccd5e1;border-radius:10px;font-size:15px;outline:none}
-input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
-button{width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;background:#2563eb;
-color:#fff;font-size:16px;font-weight:700;cursor:pointer}
-button:disabled{opacity:.65;cursor:not-allowed}
-.status{display:none;margin-top:16px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.45;white-space:pre-wrap}
-.info{display:block;background:#eef5ff;color:#174ea6}.success{display:block;background:#ecfdf3;color:#067647}
-.error{display:block;background:#fef3f2;color:#b42318}
-.back{display:block;text-align:center;margin-top:18px;color:#2563eb;text-decoration:none;font-size:14px}
-.small{margin-top:18px;text-align:center;color:#98a2b3;font-size:12px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+.card{width:min(430px,92%);background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:30px;box-shadow:0 18px 50px #0001}
+h1{margin:0 0 8px}.muted{color:#64748b;margin:0 0 24px}
+label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}
+button{width:100%;margin-top:20px;padding:12px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}
+button:disabled{opacity:.65;cursor:wait}.msg{display:none;margin-top:14px;padding:11px;border-radius:9px;font-size:13px;line-height:1.4}.msg.info{display:block;background:#eff6ff;color:#1d4ed8}.msg.ok{display:block;background:#f0fdf4;color:#166534}.msg.err{display:block;background:#fef2f2;color:#991b1b}
+.back{display:block;text-align:center;margin-top:18px;color:#2563eb;text-decoration:none;font-size:13px}
 </style>
 </head>
 <body>
 <div class="card">
-<h1>Welcome back</h1>
-<p class="sub">Sign in to your Immigrants Guide USCIS Case Tracker.</p>
-<form id="loginForm" novalidate>
+<h1>Immigrants <span style="color:#2563eb">Guide</span></h1>
+<p class="muted">Secure staff login for the USCIS Case Tracker.</p>
+<form id="form">
 <label for="email">Email</label>
 <input id="email" type="email" autocomplete="username" required>
 <label for="password">Password</label>
 <input id="password" type="password" autocomplete="current-password" required>
-<button id="loginBtn" type="submit">Login</button>
+<button id="btn" type="submit">Log In</button>
 </form>
-<div id="status" class="status"></div>
+<div id="msg" class="msg"></div>
 <a class="back" href="index.html">← Back to Case Tracker</a>
-<div class="small">Immigrants Guide</div>
 </div>
-
 <script>
 (function(){
-  const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
-  const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
-  const PROJECT_REF="euzifpjzeuqdznkelxdq";
-  const STORAGE_KEY="sb-"+PROJECT_REF+"-auth-token";
+"use strict";
+const URL="https://euzifpjzeuqdznkelxdq.supabase.co";
+const KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
+const BOOT="immigrants_guide_auth_bootstrap";
+const $=id=>document.getElementById(id);
+function message(t,c){$("msg").className="msg "+c;$("msg").textContent=t;}
+$("form").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const btn=$("btn");btn.disabled=true;btn.textContent="Signing in...";
+ message("Signing in...","info");
+ try{
+   const controller=new AbortController();
+   const timer=setTimeout(()=>controller.abort(),15000);
+   const r=await fetch(URL+"/auth/v1/token?grant_type=password",{
+     method:"POST",
+     headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+KEY},
+     body:JSON.stringify({email:$("email").value.trim(),password:$("password").value}),
+     signal:controller.signal
+   });
+   clearTimeout(timer);
+   let data={};try{data=await r.json()}catch(_){}
+   if(!r.ok)throw new Error(data.error_description||data.msg||data.message||"Login failed.");
+   if(!data.access_token||!data.refresh_token||!data.user)throw new Error("Supabase did not return a complete session.");
 
-  const form=document.getElementById("loginForm");
-  const btn=document.getElementById("loginBtn");
-  const status=document.getElementById("status");
+   const bootstrap={
+     access_token:data.access_token,
+     refresh_token:data.refresh_token
+   };
+   sessionStorage.setItem(BOOT,JSON.stringify(bootstrap));
+   // Also keep a fallback in localStorage in case the browser opens dashboard
+   // in a separate page context.
+   localStorage.setItem(BOOT,JSON.stringify(bootstrap));
 
-  function show(text,type){
-    status.className="status "+type;
-    status.textContent=text;
-  }
-
-  function busy(v){
-    btn.disabled=v;
-    btn.textContent=v?"Signing in...":"Login";
-  }
-
-  form.addEventListener("submit",async function(e){
-    e.preventDefault();
-
-    const email=document.getElementById("email").value.trim();
-    const password=document.getElementById("password").value;
-
-    if(!email||!password){
-      show("Please enter both email and password.","error");
-      return;
-    }
-
-    busy(true);
-    show("Connecting to Supabase Auth...","info");
-
-    try{
-      const controller=new AbortController();
-      const timeout=setTimeout(()=>controller.abort(),15000);
-
-      const response=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "apikey":SUPABASE_KEY,
-          "Authorization":"Bearer "+SUPABASE_KEY
-        },
-        body:JSON.stringify({email:email,password:password}),
-        signal:controller.signal
-      });
-
-      clearTimeout(timeout);
-
-      let data=null;
-      try{data=await response.json();}catch(_){}
-
-      if(!response.ok){
-        const msg=data?.error_description||data?.msg||data?.message||"Supabase Auth rejected the login.";
-        show(msg,"error");
-        busy(false);
-        return;
-      }
-
-      if(!data?.access_token||!data?.refresh_token||!data?.user){
-        show("Supabase returned an incomplete login session. Please try again.","error");
-        busy(false);
-        return;
-      }
-
-      // Store the same session shape used by supabase-js v2.
-      // This lets dashboard.html initialize normally without calling signInWithPassword().
-      const now=Math.floor(Date.now()/1000);
-      const expiresIn=Number(data.expires_in||3600);
-      const session={
-        access_token:data.access_token,
-        refresh_token:data.refresh_token,
-        expires_in:expiresIn,
-        expires_at:now+expiresIn,
-        token_type:data.token_type||"bearer",
-        user:data.user
-      };
-
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(session));
-
-      // Verify that the browser really stored the session before leaving login.
-      const stored=localStorage.getItem(STORAGE_KEY);
-      if(!stored){
-        throw new Error("Browser blocked local storage. Please allow site storage for immigrantsguide.github.io.");
-      }
-
-      const parsed=JSON.parse(stored);
-      if(!parsed.access_token||!parsed.refresh_token){
-        throw new Error("Browser session storage verification failed.");
-      }
-
-      show("Login successful. Session saved. Opening dashboard...","success");
-
-      // Use replace so Back does not return to the login page.
-      setTimeout(function(){
-        window.location.replace("dashboard.html?auth=1&v="+Date.now());
-      },250);
-
-    }catch(err){
-      console.error(err);
-      if(err.name==="AbortError"){
-        show("Supabase Auth timed out after 15 seconds. Please refresh and try again.","error");
-      }else{
-        show("Login error: "+(err.message||String(err)),"error");
-      }
-      busy(false);
-    }
-  });
+   message("Login successful. Opening dashboard...","ok");
+   setTimeout(()=>window.location.replace("dashboard.html?auth=1&v="+Date.now()),250);
+ }catch(err){
+   message(err.name==="AbortError"?"Supabase Auth timed out after 15 seconds.":(err.message||String(err)),"err");
+   btn.disabled=false;btn.textContent="Log In";
+ }
+});
 })();
 </script>
 </body>
