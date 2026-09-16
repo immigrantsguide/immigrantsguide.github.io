@@ -517,9 +517,8 @@ window.addEventListener("error",e=>{
   if($("notice"))setNotice("Website error: "+e.message,true);
 });
 
-/* Only react to an actual Supabase sign-out.
-   We deliberately do not redirect on generic auth events,
-   which prevents the login/dashboard redirect loop. */
+/* Authentication is kept identical to the previously working dashboard.
+   Monitoring features must never change the login/session flow. */
 async function init(){
   try{
     if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
@@ -528,20 +527,55 @@ async function init(){
       auth:{
         persistSession:true,
         autoRefreshToken:true,
-        detectSessionInUrl:true
+        detectSessionInUrl:false
       }
     });
 
-    const result=await db.auth.getSession();
-    const session=result?.data?.session;
+    let session=null;
+    const bootstrapKey="immigrants_guide_auth_bootstrap";
+    const bootstrapRaw=sessionStorage.getItem(bootstrapKey) || localStorage.getItem(bootstrapKey);
+
+    if(bootstrapRaw){
+      try{
+        const bootstrap=JSON.parse(bootstrapRaw);
+        if(bootstrap?.access_token && bootstrap?.refresh_token){
+          const setResult=await db.auth.setSession({
+            access_token:bootstrap.access_token,
+            refresh_token:bootstrap.refresh_token
+          });
+          if(setResult.error)throw setResult.error;
+          session=setResult.data?.session||null;
+          sessionStorage.removeItem(bootstrapKey);
+          localStorage.removeItem(bootstrapKey);
+        }
+      }catch(bootstrapError){
+        console.error("Auth bootstrap error:",bootstrapError);
+      }
+    }
 
     if(!session){
-      window.location.replace("index.html");
+      const result=await db.auth.getSession();
+      if(result.error)throw result.error;
+      session=result?.data?.session||null;
+    }
+
+    if(!session){
+      setNotice("Authentication session not found. Please log in again.",true);
+      setTimeout(()=>window.location.replace("login.html?auth_required=1"),700);
+      return;
+    }
+
+    const userResult=await db.auth.getUser(session.access_token);
+    if(userResult.error || !userResult.data?.user){
+      console.error("Authenticated user verification failed:",userResult.error);
+      await db.auth.signOut({scope:"local"});
+      setNotice("Your login session could not be verified. Please log in again.",true);
+      setTimeout(()=>window.location.replace("login.html?auth_required=1"),700);
       return;
     }
 
     initialized=true;
-    $("who").textContent=session.user?.email||"";
+    $("who").textContent=userResult.data.user.email||session.user?.email||"";
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
     await load();
 
