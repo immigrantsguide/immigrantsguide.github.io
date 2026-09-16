@@ -1,165 +1,158 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Immigrants Guide — Staff Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Immigrants Guide — Login</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{width:min(450px,100%);background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 15px 45px #0f172a18}
-.logo{font-size:23px;font-weight:800}.logo span{color:#2563eb}
-.subtitle{color:#64748b;margin:8px 0 25px}
-label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}
-input{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px}
-button{width:100%;margin-top:20px;padding:13px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
-button:disabled{opacity:.65;cursor:wait}
+body{
+  margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#172033;
+}
+.card{
+  width:min(430px,92vw);background:#fff;border:1px solid #e3e8f0;
+  border-radius:18px;padding:32px;box-shadow:0 15px 45px rgba(20,35,60,.10);
+}
+h1{margin:0 0 8px;font-size:27px}
+.sub{margin:0 0 25px;color:#667085}
+label{display:block;font-size:14px;font-weight:700;margin:16px 0 7px}
+input{
+  width:100%;padding:13px 14px;border:1px solid #ccd5e1;border-radius:10px;
+  font-size:15px;outline:none;
+}
+input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+button{
+  width:100%;margin-top:22px;padding:13px;border:0;border-radius:10px;
+  background:#2563eb;color:#fff;font-size:16px;font-weight:700;cursor:pointer;
+}
+button:disabled{opacity:.65;cursor:not-allowed}
+.status{
+  display:none;margin-top:16px;padding:12px 14px;border-radius:10px;
+  font-size:14px;line-height:1.45;white-space:pre-wrap;
+}
+.info{display:block;background:#eef5ff;color:#174ea6}
+.success{display:block;background:#ecfdf3;color:#067647}
+.error{display:block;background:#fef3f2;color:#b42318}
 .back{display:block;text-align:center;margin-top:18px;color:#2563eb;text-decoration:none;font-size:14px}
-.msg{margin-top:15px;padding:12px;border-radius:9px;font-size:13px;line-height:1.5;display:none}
-.msg.err{display:block;background:#fef2f2;color:#991b1b}
-.msg.ok{display:block;background:#ecfdf5;color:#166534}
-.msg.info{display:block;background:#eff6ff;color:#1d4ed8}
-.debug{margin-top:15px;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;font-size:12px;color:#475569;display:none}
+.small{margin-top:18px;text-align:center;color:#98a2b3;font-size:12px}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="logo">Immigrants <span>Guide</span></div>
-  <div class="subtitle">Secure staff login</div>
+  <h1>Welcome back</h1>
+  <p class="sub">Sign in to your Immigrants Guide USCIS Case Tracker.</p>
 
-  <form id="loginForm">
+  <form id="loginForm" novalidate>
     <label for="email">Email</label>
     <input id="email" type="email" autocomplete="username" required>
 
     <label for="password">Password</label>
     <input id="password" type="password" autocomplete="current-password" required>
 
-    <button id="loginBtn" type="submit">Log In</button>
+    <button id="loginBtn" type="submit">Login</button>
   </form>
 
-  <div id="msg" class="msg"></div>
-  <div id="debug" class="debug"></div>
-  <a class="back" href="index.html">← Back to USCIS Case Status</a>
+  <div id="status" class="status"></div>
+  <a class="back" href="index.html">← Back to Case Tracker</a>
+  <div class="small">Immigrants Guide</div>
 </div>
 
 <script>
 (function(){
-"use strict";
+  const SUPABASE_URL = "https://euzifpjzeuqdznkelxdq.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 
-const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
-const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
+  const statusEl = document.getElementById("status");
+  const form = document.getElementById("loginForm");
+  const btn = document.getElementById("loginBtn");
 
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
-  auth:{
-    persistSession:true,
-    autoRefreshToken:true,
-    detectSessionInUrl:true
+  function show(message, type){
+    statusEl.className = "status " + type;
+    statusEl.textContent = message;
   }
-});
 
-const $=id=>document.getElementById(id);
-
-function show(text,type){
-  $("msg").className="msg "+type;
-  $("msg").textContent=text;
-}
-
-function debug(text){
-  $("debug").style.display="block";
-  $("debug").textContent=text;
-}
-
-// IMPORTANT: Do not redirect before the login result is known.
-// This lets us see exactly what Supabase returns.
-$("loginForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-
-  const email=$("email").value.trim();
-  const password=$("password").value;
-  const btn=$("loginBtn");
-
-  btn.disabled=true;
-  btn.textContent="Signing in...";
-  show("Connecting to Supabase...","info");
-  $("debug").style.display="none";
-
-  try{
-    const result=await db.auth.signInWithPassword({email,password});
-
-    console.log("Supabase signIn result:",result);
-
-    if(result.error){
-      throw result.error;
-    }
-
-    if(!result.data?.session){
-      throw new Error("Supabase accepted the login but did not return a session.");
-    }
-
-    show("Login successful. Verifying browser session...","ok");
-
-    // Explicitly persist the returned session.
-    const session=result.data.session;
-
-    const setResult=await db.auth.setSession({
-      access_token:session.access_token,
-      refresh_token:session.refresh_token
-    });
-
-    if(setResult.error){
-      throw setResult.error;
-    }
-
-    const check=await db.auth.getSession();
-
-    if(!check.data?.session){
-      throw new Error("Login succeeded, but the browser could not persist the Supabase session.");
-    }
-
-    debug(
-      "Authentication successful.\n"+
-      "User: "+(check.data.session.user?.email||email)+"\n"+
-      "Session: ACTIVE\n"+
-      "Opening dashboard..."
-    );
-
-    setTimeout(()=>{
-      window.location.assign("dashboard.html?auth=1");
-    },700);
-
-  }catch(err){
-    console.error("LOGIN ERROR:",err);
-
-    let text=err?.message||"Login failed.";
-
-    if(text.toLowerCase().includes("invalid login credentials")){
-      text="Invalid email or password.";
-    }
-
-    if(text.toLowerCase().includes("email not confirmed")){
-      text="Your Supabase account email is not confirmed. Confirm the email in Supabase Authentication first.";
-    }
-
-    show(text,"err");
-    debug("Supabase authentication did not complete. Check the error above.");
-    btn.disabled=false;
-    btn.textContent="Log In";
+  function setBusy(busy){
+    btn.disabled = busy;
+    btn.textContent = busy ? "Signing in..." : "Login";
   }
-});
 
-// Show existing session without redirecting automatically.
-db.auth.getSession().then(({data,error})=>{
-  if(error){
-    console.error(error);
+  if (!window.supabase || !window.supabase.createClient) {
+    show("Supabase library did not load. Please refresh the page.", "error");
     return;
   }
 
-  if(data?.session){
-    show("A Supabase session is already active. You can open the dashboard.","ok");
-    debug("Existing session: ACTIVE");
-  }
-});
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if(!email || !password){
+      show("Please enter both email and password.", "error");
+      return;
+    }
+
+    setBusy(true);
+    show("Signing in...", "info");
+
+    try{
+      // signInWithPassword itself creates and persists the browser session.
+      // Do not call setSession again here; doing so can race refresh-token handling.
+      const result = await Promise.race([
+        supabase.auth.signInWithPassword({email, password}),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Login request timed out. Please refresh and try again.")), 15000)
+        )
+      ]);
+
+      const { data, error } = result;
+
+      if(error){
+        const msg = String(error.message || "Unable to sign in.");
+        if(/invalid login credentials/i.test(msg)){
+          show("Invalid email or password.", "error");
+        }else if(/email not confirmed/i.test(msg)){
+          show("Your email address has not been confirmed in Supabase Auth.", "error");
+        }else{
+          show(msg, "error");
+        }
+        setBusy(false);
+        return;
+      }
+
+      if(!data || !data.session || !data.session.access_token){
+        show("Supabase accepted the login but did not return an active session. Please try again.", "error");
+        setBusy(false);
+        return;
+      }
+
+      show("Login successful. Opening dashboard...", "success");
+
+      // Give the browser a moment to persist the session, then navigate.
+      setTimeout(function(){
+        window.location.replace("dashboard.html?auth=1");
+      }, 300);
+
+    }catch(err){
+      console.error("LOGIN_ERROR", err);
+      show("Login error: " + (err && err.message ? err.message : String(err)), "error");
+      setBusy(false);
+    }
+  });
 })();
 </script>
 </body>
