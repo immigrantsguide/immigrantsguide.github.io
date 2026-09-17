@@ -34,8 +34,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="actions">
 <span id="who" class="muted"></span>
 <button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button>
-<button id="monitorNowBtn" class="secondary" type="button">⚙ Monitor Now</button>
-<span id="monitorStatus" class="muted">Auto-monitoring: scheduled</span>
+
 <button id="refresh" class="secondary" type="button">↻ Refresh</button>
 <button id="logout" class="secondary" type="button">Log out</button>
 </div>
@@ -69,7 +68,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 </section>
 
 <section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search cases..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
-<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Monitoring</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
+<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
 
 <section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."></div>
 <div class="notice" id="historyNotice">Loading history...</div>
@@ -95,7 +94,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><label>Case Manager</label><input id="manager"></div>
 <div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
 <div><label>Premium Processing</label><select id="premium"><option value="false">No</option><option value="true">Yes</option></select></div>
-<div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="0"></div>
+<div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="Auto from Filing Date"></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -133,13 +132,16 @@ function lastChecked(x){return x?new Date(x).toLocaleString():"—";}
 function money(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString("en-US",{style:"currency",currency:"USD"}):"—";}
 function premiumLabel(x){return x===true||x==="true"||x===1||x==="1"?'<span class="badge approved">Yes</span>':'<span class="badge">No</span>';}
 function durationDays(c){
-  const explicit=Number(c.time_duration_days);
-  if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
-  if(!c.filing_date)return null;
+  const raw=c?.time_duration_days;
+  if(raw!==null&&raw!==undefined&&String(raw).trim()!==""){
+    const explicit=Number(raw);
+    if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
+  }
+  if(!c?.filing_date)return null;
   const start=new Date(c.filing_date+"T00:00:00");
   const end=c.status_date?new Date(c.status_date+"T00:00:00"):new Date();
-  const d=Math.floor((end-start)/86400000);
-  return Number.isFinite(d)&&d>=0?d:null;
+  const d=Math.max(0,Math.floor((end-start)/86400000));
+  return Number.isFinite(d)?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
 
@@ -157,41 +159,9 @@ function drawManagerStats(){
   });
   const list=[...map.entries()].sort((a,b)=>b[1].count-a[1].count||a[0].localeCompare(b[0]));
   $("managerStatsBody").innerHTML=list.length?list.map(([name,m])=>{
-    const avg=m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length)+" days":"0 days";
+    const avg=m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length)+" days":"—";
     return '<tr><td><b>'+esc(name)+'</b></td><td>'+m.count+'</td><td>'+money(m.amount)+'</td><td>'+m.premium+'</td><td>'+avg+'</td></tr>';
   }).join(""):'<tr><td colspan="5" class="empty">No case manager data yet.</td></tr>';
-}
-
-
-function monitoringLabel(x){
-  const enabled=x?.monitoring_enabled!==false;
-  return enabled?'<span class="badge approved">Enabled</span>':'<span class="badge">Off</span>';
-}
-
-async function monitorNow(){
-  const btn=$("monitorNowBtn");
-  if(btn){btn.disabled=true;btn.textContent="Monitoring...";}
-  if($("monitorStatus"))$("monitorStatus").textContent="Checking eligible cases...";
-  try{
-    const r=await db.functions.invoke("monitor-cases",{body:{source:"dashboard",force:true}});
-    if(r.error){
-      let msg=r.error.message||"Monitoring failed.";
-      try{
-        const body=await r.error.context?.json?.();
-        if(body?.error)msg=body.error;
-      }catch(_){}
-      throw new Error(msg);
-    }
-    const d=r.data||{};
-    if($("monitorStatus"))$("monitorStatus").textContent=
-      "Monitor complete: "+(d.checked||0)+" checked, "+(d.changed||0)+" changed, "+(d.failed||0)+" failed.";
-    await load();
-  }catch(e){
-    if($("monitorStatus"))$("monitorStatus").textContent="Monitor error: "+(e.message||e);
-    console.error("Monitor error:",e);
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent="⚙ Monitor Now";}
-  }
 }
 
 function draw(){
@@ -203,7 +173,7 @@ function draw(){
   $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
   $("premiumCount").textContent=rows.filter(x=>x.premium_processing===true||x.premium_processing==="true"||x.premium_processing===1||x.premium_processing==="1").length;
   const durations=rows.map(durationDays).filter(x=>x!==null);
-  $("avgDuration").textContent=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length)+" days":"0 days";
+  $("avgDuration").textContent=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length)+" days":"—";
   const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
   $("managerCount").textContent=managers.size;
   drawManagerStats();
@@ -212,7 +182,7 @@ function draw(){
   $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td>'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
 
   const b=filt(rows,$("caseSearch").value);
-  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td>'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
+  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td>'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
   $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -288,24 +258,6 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
     const up=await db.from("cases").update(payload).eq("id",c.id);
     if(up.error)throw up.error;
 
-    const previousStatus=c.uscis_status_text||null;
-    const previousModified=c.uscis_modified_date||null;
-    if(previousStatus!==statusText || previousModified!==modified){
-      const h=await db.from("uscis_status_history").insert({
-        case_id:c.id,
-        receipt_number:c.receipt_number,
-        beneficiary_name:c.beneficiary_name||null,
-        previous_uscis_status:previousStatus,
-        new_uscis_status:statusText,
-        previous_uscis_modified_date:previousModified,
-        new_uscis_modified_date:modified,
-        status_description:statusDesc,
-        checked_by:(await db.auth.getUser()).data?.user?.email||"Dashboard User",
-        source:"Manual USCIS Check"
-      });
-      if(h.error)console.warn("USCIS history insert failed:",h.error.message);
-    }
-
     return {ok:true,receipt:c.receipt_number,status:statusText};
   }catch(err){
     const message=err.message||String(err);
@@ -357,47 +309,54 @@ async function loadHistory(caseId=null){
     const r=await q;
     if(r.error)throw r.error;
     let h=r.data||[];
-    let uh=[];
-    try{
-      const ur=await db.from("uscis_status_history").select("*").order("created_at",{ascending:false}).limit(500);
-      if(!ur.error)uh=ur.data||[];
-    }catch(_){}
     const search=($("historySearch").value||"").toLowerCase().trim();
-    if(search){
-      h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
-      uh=uh.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_uscis_status,x.new_uscis_status,x.checked_by].some(v=>String(v||"").toLowerCase().includes(search)));
-    }
-    const combined=[
-      ...h.map(x=>({created_at:x.created_at,receipt_number:x.receipt_number,beneficiary_name:x.beneficiary_name,previous_status:x.previous_status||"—",new_status:x.new_status||"—",changed_by:x.changed_by||"—",kind:"Case"})),
-      ...uh.map(x=>({created_at:x.created_at,receipt_number:x.receipt_number,beneficiary_name:x.beneficiary_name,previous_status:x.previous_uscis_status||"—",new_status:x.new_uscis_status||"—",changed_by:x.checked_by||"USCIS Monitor",kind:"USCIS"}))
-    ].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-    $("historyNotice").textContent=combined.length?"Showing "+combined.length+" history record(s).":"No history records yet.";
-    $("historyBody").innerHTML=combined.length?combined.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status)+'</td><td>'+badge(x.new_status)+'</td><td>'+esc(x.changed_by)+" ("+esc(x.kind)+")"+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
+    if(search)h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
+    $("historyNotice").textContent=h.length?"Showing "+h.length+" history record(s).":"No history records yet.";
+    $("historyBody").innerHTML=h.length?h.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status||"—")+'</td><td>'+badge(x.new_status||"—")+'</td><td>'+esc(x.changed_by||"—")+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
   }catch(e){
     $("historyNotice").textContent="History error: "+(e.message||e);
     $("historyNotice").className="notice error";
   }
 }
 
+function setField(id,value){
+  const el=$(id);
+  if(!el){
+    console.error("Dashboard: missing form element #"+id);
+    return false;
+  }
+  el.value=value??"";
+  return true;
+}
+
 function openModal(c){
-  $("modal").style.display="grid";
-  $("modalTitle").textContent=c?"Edit Case":"Add Case";
-  $("caseId").value=c?.id||"";
-  $("receipt").value=c?.receipt_number||"";
-  $("beneficiary").value=c?.beneficiary_name||"";
-  $("employer").value=c?.employer||"";
-  $("formType").value=c?.form_type||"";
-  $("filingDate").value=c?.filing_date||"";
-  $("priorityDate").value=c?.priority_date||"";
-  $("status").value=c?.current_status||"Case Was Received";
-  $("statusDate").value=c?.status_date||"";
-  $("manager").value=c?.case_manager||"";
-  $("amount").value=c?.amount??"";
-  $("premium").value=(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false";
-  $("duration").value=c?.time_duration_days??"";
-  $("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
-  $("notes").value=c?.notes||"";
-  $("formMsg").innerHTML="";
+  const modal=$("modal");
+  if(!modal){
+    setNotice("Add Case form is missing from this dashboard version. Please upload the latest dashboard file.",true);
+    console.error("Dashboard: missing #modal");
+    return;
+  }
+
+  modal.style.display="grid";
+  const title=$("modalTitle");
+  if(title)title.textContent=c?"Edit Case":"Add Case";
+
+  setField("caseId",c?.id||"");
+  setField("receipt",c?.receipt_number||"");
+  setField("beneficiary",c?.beneficiary_name||"");
+  setField("employer",c?.employer||"");
+  setField("formType",c?.form_type||"");
+  setField("filingDate",c?.filing_date||"");
+  setField("priorityDate",c?.priority_date||"");
+  setField("status",c?.current_status||"Case Was Received");
+  setField("statusDate",c?.status_date||"");
+  setField("manager",c?.case_manager||"");
+  setField("amount",c?.amount??"");
+  setField("premium",(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false");
+  setField("duration",c?.time_duration_days??"");
+  setField("notes",c?.notes||"");
+  const formMsg=$("formMsg");
+  if(formMsg)formMsg.innerHTML="";
 }
 function closeModal(){$("modal").style.display="none";}
 
@@ -419,7 +378,6 @@ $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
 $("refresh").addEventListener("click",load);
 $("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
-$("monitorNowBtn").addEventListener("click",monitorNow);
 $("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
@@ -483,35 +441,82 @@ $("logout").addEventListener("click",async()=>{
   }
 });
 
-$("caseForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  $("formMsg").innerHTML="";
-  const id=$("caseId").value;
-  const payload={
-    receipt_number:$("receipt").value.trim(),
-    beneficiary_name:$("beneficiary").value.trim(),
-    employer:$("employer").value.trim()||null,
-    form_type:$("formType").value.trim()||null,
-    filing_date:$("filingDate").value||null,
-    priority_date:$("priorityDate").value||null,
-    current_status:$("status").value,
-    status_date:$("statusDate").value||null,
-    case_manager:$("manager").value.trim()||null,
-    amount:$("amount").value===""?null:Number($("amount").value),
-    premium_processing:$("premium").value==="true",
-    time_duration_days:$("duration").value===""?null:Number($("duration").value),
-    monitoring_enabled:$("monitoring").value==="true",
-    notes:$("notes").value.trim()||null
-  };
-  try{
-    const r=id?await db.from("cases").update(payload).eq("id",id):await db.from("cases").insert(payload);
-    if(r.error)throw r.error;
-    $("formMsg").innerHTML='<div class="msg success">Case saved successfully.</div>';
-    setTimeout(()=>{closeModal();load();},500);
-  }catch(e){
-    $("formMsg").innerHTML='<div class="msg error">'+esc(e.message||e)+'</div>';
-  }
-});
+const caseForm=$("caseForm");
+if(caseForm){
+  caseForm.addEventListener("submit",async e=>{
+    e.preventDefault();
+    const formMsg=$("formMsg");
+    if(formMsg)formMsg.innerHTML="";
+
+    const receiptEl=$("receipt"), beneficiaryEl=$("beneficiary");
+    if(!receiptEl||!beneficiaryEl){
+      const msg="The Add Case form is incomplete. Please upload the latest dashboard file.";
+      if(formMsg)formMsg.innerHTML='<div class="msg error">'+esc(msg)+'</div>';
+      setNotice(msg,true);
+      return;
+    }
+
+    const receipt=receiptEl.value.trim().toUpperCase();
+    const beneficiary=beneficiaryEl.value.trim();
+    if(!/^[A-Z]{3}[0-9]{10}$/.test(receipt)){
+      if(formMsg)formMsg.innerHTML='<div class="msg error">Receipt number must be 3 letters followed by 10 digits.</div>';
+      receiptEl.focus();
+      return;
+    }
+    if(!beneficiary){
+      if(formMsg)formMsg.innerHTML='<div class="msg error">Beneficiary name is required.</div>';
+      beneficiaryEl.focus();
+      return;
+    }
+
+    const val=id=>{const el=$(id);return el?el.value:"";};
+    const id=val("caseId");
+    const amountRaw=val("amount");
+    const durationRaw=val("duration");
+    const amount=amountRaw===""?null:Number(amountRaw);
+    const duration=durationRaw===""?null:Number(durationRaw);
+    if(amount!==null&&(!Number.isFinite(amount)||amount<0)){
+      if(formMsg)formMsg.innerHTML='<div class="msg error">Amount must be a valid non-negative number.</div>';
+      return;
+    }
+    if(duration!==null&&(!Number.isFinite(duration)||duration<0)){
+      if(formMsg)formMsg.innerHTML='<div class="msg error">Time Duration must be a valid non-negative number.</div>';
+      return;
+    }
+
+    const payload={
+      receipt_number:receipt,
+      beneficiary_name:beneficiary,
+      employer:val("employer").trim()||null,
+      form_type:val("formType").trim()||null,
+      filing_date:val("filingDate")||null,
+      priority_date:val("priorityDate")||null,
+      current_status:val("status")||"Case Was Received",
+      status_date:val("statusDate")||null,
+      case_manager:val("manager").trim()||null,
+      amount:amount,
+      premium_processing:val("premium")==="true",
+      time_duration_days:duration,
+      notes:val("notes").trim()||null
+    };
+
+    try{
+      if(!db)throw new Error("Database connection is not ready. Please refresh and try again.");
+      const r=id
+        ?await db.from("cases").update(payload).eq("id",id)
+        :await db.from("cases").insert(payload);
+      if(r.error)throw r.error;
+      if(formMsg)formMsg.innerHTML='<div class="msg success">Case saved successfully.</div>';
+      setTimeout(()=>{closeModal();load();},500);
+    }catch(e){
+      console.error("Save case error:",e);
+      const message=e?.message||String(e);
+      if(formMsg)formMsg.innerHTML='<div class="msg error">Unable to save case: '+esc(message)+'</div>';
+    }
+  });
+}else{
+  console.error("Dashboard: #caseForm is missing.");
+}
 
 window.addEventListener("error",e=>{
   if($("notice"))setNotice("Website error: "+e.message,true);
@@ -542,7 +547,6 @@ async function init(){
 
     initialized=true;
     $("who").textContent=session.user?.email||"";
-    if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
     await load();
 
     db.auth.onAuthStateChange((event)=>{
