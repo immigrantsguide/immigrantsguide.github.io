@@ -305,7 +305,7 @@ function draw(){
   const pendingCases=Math.max(0,totalCases-approvedCases-deniedCases);
   $("total").textContent=totalCases;
   $("pending").textContent=pendingCases;
-  $("rfe").textContent=rows.filter(isRfe).length;
+  $("rfe").textContent=rows.filter(c=>isRfe(c)||c.rfe_deadline_date).length;
   $("approved").textContent=approvedCases;
   $("denied").textContent=deniedCases;
   $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
@@ -315,8 +315,7 @@ function draw(){
   const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
   $("managerCount").textContent=managers.size;
   $("activeCount").textContent=rows.filter(isPending).length;
-  $("rfeDueCount").textContent=rows.filter(c=>daysUntil(c.rfe_deadline_date)!==null&&daysUntil(c.rfe_deadline_date)<=30).length;
-  $("extensionDueCount").textContent=rows.filter(c=>daysUntil(c.extension_target_date)!==null&&daysUntil(c.extension_target_date)<=90).length;
+  
   drawEmployerStats();
   drawDeadlines();
   drawAttention();
