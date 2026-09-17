@@ -212,7 +212,7 @@ function nValidDeadline(n){return n!==null&&n<=90;}
 function drawDeadlines(){
   const items=[];
   rows.forEach(c=>{
-    if(isRfe(c)&&c.rfe_deadline_date)items.push({type:"RFE",date:c.rfe_deadline_date,c});
+    if(c.rfe_deadline_date)items.push({type:"RFE",date:c.rfe_deadline_date,c});
     if(c.extension_target_date)items.push({type:"Extension",date:c.extension_target_date,c});
   });
   items.sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
