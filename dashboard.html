@@ -8,7 +8,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
 button,input,select,textarea{font:inherit}button{cursor:pointer}
-.side{position:fixed;inset:0 auto 0 0;width:286px;background:linear-gradient(180deg,#020617 0%,#0b1222 55%,#020617 100%);color:#fff;padding:12px 10px;overflow:auto}.brand-block{display:flex;justify-content:center;align-items:center;padding:2px 0 12px}.ig-logo{width:100%;max-width:270px;height:auto;display:block}.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cbd5e1;padding:12px;border-radius:9px;margin:3px 0}.nav button.active,.nav button:hover{background:#1e293b;color:#fff}
+.side{position:fixed;inset:0 auto 0 0;width:286px;background:linear-gradient(180deg,#020617 0%,#0b1222 55%,#020617 100%);color:#fff;padding:12px 10px;overflow:auto}.brand-block{display:flex;justify-content:center;align-items:center;padding:2px 0 12px}.ig-logo{width:100%;max-width:270px;height:auto;display:block;object-fit:contain}.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#cbd5e1;padding:12px;border-radius:9px;margin:3px 0}.nav button.active,.nav button:hover{background:#1e293b;color:#fff}
 .main{margin-left:286px;padding:30px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.top h1{margin:0 0 5px;font-size:29px}.muted{color:#64748b}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}.card,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}.card{padding:18px}.num{font-size:28px;font-weight:800;margin-top:8px}.red{color:#dc2626}.green{color:#059669}.orange{color:#ea580c}.deadline-panel{margin-bottom:20px}.deadline-table td,.deadline-table th{font-size:12px}.small{font-size:11px;color:#64748b;margin-top:3px}.overdue{color:#dc2626;font-weight:800}.due-soon{color:#ea580c;font-weight:800}.active-badge{background:#eff6ff;color:#2563eb}.stat-note{font-size:11px;color:#64748b;margin-top:5px}
 .panel{overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h2{margin:0;font-size:17px}.search{max-width:330px;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px}
 .notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.notice.error{background:#fef2f2;color:#991b1b}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}.link{border:0;background:none;color:#2563eb;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}.primary,.secondary,.check-btn{border-radius:9px;padding:9px 12px;font-weight:700}.primary{border:0;background:#2563eb;color:white}.secondary{border:1px solid #cbd5e1;background:#fff}.check-btn{border:1px solid #2563eb;background:#fff;color:#2563eb;font-size:12px}.check-btn:disabled{opacity:.55;cursor:wait}.uscis-cell{max-width:280px;white-space:normal}.uscis-desc{font-size:11px;color:#64748b;margin-top:4px;line-height:1.35}.last-check{font-size:11px;color:#64748b;margin-top:3px}
@@ -22,31 +22,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <body>
 <aside class="side">
 <div class="brand-block">
-  <svg class="ig-logo" viewBox="0 0 280 300" role="img" aria-label="Immigrants Guide VK globe, USA and eagle logo">
-    <defs><linearGradient id="flagRedDash" x1="0" x2="1"><stop offset="0" stop-color="#ef233c"/><stop offset="1" stop-color="#b91c1c"/></linearGradient></defs>
-    <circle cx="140" cy="118" r="91" fill="#05070b" stroke="#fff" stroke-width="3"/>
-    <ellipse cx="140" cy="118" rx="44" ry="89" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
-    <ellipse cx="140" cy="118" rx="72" ry="89" fill="none" stroke="#9ca3af" stroke-width="1.2" opacity=".8"/>
-    <ellipse cx="140" cy="118" rx="88" ry="31" fill="none" stroke="#9ca3af" stroke-width="1.3"/>
-    <ellipse cx="140" cy="118" rx="88" ry="58" fill="none" stroke="#9ca3af" stroke-width="1.1" opacity=".8"/>
-    <path d="M51 118h178M62 82h156M62 154h156" stroke="#9ca3af" stroke-width="1.2" opacity=".8"/>
-    <path d="M79 92l12-8 14 2 9-5 13 6 12-2 9 9 14 2 10 8-5 8-14 0-8 7-11-2-9 7-12-5-8 2-7-7-12-2 2-8z" fill="#fff"/>
-    <text x="140" y="145" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="900" fill="#fff" letter-spacing="-3">VK</text>
-    <path d="M55 158 C86 194 174 201 228 157" fill="none" stroke="url(#flagRedDash)" stroke-width="13" stroke-linecap="round"/>
-    <path d="M50 170 C89 207 178 211 232 169" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
-    <path d="M61 184 C101 218 180 217 224 184" fill="none" stroke="url(#flagRedDash)" stroke-width="10" stroke-linecap="round"/>
-    <path d="M55 158 C68 174 78 180 92 185" fill="none" stroke="#1d4ed8" stroke-width="12" stroke-linecap="round"/>
-    <circle cx="61" cy="161" r="2.2" fill="#fff"/><circle cx="69" cy="168" r="2.2" fill="#fff"/><circle cx="77" cy="175" r="2.2" fill="#fff"/>
-    <path d="M111 48 C91 28 68 21 42 27 C59 39 75 49 94 55 C75 47 57 45 37 51 C57 60 77 66 101 64 L116 57 Z" fill="#fff"/>
-    <path d="M169 52 C191 30 216 23 239 29 C224 41 207 51 187 57 C208 48 226 48 246 55 C225 64 205 69 180 65 L166 59 Z" fill="#fff"/>
-    <path d="M125 45 C132 36 147 36 155 46 L164 61 151 76 132 76 117 61 Z" fill="#fff"/>
-    <path d="M151 45 L166 39 178 47 164 53Z" fill="#d1d5db"/>
-    <path d="M128 73 L118 89 137 80 148 90 155 73Z" fill="#d1d5db"/>
-    <path d="M160 49 L176 46 166 57Z" fill="#facc15"/>
-    <text x="140" y="242" text-anchor="middle" font-family="Georgia,serif" font-size="25" font-weight="700" fill="#fff" letter-spacing="1">IMMIGRANTS GUIDE</text>
-    <text x="140" y="263" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#cbd5e1" letter-spacing="2.2">GUIDE • TRACK • SUCCEED</text>
-    <text x="140" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#60a5fa" letter-spacing="1.6">YOUR IMMIGRATION PARTNER</text>
-  </svg>
+  <img src="assets/immigrants-guide-logo.png" alt="Immigrants Guide VK Eagle Globe USA logo" class="ig-logo">
 </div>
 <div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
