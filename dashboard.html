@@ -65,6 +65,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 </div>
 <div class="panel" style="margin-bottom:20px">
 <div class="panel-head"><h2>Employer Statistics</h2><input id="employerSearch" class="search" placeholder="Search employer..."></div>
+<div class="small" style="padding:0 18px 12px">Employer totals use every case currently stored in the tracker. Approved/Pending counts use both your internal case status and the latest USCIS status.</div>
 <div class="table-wrap">
 <table style="min-width:900px">
 <thead><tr><th>Employer</th><th>Total Cases Filed</th><th>Total Spent</th><th>Approved</th><th>Pending</th><th>Premium Cases</th><th>Case Managers</th></tr></thead>
@@ -156,7 +157,8 @@ const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-US"):"—";
 const isRfe=x=>/rfe|noid/i.test(x.current_status||"")||/rfe|noid/i.test(x.uscis_status_text||"");
-const isPending=x=>!/approved|denied/i.test(x.current_status||"");
+const isPending=x=>!approvedCase(x)&&!deniedCase(x);
+const deniedCase=x=>/denied/i.test(String(x.current_status||"")+" "+String(x.uscis_status_text||""));
 
 function setNotice(text,error=false){
   $("notice").textContent=text;
@@ -278,8 +280,8 @@ function draw(){
   $("total").textContent=rows.length;
   $("pending").textContent=rows.filter(isPending).length;
   $("rfe").textContent=rows.filter(isRfe).length;
-  $("approved").textContent=rows.filter(x=>/approved/i.test(x.current_status||"")||/approved/i.test(x.uscis_status_text||"")).length;
-  $("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")||/denied/i.test(x.uscis_status_text||"")).length;
+  $("approved").textContent=rows.filter(approvedCase).length;
+  $("denied").textContent=rows.filter(deniedCase).length;
   $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
   $("premiumCount").textContent=rows.filter(x=>x.premium_processing===true||x.premium_processing==="true"||x.premium_processing===1||x.premium_processing==="1").length;
   const durations=rows.map(durationDays).filter(x=>x!==null);
