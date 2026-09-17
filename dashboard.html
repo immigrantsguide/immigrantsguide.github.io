@@ -12,7 +12,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .main{margin-left:220px;padding:30px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.top h1{margin:0 0 5px;font-size:29px}.muted{color:#64748b}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}.card,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}.card{padding:18px}.num{font-size:28px;font-weight:800;margin-top:8px}.red{color:#dc2626}.green{color:#059669}
 .panel{overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h2{margin:0;font-size:17px}.search{max-width:330px;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px}
 .notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.notice.error{background:#fef2f2;color:#991b1b}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}.link{border:0;background:none;color:#2563eb;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}.primary,.secondary,.check-btn{border-radius:9px;padding:9px 12px;font-weight:700}.primary{border:0;background:#2563eb;color:white}.secondary{border:1px solid #cbd5e1;background:#fff}.check-btn{border:1px solid #2563eb;background:#fff;color:#2563eb;font-size:12px}.check-btn:disabled{opacity:.55;cursor:wait}.uscis-cell{max-width:280px;white-space:normal}.uscis-desc{font-size:11px;color:#64748b;margin-top:4px;line-height:1.35}.last-check{font-size:11px;color:#64748b;margin-top:3px}
-.modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}textarea{min-height:100px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.msg{padding:10px;border-radius:9px;margin-top:12px;font-size:13px}.msg.error{background:#fef2f2;color:#991b1b}.msg.success{background:#f0fdf4;color:#166534}.warn{background:#fff7ed;color:#9a3412}.danger-text{color:#dc2626}.small{font-size:11px;color:#64748b}
+.modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}textarea{min-height:100px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.msg{padding:10px;border-radius:9px;margin-top:12px;font-size:13px}.msg.error{background:#fef2f2;color:#991b1b}.msg.success{background:#f0fdf4;color:#166534}
 @media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
@@ -23,7 +23,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
 <button data-view="history">◷ Case History</button>
-<button data-view="h1b">H-1B Tracker</button>
 <button id="addNav">＋ Add Case</button>
 <button data-view="alerts">⚑ Alerts</button>
 </div>
@@ -63,16 +62,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 </table>
 </div>
 </div>
-<div class="panel" style="margin-bottom:20px">
-<div class="panel-head"><h2>Employer Statistics</h2><input id="employerSearch" class="search" placeholder="Search employer..."></div>
-<div class="small" style="padding:0 18px 12px">Employer totals use every case currently stored in the tracker. Approved/Pending counts use both your internal case status and the latest USCIS status.</div>
-<div class="table-wrap">
-<table style="min-width:900px">
-<thead><tr><th>Employer</th><th>Total Cases Filed</th><th>Total Spent</th><th>Approved</th><th>Pending</th><th>Premium Cases</th><th>Case Managers</th></tr></thead>
-<tbody id="employerStatsBody"></tbody>
-</table>
-</div>
-</div>
 <div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
 <div id="notice" class="notice">Checking authentication...</div>
 <div id="batchNotice" class="notice" style="display:none"></div>
@@ -81,25 +70,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 <section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search cases..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Monitoring</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
-
-<section id="h1b" style="display:none">
-<div class="cards">
-<div class="card">H-1B Cases<div id="h1bTotal" class="num">0</div></div>
-<div class="card">H-1B Approved<div id="h1bApproved" class="num green">0</div></div>
-<div class="card">Extension Planning<div id="h1bExtensionDue" class="num red">0</div></div>
-<div class="card">I-94 Expiring ≤ 90 Days<div id="i94Expiring90" class="num red">0</div></div>
-<div class="card">I-94 Records<div id="i94Tracked" class="num">0</div></div>
-</div>
-<div class="panel" style="margin-bottom:20px">
-<div class="panel-head"><h2>H-1B Approved / Extension Tracker</h2><input id="h1bSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
-<div class="notice">The extension planning date is calculated as 180 days before the recorded I-94 Admit Until Date when no manual extension target date is entered. This is a planning reminder, not a legal filing deadline. CBP says the I-94 “Admit Until Date” is the date nonimmigrant status expires in the U.S.</div>
-<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>H-1B Type</th><th>Approval Date</th><th>Approval End</th><th>I-94 Number</th><th>I-94 Admit Until</th><th>Extension Target</th><th>Case Manager</th><th>Status</th><th>Action</th></tr></thead><tbody id="h1bBody"></tbody></table></div>
-</div>
-<div class="panel">
-<div class="panel-head"><h2>I-94 / Extension Alerts</h2></div>
-<div id="i94AlertBody" class="notice">Loading alerts...</div>
-</div>
-</section>
 
 <section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."></div>
 <div class="notice" id="historyNotice">Loading history...</div>
@@ -116,8 +86,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><label>Beneficiary Name *</label><input id="beneficiary" required></div>
 <div><label>Employer</label><input id="employer"></div>
 <div><label>Form Type</label><input id="formType" placeholder="I-129"></div>
-<div><label>Case Category</label><select id="caseCategory"><option value="">Select</option><option>H-1B</option><option>H-4</option><option>I-140</option><option>PERM</option><option>STEM OPT</option><option>F-1</option><option>Other</option></select></div>
-<div><label>H-1B Case Type</label><select id="h1bCaseType"><option value="">Not H-1B</option><option>Initial</option><option>Transfer</option><option>Extension</option><option>Amendment</option><option>Extension + Amendment</option><option>Other</option></select></div>
 <div><label>Filing Date</label><input id="filingDate" type="date"></div>
 <div><label>Priority Date</label><input id="priorityDate" type="date"></div>
 <div><label>Current Status</label><select id="status">
@@ -128,17 +96,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
 <div><label>Premium Processing</label><select id="premium"><option value="false">No</option><option value="true">Yes</option></select></div>
 <div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="0"></div>
-<div><label>H-1B Approval Date</label><input id="h1bApprovalDate" type="date"></div>
-<div><label>H-1B Approval Start Date</label><input id="h1bApprovalStartDate" type="date"></div>
-<div><label>H-1B Approval End Date</label><input id="h1bApprovalEndDate" type="date"></div>
-<div><label>I-94 Number</label><input id="i94Number" placeholder="I-94 admission number"></div>
-<div><label>I-94 Class of Admission</label><input id="i94Class" placeholder="H-1B"></div>
-<div><label>I-94 Last Entry Date</label><input id="i94EntryDate" type="date"></div>
-<div><label>I-94 Admit Until Date</label><input id="i94AdmitUntil" type="date"></div>
-<div><label>Extension Target Date</label><input id="extensionTarget" type="date"><div class="small">Leave blank to calculate 180 days before I-94 expiry.</div></div>
-<div><label>Extension Filed Date</label><input id="extensionFiledDate" type="date"></div>
-<div><label>Extension Status</label><select id="extensionStatus"><option value="">Not Started</option><option>Planning</option><option>Ready to File</option><option>Filed</option><option>Approved</option><option>Not Applicable</option></select></div>
-<div><label>H-1B Notes</label><input id="h1bNotes" placeholder="AC21 / PERM / I-140 notes"></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -157,8 +114,7 @@ const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-US"):"—";
 const isRfe=x=>/rfe|noid/i.test(x.current_status||"")||/rfe|noid/i.test(x.uscis_status_text||"");
-const isPending=x=>!approvedCase(x)&&!deniedCase(x);
-const deniedCase=x=>/denied/i.test(String(x.current_status||"")+" "+String(x.uscis_status_text||""));
+const isPending=x=>!/approved|denied/i.test(x.current_status||"");
 
 function setNotice(text,error=false){
   $("notice").textContent=text;
@@ -177,23 +133,18 @@ function lastChecked(x){return x?new Date(x).toLocaleString():"—";}
 function money(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString("en-US",{style:"currency",currency:"USD"}):"—";}
 function premiumLabel(x){return x===true||x==="true"||x===1||x==="1"?'<span class="badge approved">Yes</span>':'<span class="badge">No</span>';}
 function durationDays(c){
-  const explicit=Number(c.time_duration_days);
-  if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
-  if(!c.filing_date)return null;
+  const raw=c?.time_duration_days;
+  if(raw!==null&&raw!==undefined&&String(raw).trim()!==""){
+    const explicit=Number(raw);
+    if(Number.isFinite(explicit)&&explicit>=0)return Math.round(explicit);
+  }
+  if(!c?.filing_date)return null;
   const start=new Date(c.filing_date+"T00:00:00");
   const end=c.status_date?new Date(c.status_date+"T00:00:00"):new Date();
   const d=Math.floor((end-start)/86400000);
   return Number.isFinite(d)&&d>=0?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
-function isH1B(c){return String(c.case_category||"").toUpperCase()==="H-1B"||/^I-129$/i.test(String(c.form_type||""))&&String(c.h1b_case_type||"").trim()!=="";}
-function approvedCase(c){return /approved|approval was affirmed/i.test(String(c.current_status||"")+" "+String(c.uscis_status_text||"")) || !!c.h1b_approval_date;}
-function addDays(d,n){if(!d)return null;const x=new Date(d+"T00:00:00");x.setDate(x.getDate()+n);return x.toISOString().slice(0,10);}
-function subDays(d,n){return addDays(d,-n);}
-function extensionTarget(c){return c.extension_target_date||subDays(c.i94_admit_until_date,180)||subDays(c.h1b_approval_end_date,180)||null;}
-function daysUntil(d){if(!d)return null;const a=new Date();a.setHours(0,0,0,0);const b=new Date(d+"T00:00:00");return Math.ceil((b-a)/86400000);}
-function extensionLabel(c){const d=extensionTarget(c);if(!d)return "—";const n=daysUntil(d);if(n<0)return '<span class="badge denied">Overdue</span><div class="small">'+esc(date(d))+'</div>';if(n<=30)return '<span class="badge rfe">Due in '+n+' days</span><div class="small">'+esc(date(d))+'</div>';if(n<=90)return '<span class="badge rfe">Due in '+n+' days</span><div class="small">'+esc(date(d))+'</div>';return esc(date(d));}
-function i94Label(c){const d=c.i94_admit_until_date;if(!d)return "—";const n=daysUntil(d);if(n<0)return '<span class="badge denied">Expired</span><div class="small">'+esc(date(d))+'</div>';if(n<=30)return '<span class="badge denied">'+n+' days</span><div class="small">'+esc(date(d))+'</div>';if(n<=90)return '<span class="badge rfe">'+n+' days</span><div class="small">'+esc(date(d))+'</div>';return esc(date(d));}
 
 function drawManagerStats(){
   const map=new Map();
@@ -214,36 +165,6 @@ function drawManagerStats(){
   }).join(""):'<tr><td colspan="5" class="empty">No case manager data yet.</td></tr>';
 }
 
-
-function drawEmployerStats(){
-  const q=String($("employerSearch")?.value||"").toLowerCase().trim();
-  const map=new Map();
-  rows.forEach(c=>{
-    const name=String(c.employer||"Unassigned").trim()||"Unassigned";
-    if(q&&!name.toLowerCase().includes(q))return;
-    if(!map.has(name))map.set(name,{count:0,amount:0,approved:0,pending:0,premium:0,managers:new Set()});
-    const m=map.get(name);m.count++;m.amount+=Number(c.amount)||0;
-    if(approvedCase(c))m.approved++;else m.pending++;
-    if(c.premium_processing===true||c.premium_processing==="true"||c.premium_processing===1||c.premium_processing==="1")m.premium++;
-    if(String(c.case_manager||"").trim())m.managers.add(String(c.case_manager).trim());
-  });
-  const list=[...map.entries()].sort((a,b)=>b[1].count-a[1].count||a[0].localeCompare(b[0]));
-  $("employerStatsBody").innerHTML=list.length?list.map(([name,m])=>'<tr><td><b>'+esc(name)+'</b></td><td>'+m.count+'</td><td>'+money(m.amount)+'</td><td>'+m.approved+'</td><td>'+m.pending+'</td><td>'+m.premium+'</td><td>'+esc([...m.managers].join(", ")||"Unassigned")+'</td></tr>').join(""):'<tr><td colspan="7" class="empty">No employer data yet.</td></tr>';
-}
-
-function drawH1B(){
-  const hs=rows.filter(isH1B);
-  $("h1bTotal").textContent=hs.length;
-  $("h1bApproved").textContent=hs.filter(approvedCase).length;
-  $("h1bExtensionDue").textContent=hs.filter(c=>{const n=daysUntil(extensionTarget(c));return n!==null&&n<=90;}).length;
-  $("i94Expiring90").textContent=hs.filter(c=>{const n=daysUntil(c.i94_admit_until_date);return n!==null&&n<=90;}).length;
-  $("i94Tracked").textContent=hs.filter(c=>c.i94_number||c.i94_admit_until_date).length;
-  const q=String($("h1bSearch")?.value||"").toLowerCase().trim();
-  const list=hs.filter(c=>!q||[c.receipt_number,c.beneficiary_name,c.employer,c.h1b_case_type,c.case_manager].some(v=>String(v||"").toLowerCase().includes(q)));
-  $("h1bBody").innerHTML=list.length?list.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer||"—")+'</td><td>'+esc(c.h1b_case_type||"—")+'</td><td>'+date(c.h1b_approval_date)+'</td><td>'+date(c.h1b_approval_end_date)+'</td><td>'+esc(c.i94_number||"—")+'</td><td>'+i94Label(c)+'</td><td>'+extensionLabel(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+badge(c.current_status||c.uscis_status_text)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No H-1B cases found.</td></tr>';
-  const alerts=hs.filter(c=>{const i=daysUntil(c.i94_admit_until_date);const e=daysUntil(extensionTarget(c));return (i!==null&&i<=90)||(e!==null&&e<=90);}).sort((a,b)=>(daysUntil(extensionTarget(a))??99999)-(daysUntil(extensionTarget(b))??99999));
-  $("i94AlertBody").innerHTML=alerts.length?alerts.map(c=>'<div style="padding:10px 0;border-bottom:1px solid #e2e8f0"><b>'+esc(c.beneficiary_name)+'</b> — '+esc(c.employer||"Unassigned")+' — '+esc(c.receipt_number)+'<br><span class="small">I-94: '+(c.i94_admit_until_date?esc(date(c.i94_admit_until_date)):"Not recorded")+' | Extension target: '+(extensionTarget(c)?esc(date(extensionTarget(c))):"Not available")+' | Manager: '+esc(c.case_manager||"Unassigned")+'</span></div>').join(""):'No I-94 / extension alerts.';
-}
 
 function monitoringLabel(x){
   const enabled=x?.monitoring_enabled!==false;
@@ -280,8 +201,8 @@ function draw(){
   $("total").textContent=rows.length;
   $("pending").textContent=rows.filter(isPending).length;
   $("rfe").textContent=rows.filter(isRfe).length;
-  $("approved").textContent=rows.filter(approvedCase).length;
-  $("denied").textContent=rows.filter(deniedCase).length;
+  $("approved").textContent=rows.filter(x=>/approved/i.test(x.current_status||"")||/approved/i.test(x.uscis_status_text||"")).length;
+  $("denied").textContent=rows.filter(x=>/denied/i.test(x.current_status||"")||/denied/i.test(x.uscis_status_text||"")).length;
   $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
   $("premiumCount").textContent=rows.filter(x=>x.premium_processing===true||x.premium_processing==="true"||x.premium_processing===1||x.premium_processing==="1").length;
   const durations=rows.map(durationDays).filter(x=>x!==null);
@@ -289,8 +210,6 @@ function draw(){
   const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
   $("managerCount").textContent=managers.size;
   drawManagerStats();
-  drawEmployerStats();
-  drawH1B();
 
   const a=filt(rows,$("dashSearch").value);
   $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td>'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
@@ -464,46 +383,24 @@ async function loadHistory(caseId=null){
 }
 
 function openModal(c){
-  const modal=$("modal");
-  if(!modal){
-    setNotice("Add Case form is missing from this dashboard version. Please upload the latest dashboard file.",true);
-    console.error("Dashboard: missing #modal");
-    return;
-  }
-
-  modal.style.display="grid";
-  const title=$("modalTitle");
-  if(title)title.textContent=c?"Edit Case":"Add Case";
-
-  setField("caseId",c?.id||"");
-  setField("receipt",c?.receipt_number||"");
-  setField("beneficiary",c?.beneficiary_name||"");
-  setField("employer",c?.employer||"");
-  setField("formType",c?.form_type||"");
-  setField("caseCategory",c?.case_category||"");
-  setField("h1bCaseType",c?.h1b_case_type||"");
-  setField("filingDate",c?.filing_date||"");
-  setField("priorityDate",c?.priority_date||"");
-  setField("status",c?.current_status||"Case Was Received");
-  setField("statusDate",c?.status_date||"");
-  setField("manager",c?.case_manager||"");
-  setField("amount",c?.amount??"");
-  setField("premium",(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false");
-  setField("duration",c?.time_duration_days??"");
-  setField("h1bApprovalDate",c?.h1b_approval_date||"");
-  setField("h1bApprovalStartDate",c?.h1b_approval_start_date||"");
-  setField("h1bApprovalEndDate",c?.h1b_approval_end_date||"");
-  setField("i94Number",c?.i94_number||"");
-  setField("i94Class",c?.i94_class_of_admission||"");
-  setField("i94EntryDate",c?.i94_last_entry_date||"");
-  setField("i94AdmitUntil",c?.i94_admit_until_date||"");
-  setField("extensionTarget",c?.extension_target_date||"");
-  setField("extensionFiledDate",c?.extension_filed_date||"");
-  setField("extensionStatus",c?.extension_status||"");
-  setField("h1bNotes",c?.h1b_notes||"");
-  setField("notes",c?.notes||"");
-  const formMsg=$("formMsg");
-  if(formMsg)formMsg.innerHTML="";
+  $("modal").style.display="grid";
+  $("modalTitle").textContent=c?"Edit Case":"Add Case";
+  $("caseId").value=c?.id||"";
+  $("receipt").value=c?.receipt_number||"";
+  $("beneficiary").value=c?.beneficiary_name||"";
+  $("employer").value=c?.employer||"";
+  $("formType").value=c?.form_type||"";
+  $("filingDate").value=c?.filing_date||"";
+  $("priorityDate").value=c?.priority_date||"";
+  $("status").value=c?.current_status||"Case Was Received";
+  $("statusDate").value=c?.status_date||"";
+  $("manager").value=c?.case_manager||"";
+  $("amount").value=c?.amount??"";
+  $("premium").value=(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false";
+  $("duration").value=c?.time_duration_days??"";
+  $("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
+  $("notes").value=c?.notes||"";
+  $("formMsg").innerHTML="";
 }
 function closeModal(){$("modal").style.display="none";}
 
@@ -515,10 +412,8 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   $("cases").style.display=v==="cases"?"block":"none";
   $("alerts").style.display=v==="alerts"?"block":"none";
   $("history").style.display=v==="history"?"block":"none";
-  $("h1b").style.display=v==="h1b"?"block":"none";
-  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="h1b"?"H-1B & I-94 Tracker":"RFE / NOID Alerts";
+  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":"RFE / NOID Alerts";
   if(v==="history")loadHistory();
-  if(v==="h1b")drawH1B();
 }));
 
 $("addBtn").addEventListener("click",()=>openModal(null));
@@ -532,8 +427,6 @@ $("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
 $("historySearch").addEventListener("input",()=>loadHistory());
-$("employerSearch").addEventListener("input",drawEmployerStats);
-$("h1bSearch").addEventListener("input",drawH1B);
 
 document.addEventListener("click",async e=>{
   const check=e.target.closest(".checkOneBtn");
@@ -560,7 +453,6 @@ document.addEventListener("click",async e=>{
     $("dashboard").style.display="none";
     $("cases").style.display="none";
     $("alerts").style.display="none";
-    $("h1b").style.display="none";
     $("history").style.display="block";
     $("title").textContent="Case History";
     $("historySearch").value="";
@@ -594,96 +486,35 @@ $("logout").addEventListener("click",async()=>{
   }
 });
 
-const caseForm=$("caseForm");
-if(caseForm){
-  caseForm.addEventListener("submit",async e=>{
-    e.preventDefault();
-    const formMsg=$("formMsg");
-    if(formMsg)formMsg.innerHTML="";
-
-    const receiptEl=$("receipt"), beneficiaryEl=$("beneficiary");
-    if(!receiptEl||!beneficiaryEl){
-      const msg="The Add Case form is incomplete. Please upload the latest dashboard file.";
-      if(formMsg)formMsg.innerHTML='<div class="msg error">'+esc(msg)+'</div>';
-      setNotice(msg,true);
-      return;
-    }
-
-    const receipt=receiptEl.value.trim().toUpperCase();
-    const beneficiary=beneficiaryEl.value.trim();
-    if(!/^[A-Z]{3}[0-9]{10}$/.test(receipt)){
-      if(formMsg)formMsg.innerHTML='<div class="msg error">Receipt number must be 3 letters followed by 10 digits.</div>';
-      receiptEl.focus();
-      return;
-    }
-    if(!beneficiary){
-      if(formMsg)formMsg.innerHTML='<div class="msg error">Beneficiary name is required.</div>';
-      beneficiaryEl.focus();
-      return;
-    }
-
-    const val=id=>{const el=$(id);return el?el.value:"";};
-    const id=val("caseId");
-    const amountRaw=val("amount");
-    const durationRaw=val("duration");
-    const amount=amountRaw===""?null:Number(amountRaw);
-    const duration=durationRaw===""?null:Number(durationRaw);
-    if(amount!==null&&(!Number.isFinite(amount)||amount<0)){
-      if(formMsg)formMsg.innerHTML='<div class="msg error">Amount must be a valid non-negative number.</div>';
-      return;
-    }
-    if(duration!==null&&(!Number.isFinite(duration)||duration<0)){
-      if(formMsg)formMsg.innerHTML='<div class="msg error">Time Duration must be a valid non-negative number.</div>';
-      return;
-    }
-
-    const payload={
-      receipt_number:receipt,
-      beneficiary_name:beneficiary,
-      employer:val("employer").trim()||null,
-      form_type:val("formType").trim()||null,
-      case_category:val("caseCategory").trim()||null,
-      h1b_case_type:val("h1bCaseType").trim()||null,
-      filing_date:val("filingDate")||null,
-      priority_date:val("priorityDate")||null,
-      current_status:val("status")||"Case Was Received",
-      status_date:val("statusDate")||null,
-      case_manager:val("manager").trim()||null,
-      amount:amount,
-      premium_processing:val("premium")==="true",
-      time_duration_days:duration,
-      h1b_approval_date:val("h1bApprovalDate")||null,
-      h1b_approval_start_date:val("h1bApprovalStartDate")||null,
-      h1b_approval_end_date:val("h1bApprovalEndDate")||null,
-      i94_number:val("i94Number").trim()||null,
-      i94_class_of_admission:val("i94Class").trim()||null,
-      i94_last_entry_date:val("i94EntryDate")||null,
-      i94_admit_until_date:val("i94AdmitUntil")||null,
-      extension_target_date:val("extensionTarget")||null,
-      extension_filed_date:val("extensionFiledDate")||null,
-      extension_status:val("extensionStatus")||null,
-      h1b_notes:val("h1bNotes").trim()||null,
-      notes:val("notes").trim()||null,
-      monitoring_enabled:val("monitoring")==="false"?false:true
-    };
-
-    try{
-      if(!db)throw new Error("Database connection is not ready. Please refresh and try again.");
-      const r=id
-        ?await db.from("cases").update(payload).eq("id",id)
-        :await db.from("cases").insert(payload);
-      if(r.error)throw r.error;
-      if(formMsg)formMsg.innerHTML='<div class="msg success">Case saved successfully.</div>';
-      setTimeout(()=>{closeModal();load();},500);
-    }catch(e){
-      console.error("Save case error:",e);
-      const message=e?.message||String(e);
-      if(formMsg)formMsg.innerHTML='<div class="msg error">Unable to save case: '+esc(message)+'</div>';
-    }
-  });
-}else{
-  console.error("Dashboard: #caseForm is missing.");
-}
+$("caseForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  $("formMsg").innerHTML="";
+  const id=$("caseId").value;
+  const payload={
+    receipt_number:$("receipt").value.trim(),
+    beneficiary_name:$("beneficiary").value.trim(),
+    employer:$("employer").value.trim()||null,
+    form_type:$("formType").value.trim()||null,
+    filing_date:$("filingDate").value||null,
+    priority_date:$("priorityDate").value||null,
+    current_status:$("status").value,
+    status_date:$("statusDate").value||null,
+    case_manager:$("manager").value.trim()||null,
+    amount:$("amount").value===""?null:Number($("amount").value),
+    premium_processing:$("premium").value==="true",
+    time_duration_days:$("duration").value===""?null:Number($("duration").value),
+    monitoring_enabled:$("monitoring").value==="true",
+    notes:$("notes").value.trim()||null
+  };
+  try{
+    const r=id?await db.from("cases").update(payload).eq("id",id):await db.from("cases").insert(payload);
+    if(r.error)throw r.error;
+    $("formMsg").innerHTML='<div class="msg success">Case saved successfully.</div>';
+    setTimeout(()=>{closeModal();load();},500);
+  }catch(e){
+    $("formMsg").innerHTML='<div class="msg error">'+esc(e.message||e)+'</div>';
+  }
+});
 
 window.addEventListener("error",e=>{
   if($("notice"))setNotice("Website error: "+e.message,true);
