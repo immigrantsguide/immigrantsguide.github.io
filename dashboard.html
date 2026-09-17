@@ -17,6 +17,21 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 
 .case-number{font-weight:700;white-space:nowrap;}
 .duration-cell{font-weight:700;white-space:nowrap;}
+.attention-panel{margin-bottom:20px;border:1px solid #fecaca;}
+.attention-head{background:#fff7f7;}
+.attention-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:15px;}
+.attention-card{border:1px solid #e2e8f0;border-radius:12px;padding:14px;background:#fff;}
+.attention-card.urgent{border-color:#fca5a5;background:#fff7f7;}
+.attention-card.warning{border-color:#fdba74;background:#fffaf5;}
+.attention-card.info{border-color:#93c5fd;background:#f8fbff;}
+.attention-title{font-weight:800;font-size:13px;margin-bottom:6px;}
+.attention-count{font-size:24px;font-weight:800;}
+.attention-items{margin-top:8px;font-size:12px;color:#475569;line-height:1.5;}
+.attention-item{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid #eef2f7;}
+.attention-item:first-child{border-top:0;}
+.attention-receipt{font-weight:700;color:#1e40af;}
+.attention-empty{color:#64748b;font-size:12px;}
+@media(max-width:900px){.attention-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -61,6 +76,16 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="card">RFE Deadlines ≤ 30 Days<div id="rfeDueCount" class="num orange">0</div></div>
 <div class="card">Extension Deadlines ≤ 90 Days<div id="extensionDueCount" class="num orange">0</div></div>
 </div>
+
+<div class="panel attention-panel">
+<div class="panel-head attention-head"><div><h2>🚨 Attention Required</h2><div class="small">Recorded deadlines and recent USCIS status activity that may need your team's attention.</div></div></div>
+<div class="attention-grid">
+<div class="attention-card urgent"><div class="attention-title">🔴 RFE / NOID Deadlines</div><div id="attentionRfeCount" class="attention-count">0</div><div id="attentionRfeItems" class="attention-items"><span class="attention-empty">No recorded RFE / NOID deadlines.</span></div></div>
+<div class="attention-card warning"><div class="attention-title">🟠 Extension Planning</div><div id="attentionExtCount" class="attention-count">0</div><div id="attentionExtItems" class="attention-items"><span class="attention-empty">No extension target dates within 90 days.</span></div></div>
+<div class="attention-card info"><div class="attention-title">🔵 Recent USCIS Activity</div><div id="attentionActivityCount" class="attention-count">0</div><div id="attentionActivityItems" class="attention-items"><span class="attention-empty">No recent USCIS status changes recorded.</span></div></div>
+</div>
+</div>
+
 <div class="panel" style="margin-bottom:20px">
 <div class="panel-head"><h2>Employer Statistics</h2><input id="employerSearch" class="search" placeholder="Search employer..."></div>
 <div class="notice">Tracks total cases, amount spent, approved cases, active cases, RFE/NOID deadline counts, extension deadline counts, and assigned managers by employer.</div>
@@ -130,7 +155,7 @@ const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
-let db=null, rows=[], signingOut=false, initialized=false;
+let db=null, rows=[], recentUscisHistory=[], signingOut=false, initialized=false;
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -189,6 +214,29 @@ function durationDays(c){
   return Number.isFinite(d)&&d>=0?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
+
+function attentionDeadlineItem(x){
+  const n=daysUntil(x.date);
+  const cls=n<0?"overdue":n<=7?"due-soon":"";
+  return '<div class="attention-item"><span><span class="attention-receipt">'+esc(x.c.receipt_number)+'</span><br>'+esc(x.c.beneficiary_name||"")+'</span><span class="'+cls+'">'+esc(deadlineLabel(x.date))+'</span></div>';
+}
+function drawAttention(){
+  const rfeItems=rows.filter(c=>c.rfe_deadline_date).map(c=>({date:c.rfe_deadline_date,c}))
+    .filter(x=>{const n=daysUntil(x.date);return n!==null&&n<=30;})
+    .sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
+  const extItems=rows.filter(c=>c.extension_target_date).map(c=>({date:c.extension_target_date,c}))
+    .filter(x=>{const n=daysUntil(x.date);return n!==null&&n<=90;})
+    .sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
+
+  $("attentionRfeCount").textContent=rfeItems.length;
+  $("attentionRfeItems").innerHTML=rfeItems.length?rfeItems.slice(0,5).map(attentionDeadlineItem).join(""):'<span class="attention-empty">No RFE / NOID deadlines due within 30 days.</span>';
+  $("attentionExtCount").textContent=extItems.length;
+  $("attentionExtItems").innerHTML=extItems.length?extItems.slice(0,5).map(attentionDeadlineItem).join(""):'<span class="attention-empty">No extension target dates due within 90 days.</span>';
+
+  const recent=recentUscisHistory.slice(0,5);
+  $("attentionActivityCount").textContent=recent.length;
+  $("attentionActivityItems").innerHTML=recent.length?recent.map(x=>'<div class="attention-item"><span><span class="attention-receipt">'+esc(x.receipt_number)+'</span><br>'+esc(x.new_uscis_status||"USCIS status updated")+'</span><span class="small">'+esc(new Date(x.created_at).toLocaleDateString())+'</span></div>').join(""):'<span class="attention-empty">No recent USCIS status changes recorded.</span>';
+}
 
 function drawEmployerStats(){
   const q=String($("employerSearch")?.value||"").toLowerCase().trim();
@@ -271,6 +319,7 @@ function draw(){
   $("extensionDueCount").textContent=rows.filter(c=>daysUntil(c.extension_target_date)!==null&&daysUntil(c.extension_target_date)<=90).length;
   drawEmployerStats();
   drawDeadlines();
+  drawAttention();
 
   const a=filt(rows,$("dashSearch").value);
   $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
@@ -289,6 +338,10 @@ async function load(){
     const r=await db.from("cases").select("*").order("created_at",{ascending:false});
     if(r.error)throw r.error;
     rows=r.data||[];
+    try{
+      const uh=await db.from("uscis_status_history").select("*").order("created_at",{ascending:false}).limit(5);
+      recentUscisHistory=uh.error?[]:(uh.data||[]);
+    }catch(_){recentUscisHistory=[];}
     draw();
     setNotice("Connected to Supabase. "+rows.length+" case(s) loaded.");
   }catch(e){
