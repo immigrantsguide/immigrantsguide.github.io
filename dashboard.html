@@ -126,6 +126,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="0"></div>
 <div><label>RFE / NOID Deadline</label><input id="rfeDeadline" type="date"></div>
 <div><label>Extension Deadline / Target Date</label><input id="extensionTarget" type="date"><div class="small">Enter the date your team wants to target for filing the extension.</div></div>
+<div><label>Automatic Monitoring</label><select id="monitoring"><option value="true">Enabled</option><option value="false">Off</option></select></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -466,6 +467,8 @@ function openModal(c){
   $("amount").value=c?.amount??"";
   $("premium").value=(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false";
   $("duration").value=c?.time_duration_days??"";
+  $("rfeDeadline").value=c?.rfe_deadline_date||"";
+  $("extensionTarget").value=c?.extension_target_date||"";
   $("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
   $("notes").value=c?.notes||"";
   $("formMsg").innerHTML="";
@@ -572,6 +575,8 @@ $("caseForm").addEventListener("submit",async e=>{
     amount:$("amount").value===""?null:Number($("amount").value),
     premium_processing:$("premium").value==="true",
     time_duration_days:$("duration").value===""?null:Number($("duration").value),
+    rfe_deadline_date:$("rfeDeadline").value||null,
+    extension_target_date:$("extensionTarget").value||null,
     monitoring_enabled:$("monitoring").value==="true",
     notes:$("notes").value.trim()||null
   };
