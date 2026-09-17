@@ -248,7 +248,7 @@ function drawEmployerStats(){
     const m=map.get(name);
     m.count++; m.amount+=Number(c.amount)||0;
     if(isApproved(c))m.approved++; else if(isPending(c))m.active++;
-    if(isRfe(c)){m.rfe++; const n=daysUntil(c.rfe_deadline_date); if(n!==null&&n<=30)m.rfeDue++;}
+    if(isRfe(c))m.rfe++; const rfeDays=daysUntil(c.rfe_deadline_date); if(rfeDays!==null&&rfeDays<=30)m.rfeDue++;
     const e=daysUntil(c.extension_target_date); if(nValidDeadline(e))m.extDue++;
     if(String(c.case_manager||"").trim())m.managers.add(String(c.case_manager).trim());
   });
@@ -315,7 +315,7 @@ function draw(){
   const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
   $("managerCount").textContent=managers.size;
   $("activeCount").textContent=rows.filter(isPending).length;
-  $("rfeDueCount").textContent=rows.filter(c=>isRfe(c)&&daysUntil(c.rfe_deadline_date)!==null&&daysUntil(c.rfe_deadline_date)<=30).length;
+  $("rfeDueCount").textContent=rows.filter(c=>daysUntil(c.rfe_deadline_date)!==null&&daysUntil(c.rfe_deadline_date)<=30).length;
   $("extensionDueCount").textContent=rows.filter(c=>daysUntil(c.extension_target_date)!==null&&daysUntil(c.extension_target_date)<=90).length;
   drawEmployerStats();
   drawDeadlines();
