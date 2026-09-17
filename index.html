@@ -14,29 +14,40 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
 .hero{padding:48px 20px 28px;text-align:center}.hero h1{margin:0 0 10px;font-size:34px}.hero p{margin:0;color:#64748b}
 .wrap{width:min(1100px,94%);margin:0 auto 50px}
 .panel{background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden}
-.lookup{margin-bottom:22px;padding:22px}.lookup h2{margin:0 0 10px;font-size:18px}.muted{color:#475569;font-size:14px}
-.lookup-form{display:flex;gap:10px;margin-top:15px}.lookup-input{flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:9px;text-transform:uppercase}
-.lookup-btn{border:0;background:#2563eb;color:#fff;padding:12px 18px;border-radius:9px;font-weight:700;cursor:pointer;white-space:nowrap}
-.lookup-btn:disabled{opacity:.65;cursor:wait}
-.lookup-result{margin-top:15px;display:none;padding:14px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0}
-.lookup-result.show{display:block}.lookup-status{font-size:16px;font-weight:800;margin-bottom:8px}
-.lookup-meta{font-size:13px;color:#475569;line-height:1.55}.lookup-description{margin-top:9px;font-size:14px;line-height:1.55}
-.lookup-description a{color:#2563eb;font-weight:700}
 .panel-head{padding:18px 20px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:15px}
-.panel-head h2{margin:0;font-size:18px}.search{width:min(350px,100%);padding:11px;border:1px solid #cbd5e1;border-radius:9px}
-.notice{padding:11px 20px;background:#eff6ff;color:#1d4ed8;font-size:13px}.notice.error{background:#fef2f2;color:#991b1b}
-.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{padding:14px 16px;border-bottom:1px solid #eef2f7;text-align:left;font-size:14px}th{background:#f8fafc;color:#64748b}
+.panel-head h2{margin:0;font-size:18px}
+.search{width:min(350px,100%);padding:11px;border:1px solid #cbd5e1;border-radius:9px}
+.notice{padding:11px 20px;background:#eff6ff;color:#1d4ed8;font-size:13px}
+.notice.error{background:#fef2f2;color:#991b1b}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{padding:14px 16px;border-bottom:1px solid #eef2f7;text-align:left;font-size:14px}
+th{background:#f8fafc;color:#64748b}
 .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#eff6ff;color:#2563eb}
-.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}
-.empty{text-align:center;color:#64748b;padding:45px}.footer{text-align:center;color:#64748b;font-size:12px;padding:25px}
-@media(max-width:700px){.hero h1{font-size:27px}.panel-head{align-items:flex-start;flex-direction:column}.lookup-form{flex-direction:column}.lookup-btn{width:100%}}
+.badge.rfe{background:#fff7ed;color:#ea580c}
+.badge.approved{background:#ecfdf5;color:#059669}
+.badge.denied{background:#fef2f2;color:#dc2626}
+.empty{text-align:center;color:#64748b;padding:45px}
+.hero-image{width:min(1500px,100%);margin:0 auto 24px;padding:0 20px}.hero-image img{display:block;width:100%;height:auto;border-radius:18px;box-shadow:0 15px 40px #0002}.lookup{margin-bottom:22px;padding:22px}.lookup-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:10px}.lookup-head h2{margin:0;font-size:18px}.lookup-form{display:flex;gap:10px;margin-top:15px}.lookup-input{flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:9px;text-transform:uppercase}.lookup-btn{border:0;background:#2563eb;color:#fff;padding:12px 18px;border-radius:9px;font-weight:700;cursor:pointer;white-space:nowrap}.lookup-btn:disabled{opacity:.65;cursor:wait}.lookup-result{margin-top:15px;display:none;padding:14px;border-radius:10px;background:#f8fafc;border:1px solid #e2e8f0}.lookup-result.show{display:block}.lookup-status{font-size:16px;font-weight:800;margin-bottom:5px}.lookup-meta{font-size:12px;color:#64748b;line-height:1.5}.footer{text-align:center;color:#64748b;font-size:12px;padding:25px}
+.login-modal{display:none;position:fixed;inset:0;background:#0f172a99;place-items:center;padding:20px;z-index:10}
+.login-card{width:min(430px,100%);background:#fff;padding:32px;border-radius:16px;box-shadow:0 20px 60px #0003}
+.login-head{display:flex;justify-content:space-between;align-items:center}
+.close{border:0;background:#f1f5f9;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer}
+label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}
+input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}
+.submit{width:100%;margin-top:20px;padding:12px;border:0;border-radius:9px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}
+.submit:disabled{opacity:.65}
+.msg{margin-top:14px;padding:11px;border-radius:9px;font-size:13px;display:none}
+.msg.err{display:block;background:#fef2f2;color:#991b1b}
+.msg.info{display:block;background:#eff6ff;color:#1d4ed8}
+.intro-panel h2,.official-tools h2{margin:0 0 10px}.intro-lead{font-size:16px;line-height:1.6;color:#475569}.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.service-card{border:1px solid #e2e8f0;border-radius:12px;padding:18px;background:#f8fafc}.service-card h3{margin:0 0 8px;font-size:15px}.service-card p{margin:0;color:#64748b;font-size:13px;line-height:1.55}.official-tools{margin-top:20px}.tool-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.tool-btn{display:inline-block;text-decoration:none;border-radius:9px;padding:12px 18px;background:#2563eb;color:#fff;font-weight:700}.tool-btn.secondary-tool{background:#0f766e}.tool-note{font-size:12px;color:#64748b;line-height:1.55;margin-top:15px}@media(max-width:900px){.service-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.header{padding:15px 4%}.hero h1{font-size:27px}.panel-head{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
 <header class="header">
   <div class="logo">Immigrants <span>Guide</span></div>
-  <button class="login-btn" type="button" onclick="window.location.href='login.html?v=20260916'">🔐 Login</button>
+  <button id="loginOpen" class="login-btn" type="button">🔐 Login</button>
 </header>
 
 <section class="hero">
@@ -44,101 +55,104 @@ th,td{padding:14px 16px;border-bottom:1px solid #eef2f7;text-align:left;font-siz
   <p>View receipt numbers and the latest available USCIS status for tracked cases.</p>
 </section>
 
-<main class="wrap">
-<section class="panel lookup">
-  <h2>USCIS Case Status Check</h2>
-  <div class="muted">Enter any USCIS receipt number to check the latest status available through the USCIS case-status service.</div>
-  <form id="lookupForm" class="lookup-form">
-    <input id="lookupReceipt" class="lookup-input" maxlength="13" autocomplete="off" placeholder="Example: IOE1234567890" required>
-    <button id="lookupBtn" class="lookup-btn" type="submit">Check USCIS Status</button>
-  </form>
-  <div id="lookupResult" class="lookup-result"></div>
-</section>
+<div class="hero-image">
+  <img src="assets/immigrants-guide-hero.png" alt="Immigrants Guide USCIS Case Tracker — H-1B, OPT, EAD and RFE support">
+</div>
 
-<section class="panel">
-  <div class="panel-head">
-    <h2>Tracked Case Status</h2>
-    <input id="search" class="search" placeholder="Search receipt number...">
-  </div>
-  <div id="notice" class="notice">Loading case statuses...</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Receipt Number</th><th>USCIS Status</th><th>Last Updated</th></tr></thead>
-      <tbody id="body"><tr><td colspan="3" class="empty">Loading...</td></tr></tbody>
-    </table>
-  </div>
-</section>
+<main class="wrap">
+  <section class="panel intro-panel">
+    <h2>Immigrants Guide</h2>
+    <p class="intro-lead">Immigrants Guide helps individuals, employers, and immigration teams organize and monitor U.S. immigration cases in one place.</p>
+    <div class="service-grid">
+      <div class="service-card"><h3>H-1B Petitions & RFE Support</h3><p>Track H-1B filings, transfers, extensions, amendments, approvals, RFEs, NOIDs, case managers, filing costs, and important dates.</p></div>
+      <div class="service-card"><h3>STEM OPT RFE Support</h3><p>Organize STEM OPT cases, RFE response tracking, supporting documentation, deadlines, and case status updates.</p></div>
+      <div class="service-card"><h3>OPT RFE Support</h3><p>Track OPT applications, RFE-related work, case status, and important filing information.</p></div>
+      <div class="service-card"><h3>H-4 Petitions & EAD</h3><p>Track H-4 extensions, changes of status, EAD-related cases, filing dates, and USCIS updates.</p></div>
+      <div class="service-card"><h3>I-140 & Other Immigration Cases</h3><p>Maintain organized records for employment-based and other immigration filings with status and document tracking.</p></div>
+      <div class="service-card"><h3>USCIS Case Monitoring</h3><p>Monitor eligible tracked cases through the USCIS case-status service and maintain status history for your records.</p></div>
+    </div>
+  </section>
+  <section class="panel official-tools">
+    <h2>Official Immigration Tools</h2>
+    <p class="muted">Use the official government websites below to check your information directly.</p>
+    <div class="tool-buttons">
+      <a class="tool-btn" href="https://egov.uscis.gov/casestatus/landing.do" target="_blank" rel="noopener noreferrer">🔎 USCIS Case Status</a>
+      <a class="tool-btn secondary-tool" href="https://i94.cbp.dhs.gov/home" target="_blank" rel="noopener noreferrer">📄 Get I-94</a>
+    </div>
+    <p class="tool-note">The USCIS Case Status button opens the official USCIS case-status service. The Get I-94 button opens CBP's official I-94 website. USCIS says the electronic I-94 record can be accessed through CBP's I-94 website.</p>
+  </section>
 </main>
 
-<div class="footer">Immigrants Guide — USCIS Case Tracker</div>
+<div class="footer">Immigrants Guide — USCIS Case Tracker<br><strong>Email us at <a href="mailto:immigrantsguide@outlook.com">immigrantsguide@outlook.com</a></strong></div>
+
+<div id="loginModal" class="login-modal">
+  <div class="login-card">
+    <div class="login-head">
+      <div><div class="logo">Immigrants <span>Guide</span></div><p style="color:#64748b;margin:7px 0 0">Secure staff login</p></div>
+      <button id="loginClose" class="close" type="button">×</button>
+    </div>
+    <form id="loginForm">
+      <label>Email</label><input id="email" type="email" autocomplete="username" required>
+      <label>Password</label><input id="password" type="password" autocomplete="current-password" required>
+      <button id="loginBtn" class="submit" type="submit">Log In</button>
+    </form>
+    <div id="msg" class="msg"></div>
+  </div>
+</div>
 
 <script>
 (function(){
 "use strict";
 const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let publicRows=[];
+let db=null;
+if(!window.supabase) throw new Error("Supabase library did not load. Please refresh.");
+db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const badge=s=>{const t=String(s||"").toLowerCase();const c=t.includes("approved")?"approved":t.includes("denied")?"denied":t.includes("rfe")||t.includes("noid")?"rfe":"";return '<span class="badge '+c+'">'+esc(s||"Status unavailable")+'</span>'};
+const badge=s=>{
+  const t=String(s||"").toLowerCase();
+  const c=t.includes("approved")?"approved":t.includes("denied")?"denied":t.includes("rfe")||t.includes("noid")?"rfe":"";
+  return '<span class="badge '+c+'">'+esc(s||"Status unavailable")+'</span>';
+};
 const last=x=>x?new Date(x).toLocaleString():"—";
 
-function draw(){
- const q=($("search").value||"").toLowerCase().trim();
- const rows=q?publicRows.filter(x=>String(x.receipt_number||"").toLowerCase().includes(q)):publicRows;
- $("body").innerHTML=rows.length?rows.map(c=>'<tr><td><b>'+esc(c.receipt_number)+'</b></td><td>'+badge(c.uscis_status_text||c.current_status)+'</td><td>'+esc(last(c.last_checked_at))+'</td></tr>').join(""):'<tr><td colspan="3" class="empty">No public case statuses available.</td></tr>';
-}
 
-async function loadPublicCases(){
- try{
-  const{data,error}=await db.from("public_case_status").select("receipt_number,uscis_status_text,current_status,last_checked_at").order("last_checked_at",{ascending:false});
-  if(error)throw error;
-  publicRows=data||[];
-  draw();
-  $("notice").textContent=publicRows.length+" case status record(s) available.";
- }catch(e){
-  publicRows=[];draw();
-  $("notice").textContent="Public tracked case statuses could not be loaded.";
-  $("notice").className="notice error";
-  console.error(e);
- }
-}
 
-async function checkUSCIS(receipt){
- const btn=$("lookupBtn"),result=$("lookupResult");
- btn.disabled=true;btn.textContent="Checking...";
- result.className="lookup-result show";result.innerHTML='<div class="muted">Checking USCIS...</div>';
- try{
-  const{data,error}=await db.functions.invoke("smart-service",{body:{receiptNumber:receipt}});
-  if(error)throw error;
-  const cs=data?.case_status;
-  if(!cs)throw new Error("USCIS returned no case status.");
-  const status=cs.current_case_status_text_en||"Status unavailable";
-  const desc=cs.current_case_status_desc_en||"";
-  const modified=cs.modifiedDate||"";
-  const form=cs.formType||"";
-  let safe=esc(desc);
-  safe=safe.replace(/&lt;a href=&quot;https:\/\/www\.uscis\.gov\/addresschange&quot;[^&]*&gt;www\.uscis\.gov\/addresschange&lt;\/a&gt;/gi,'<a href="https://www.uscis.gov/addresschange" target="_blank" rel="noopener noreferrer">www.uscis.gov/addresschange</a>');
-  result.innerHTML='<div class="lookup-status">'+badge(status)+'</div><div class="lookup-meta"><b>Receipt Number:</b> '+esc(receipt)+'</div>'+(form?'<div class="lookup-meta"><b>Form Type:</b> '+esc(form)+'</div>':'')+(modified?'<div class="lookup-meta"><b>USCIS Modified Date:</b> '+esc(modified)+'</div>':'')+(desc?'<div class="lookup-description">'+safe+'</div>':'');
- }catch(err){
-  result.innerHTML='<div style="color:#991b1b;font-weight:700">Unable to retrieve the USCIS status.</div><div class="lookup-meta" style="margin-top:5px">'+esc(err?.message||String(err))+'</div>';
- }finally{btn.disabled=false;btn.textContent="Check USCIS Status"}
-}
 
-$("search").addEventListener("input",draw);
-$("lookupReceipt").addEventListener("input",e=>e.target.value=e.target.value.toUpperCase().replace(/\s+/g,""));
-$("lookupForm").addEventListener("submit",e=>{
- e.preventDefault();
- const r=$("lookupReceipt").value.trim().toUpperCase().replace(/\s+/g,"");
- if(!/^[A-Z]{3}\d{10}$/.test(r)){
-  const x=$("lookupResult");x.className="lookup-result show";
-  x.innerHTML='<div style="color:#991b1b;font-weight:700">Please enter a valid USCIS receipt number.</div><div class="lookup-meta">Example format: IOE1234567890</div>';
-  return;
- }
- checkUSCIS(r);
+
+function openLogin(){$("loginModal").style.display="grid";$("email").focus();}
+function closeLogin(){$("loginModal").style.display="none";$("msg").className="msg";$("msg").textContent="";}
+
+$("loginOpen").addEventListener("click",openLogin);
+$("loginClose").addEventListener("click",closeLogin);
+$("loginModal").addEventListener("click",e=>{if(e.target===$("loginModal"))closeLogin();});
+
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const btn=$("loginBtn");
+  btn.disabled=true;btn.textContent="Connecting...";
+  $("msg").className="msg info";$("msg").textContent="Signing in...";
+  try{
+    const {error}=await db.auth.signInWithPassword({
+      email:$("email").value.trim(),
+      password:$("password").value
+    });
+    if(error)throw error;
+    window.location.replace("dashboard.html");
+  }catch(err){
+    $("msg").className="msg err";
+    $("msg").textContent=err?.message||"Login failed. Please try again.";
+    btn.disabled=false;btn.textContent="Log In";
+  }
 });
-loadPublicCases();
+
+window.addEventListener("error",e=>console.error(e));
+
+
+
+
 })();
 </script>
 </body>
