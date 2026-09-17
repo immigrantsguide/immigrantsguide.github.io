@@ -150,6 +150,25 @@ const isDenied=x=>/denied/i.test(statusText(x));
 const isRfe=x=>/rfe|noid/i.test(statusText(x));
 const isPending=x=>!isApproved(x)&&!isDenied(x);
 
+function daysUntil(value){
+  if(!value)return null;
+  const d=new Date(String(value).slice(0,10)+"T00:00:00");
+  if(Number.isNaN(d.getTime()))return null;
+  const today=new Date();
+  const t=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+  return Math.ceil((d-t)/86400000);
+}
+function deadlineLabel(value){
+  const n=daysUntil(value);
+  if(n===null)return "—";
+  if(n<0)return "Overdue by "+Math.abs(n)+" day"+(Math.abs(n)===1?"":"s");
+  if(n===0)return "Due today";
+  return n+" day"+(n===1?"":"s")+" remaining";
+}
+function deadlineTypeLabel(type){
+  return type==="RFE"?'<span class="badge rfe">RFE / NOID</span>':'<span class="badge">Extension</span>';
+}
+
 function setNotice(text,error=false){
   $("notice").textContent=text;
   $("notice").className=error?"notice error":"notice";
