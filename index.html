@@ -11,7 +11,7 @@
 body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff 0,#fff 55%,#f5f9ff 100%);color:var(--ink)}
 a{color:inherit}
 .header{height:82px;background:#fff;border-bottom:1px solid #e5edf6;display:flex;align-items:center;justify-content:space-between;padding:0 3.2%;gap:22px;position:sticky;top:0;z-index:20}
-.brand{display:flex;align-items:center;gap:12px;min-width:260px}.logo-image{width:82px;height:82px;object-fit:cover;object-position:center top;border-radius:10px;display:block}.footer-logo-image{width:62px;height:62px;object-fit:cover;object-position:center top;border-radius:8px;display:block}.brand-name{font-size:25px;font-weight:850;color:var(--navy);line-height:1}.brand-tag{font-size:12px;color:#5b708c;margin-top:6px}
+.brand{display:flex;align-items:center;gap:12px;min-width:260px}.brand-name{font-size:25px;font-weight:850;color:var(--navy);line-height:1}.brand-tag{font-size:12px;color:#5b708c;margin-top:6px}
 .logo-mark{width:70px;height:70px;flex:none}.logo-mark text{font-family:Arial,sans-serif;font-weight:800}
 .nav{display:flex;align-items:center;gap:27px;font-size:14px;color:#314765}.nav a{text-decoration:none}.nav a:hover{color:var(--blue)}
 .dash-btn{background:linear-gradient(135deg,#1769e8,#0755c8);color:#fff;text-decoration:none;padding:13px 18px;border-radius:9px;font-weight:800;box-shadow:0 8px 18px #1769e826;white-space:nowrap}.dash-btn:hover{transform:translateY(-1px)}
@@ -27,13 +27,30 @@ a{color:inherit}
 .footer{margin-top:34px;background:#0c294d;color:#fff;padding:26px 3.5% 20px}.footer-inner{width:min(1480px,100%);margin:auto;display:grid;grid-template-columns:1.2fr 1fr 1.2fr;gap:20px;align-items:center}.footer-brand{display:flex;align-items:center;gap:10px}.footer-brand .logo-mark{width:58px;height:58px}.footer-brand strong{font-size:19px}.footer-brand small{display:block;color:#a9bdd6;margin-top:4px}.footer-nav{text-align:center}.footer-nav a{color:#d6e2f2;text-decoration:none;font-size:13px;margin:0 9px}.footer-contact{text-align:right;color:#d6e2f2;font-size:13px}.footer-contact a{color:#fff}.copyright{border-top:1px solid #294565;margin-top:20px;padding-top:13px;display:flex;justify-content:space-between;color:#a9bdd6;font-size:11px}
 .login-modal{display:none;position:fixed;inset:0;background:#071a31b8;place-items:center;padding:20px;z-index:100}.login-card{width:min(430px,100%);background:#fff;padding:30px;border-radius:16px;box-shadow:0 25px 80px #0005}.login-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eef2f7;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer}label{display:block;font-size:13px;font-weight:700;margin:16px 0 7px}input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}.submit{width:100%;margin-top:20px;padding:12px;border:0;border-radius:9px;background:#1769e8;color:#fff;font-weight:800;cursor:pointer}.msg{margin-top:14px;padding:11px;border-radius:9px;font-size:13px;display:none}.msg.err{display:block;background:#fef2f2;color:#991b1b}.msg.info{display:block;background:#eff6ff;color:#1d4ed8}
 @media(max-width:1050px){.hero{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.nav{display:none}.header{height:auto;padding:12px 3%}.header-right{margin-left:auto}.brand{min-width:auto}.hero h1{font-size:40px}.footer-inner{grid-template-columns:1fr}.footer-nav{text-align:left}.footer-contact{text-align:left}}
-@media(max-width:720px){.tools,.services,.side{grid-template-columns:1fr}.hero h1{font-size:34px}.hero p{font-size:16px}.header-right .flag{display:none}.brand-name{font-size:20px}.logo-image{width:70px;height:70px}.brand-tag{font-size:10px}.dash-btn{padding:10px 12px}.why{align-items:flex-start;flex-direction:column}.why .dash-btn{width:100%}.copyright{flex-direction:column;gap:7px}}
+@media(max-width:720px){.tools,.services,.side{grid-template-columns:1fr}.hero h1{font-size:34px}.hero p{font-size:16px}.header-right .flag{display:none}.brand-name{font-size:20px}.brand-tag{font-size:10px}.dash-btn{padding:10px 12px}.why{align-items:flex-start;flex-direction:column}.why .dash-btn{width:100%}.copyright{flex-direction:column;gap:7px}}
+
+.ask-vijay-wrap{margin:10px 0 28px}.ask-vijay{border:1px solid #c8dbf5;background:linear-gradient(135deg,#eef6ff,#fff);border-radius:16px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;box-shadow:0 8px 25px #15365d0b}.ask-vijay-copy h2{margin:0 0 7px;color:var(--navy);font-size:26px}.ask-vijay-copy p{margin:0;color:#526b8a;font-size:14px;line-height:1.55;max-width:760px}.ask-vijay-btn{border:0;border-radius:10px;background:linear-gradient(135deg,#1769e8,#0757cf);color:#fff;padding:14px 22px;font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap;box-shadow:0 8px 18px #1769e826}.ask-vijay-btn:hover{transform:translateY(-1px)}.ask-modal{display:none;position:fixed;inset:0;background:#071a31b8;place-items:center;padding:20px;z-index:120}.ask-card{width:min(620px,100%);background:#fff;padding:28px;border-radius:16px;box-shadow:0 25px 80px #0005;max-height:90vh;overflow:auto}.ask-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.ask-head h2{margin:0;color:var(--navy);font-size:25px}.ask-head p{margin:6px 0 0;color:#647b98;font-size:13px;line-height:1.45}.ask-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ask-field{margin-top:15px}.ask-field label{display:block;font-size:13px;font-weight:700;margin:0 0 7px;color:#243b5a}.ask-field input,.ask-field textarea{width:100%;padding:12px 13px;border:1px solid #cbd8e8;border-radius:9px;font:inherit;outline:none}.ask-field textarea{min-height:150px;resize:vertical}.ask-field input:focus,.ask-field textarea:focus{border-color:#3981ef;box-shadow:0 0 0 3px #3981ef18}.ask-submit{width:100%;margin-top:18px;padding:13px;border:0;border-radius:9px;background:#1769e8;color:#fff;font-weight:800;font-size:15px;cursor:pointer}.ask-submit:disabled{opacity:.65;cursor:wait}.ask-note{margin-top:10px;color:#71839a;font-size:11px;line-height:1.45}.ask-msg{display:none;margin-top:13px;padding:11px;border-radius:9px;font-size:13px}.ask-msg.ok{display:block;background:#ecfdf5;color:#047857}.ask-msg.err{display:block;background:#fef2f2;color:#991b1b}.honeypot{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}@media(max-width:720px){.ask-vijay{align-items:flex-start;flex-direction:column}.ask-vijay-btn{width:100%}.ask-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header class="header">
   <div class="brand">
-    <img src="assets/immigrants-guide-logo.png" alt="Immigrants Guide VK Eagle Globe USA logo" class="logo-image">
+    <svg class="logo-mark" viewBox="0 0 100 100" aria-label="Immigrants Guide VK eagle globe USA logo">
+  <defs><linearGradient id="flagRedIndex" x1="0" x2="1"><stop offset="0" stop-color="#ef233c"/><stop offset="1" stop-color="#b91c1c"/></linearGradient></defs>
+  <circle cx="48" cy="52" r="35" fill="#05070b" stroke="#0d2b55" stroke-width="2.5"/>
+  <ellipse cx="48" cy="52" rx="17" ry="35" fill="none" stroke="#d1d5db" stroke-width="1.1"/>
+  <ellipse cx="48" cy="52" rx="29" ry="35" fill="none" stroke="#9ca3af" stroke-width=".9" opacity=".8"/>
+  <ellipse cx="48" cy="52" rx="35" ry="12" fill="none" stroke="#9ca3af" stroke-width="1"/>
+  <path d="M14 52h68M18 37h60M18 67h60" stroke="#9ca3af" stroke-width=".9" opacity=".8"/>
+  <path d="M24 42l8-5 9 2 6-3 8 4 8-1 7 5-3 5-9 0-6 5-7-2-6 4-8-3-6 1-5-5-7-1z" fill="#fff"/>
+  <text x="48" y="61" text-anchor="middle" font-size="24" font-family="Arial,sans-serif" font-weight="900" fill="#fff" letter-spacing="-2">VK</text>
+  <path d="M17 70 C36 87 65 88 82 70" fill="none" stroke="url(#flagRedIndex)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M19 76 C38 91 64 91 80 77" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M21 81 C40 95 63 94 77 82" fill="none" stroke="url(#flagRedIndex)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M44 21 C34 12 24 10 14 14 C21 19 29 23 38 25 C29 21 20 22 12 26 C22 31 31 33 41 30 L47 26Z" fill="#05070b" stroke="#0d2b55" stroke-width="1"/>
+  <path d="M51 23 C61 13 71 11 81 15 C74 20 66 24 57 26 C66 22 75 23 83 27 C73 32 64 33 54 30 L49 27Z" fill="#05070b" stroke="#0d2b55" stroke-width="1"/>
+  <path d="M45 22 C48 18 53 18 56 22 L59 28 53 34 47 34 42 28Z" fill="#05070b" stroke="#0d2b55" stroke-width="1"/>
+</svg>
     <div><div class="brand-name">Immigrants Guide</div><div class="brand-tag">Your Partner in U.S. Immigration Journey</div></div>
   </div>
   <nav class="nav"><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#resources">Resources</a><a href="#contact">Contact</a></nav>
@@ -89,6 +106,17 @@ a{color:inherit}
     </aside>
   </section>
 
+
+  <section class="ask-vijay-wrap" id="ask-vijay">
+    <div class="ask-vijay">
+      <div class="ask-vijay-copy">
+        <h2>💬 Have an Immigration Question?</h2>
+        <p>Ask Vijay Krishna directly. Submit your immigration question, contact details, and any context you want to share. Your message will be sent to the Immigrants Guide team for review.</p>
+      </div>
+      <button class="ask-vijay-btn" id="askVijayOpen" type="button">Ask Vijay Krishna →</button>
+    </div>
+  </section>
+
   <section class="section" id="about">
     <div class="section-head"><div style="font-size:28px">👥</div><div><h2>How Immigrants Guide Can Help</h2><p>Resources, tracking tools, and guidance for major U.S. immigration categories.</p></div></div>
     <div class="services" id="services">
@@ -110,7 +138,7 @@ a{color:inherit}
 <footer class="footer" id="contact">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img src="assets/immigrants-guide-logo.png" alt="Immigrants Guide VK logo" class="footer-logo-image">
+      <svg class="logo-mark" viewBox="0 0 100 100"><circle cx="48" cy="51" r="35" fill="none" stroke="#fff" stroke-width="3"/><ellipse cx="48" cy="51" rx="17" ry="35" fill="none" stroke="#fff" stroke-width="2"/><ellipse cx="48" cy="51" rx="35" ry="13" fill="none" stroke="#fff" stroke-width="2"/><text x="48" y="58" text-anchor="middle" font-size="18" fill="#fff">VK</text><path d="M57 27 L88 10 L76 41 L68 31 L57 27Z" fill="#2e83ff"/><path d="M68 31 L80 22" stroke="#2e83ff" stroke-width="5" stroke-linecap="round"/></svg>
       <div><strong>Immigrants Guide</strong><small>Your Partner in U.S. Immigration Journey</small></div>
     </div>
     <div class="footer-nav"><a href="#home">Home</a> | <a href="#about">About</a> | <a href="#services">Services</a> | <a href="#resources">Resources</a> | <a href="#contact">Contact</a></div>
@@ -118,6 +146,28 @@ a{color:inherit}
   </div>
   <div class="copyright"><span>© 2026 Immigrants Guide. All rights reserved.</span><span>Track · Plan · Stay Informed</span></div>
 </footer>
+
+
+<div id="askVijayModal" class="ask-modal" aria-hidden="true">
+  <div class="ask-card">
+    <div class="ask-head">
+      <div><h2>Ask Vijay Krishna</h2><p>Send your question to Immigrants Guide. Please do not include passwords, SSNs, or other highly sensitive information.</p></div>
+      <button id="askVijayClose" class="close" type="button" aria-label="Close">×</button>
+    </div>
+    <form id="askVijayForm">
+      <div class="ask-grid">
+        <div class="ask-field"><label for="askName">Your Name</label><input id="askName" name="name" type="text" maxlength="100" required></div>
+        <div class="ask-field"><label for="askEmail">Email</label><input id="askEmail" name="email" type="email" maxlength="200" required></div>
+      </div>
+      <div class="ask-field"><label for="askSubject">Subject</label><input id="askSubject" name="subject" type="text" maxlength="200" placeholder="e.g., H-1B extension question" required></div>
+      <div class="ask-field"><label for="askQuestion">Your Question</label><textarea id="askQuestion" name="question" maxlength="5000" placeholder="Tell us what you would like to ask..." required></textarea></div>
+      <div class="honeypot" aria-hidden="true"><label>Company</label><input id="askWebsite" name="website" tabindex="-1" autocomplete="off"></div>
+      <button class="ask-submit" id="askSubmit" type="submit">📨 Send Question</button>
+      <div id="askMsg" class="ask-msg"></div>
+      <div class="ask-note">Submitting this form sends your question to the Immigrants Guide team. Responses are not guaranteed to constitute legal advice or create an attorney-client relationship.</div>
+    </form>
+  </div>
+</div>
 
 <div id="loginModal" class="login-modal">
   <div class="login-card">
@@ -150,6 +200,12 @@ $("lookupReceipt").addEventListener("input",e=>{e.target.value=e.target.value.to
 $("lookupForm").addEventListener("submit",async e=>{e.preventDefault();const receipt=$("lookupReceipt").value.trim().toUpperCase();const result=$("lookupResult");const btn=$("lookupBtn");if(!/^[A-Z]{3}\d{10}$/.test(receipt)){result.className="lookup-result show";result.innerHTML='<div style="color:#991b1b;font-weight:700">Please enter a valid USCIS receipt number.</div><div class="meta">Example: IOE1234567890</div>';return;}if(!db)await init();btn.disabled=true;btn.textContent="Checking...";result.className="lookup-result show";result.innerHTML='<div class="meta">Checking USCIS...</div>';try{const r=await db.functions.invoke("smart-service",{body:{receiptNumber:receipt}});if(r.error){let message=r.error.message||"USCIS status check failed.";try{if(r.error.context?.json){const b=await r.error.context.json();message=b?.errors?.[0]?.message||b?.error||b?.message||message;}}catch(_){}throw new Error(message);}const cs=r.data?.case_status;if(!cs)throw new Error("USCIS returned no case status.");const returned=String(cs.receiptNumber||"").trim().toUpperCase();if(returned&&returned!==receipt)throw new Error("USCIS returned a different receipt number.");result.innerHTML='<div class="status">'+badge(cs.current_case_status_text_en||"Status unavailable")+'</div><div class="meta"><b>Receipt Number:</b> '+esc(receipt)+'</div>'+(cs.formType?'<div class="meta"><b>Form Type:</b> '+esc(cs.formType)+'</div>':'')+(cs.modifiedDate?'<div class="meta"><b>Modified:</b> '+esc(cs.modifiedDate)+'</div>':'')+(cs.current_case_status_desc_en?'<div class="meta" style="margin-top:7px">'+esc(cs.current_case_status_desc_en)+'</div>':'');}catch(err){result.innerHTML='<div style="color:#991b1b;font-weight:700">Unable to retrieve the USCIS status.</div><div class="meta" style="margin-top:5px">'+esc(err.message||String(err))+'</div>';}finally{btn.disabled=false;btn.textContent="🔍 Check USCIS Case Status";}});
 $("i94Number").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,11);});
 $("i94Form").addEventListener("submit",e=>{e.preventDefault();const n=$("i94Number").value.trim();const msg=$("i94Msg");if(n && !/^\d{11}$/.test(n)){msg.className="lookup-result show";msg.innerHTML='<div style="color:#991b1b;font-weight:700">Please enter an 11-digit I-94 number.</div>';return;}msg.className="lookup-result show";msg.innerHTML='<div style="font-weight:700;color:#087f63">Opening the official CBP I-94 website...</div><div class="meta" style="margin-top:5px">The official CBP site is used to retrieve your electronic I-94 record. Your I-94 number is not sent to Immigrants Guide.</div>';window.open("https://i94.cbp.dhs.gov/home","_blank","noopener");});
+
+const askModal=$("askVijayModal"),askMsg=$("askMsg");
+function openAsk(){askModal.style.display="grid";askModal.setAttribute("aria-hidden","false");setTimeout(()=>$("askName").focus(),30);}
+function closeAsk(){askModal.style.display="none";askModal.setAttribute("aria-hidden","true");askMsg.className="ask-msg";askMsg.textContent="";}
+$("askVijayOpen")?.addEventListener("click",openAsk);$("askVijayClose")?.addEventListener("click",closeAsk);askModal?.addEventListener("click",e=>{if(e.target===askModal)closeAsk();});
+$("askVijayForm")?.addEventListener("submit",async e=>{e.preventDefault();const btn=$("askSubmit");const website=$("askWebsite").value.trim();if(website)return;btn.disabled=true;btn.textContent="Sending...";askMsg.className="ask-msg";askMsg.textContent="";try{if(!db)await init();const payload={name:$("askName").value.trim(),email:$("askEmail").value.trim(),subject:$("askSubject").value.trim(),question:$("askQuestion").value.trim()};if(!payload.name||!payload.email||!payload.subject||!payload.question)throw new Error("Please complete all required fields.");const r=await db.functions.invoke("submit-question",{body:payload});if(r.error){let m=r.error.message||"Unable to send your question.";try{if(r.error.context?.json){const b=await r.error.context.json();m=b?.error||b?.message||m;}}catch(_){}throw new Error(m);}askMsg.className="ask-msg ok";askMsg.textContent="Thank you. Your question has been sent to Immigrants Guide.";$("askVijayForm").reset();}catch(err){askMsg.className="ask-msg err";askMsg.textContent=err?.message||"Unable to send your question. Please try again.";}finally{btn.disabled=false;btn.textContent="📨 Send Question";}});
 init();
 })();
 </script>
