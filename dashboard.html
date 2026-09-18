@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Immigrants Guide — USCIS Case Tracker</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
 button,input,select,textarea{font:inherit}button{cursor:pointer}
@@ -56,7 +57,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .alert-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:15px}.alert-stat{border:1px solid #e2e8f0;border-radius:12px;padding:13px;background:#f8fafc}.alert-stat b{font-size:22px;display:block;margin-top:5px}
 .mobile-menu{display:none}.nav.mobile-open{display:block}.team-table-wrap{padding:0 15px 15px}.team-form{display:grid;grid-template-columns:minmax(220px,1fr) 180px auto;gap:10px;align-items:end;padding:15px}.team-form label{margin:0}.team-member-email{font-weight:700}.team-role-select{width:auto;min-width:130px;padding:8px}.team-note{padding:0 15px 15px;font-size:12px;color:#64748b}@media(max-width:700px){.team-form{grid-template-columns:1fr}.team-form button{width:100%}}
 @media(max-width:900px){.report-grid,.alert-summary{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}.calendar-day{min-height:95px}}
-@media(max-width:700px){.mobile-menu{display:block}.main{padding:12px}.top .actions{width:100%}.top .actions button{flex:1}.calendar-day{min-height:80px;padding:5px}.calendar-event{font-size:9px}.calendar-toolbar{align-items:flex-start}.report-grid,.alert-summary{grid-template-columns:1fr}.filter-bar{overflow-x:auto;flex-wrap:nowrap}.filter-bar select,.filter-bar button{flex:0 0 auto}.side{z-index:20}.nav button{padding:10px}}
+@media(max-width:700px){.mobile-menu{display:block}.main{padding:12px}.top .actions{width:100%}.top .actions button{flex:1}.calendar-day{min-height:80px;padding:5px}.calendar-event{font-size:9px}.calendar-toolbar{align-items:flex-start}.report-grid,.alert-summary{grid-template-columns:1fr}.filter-bar{overflow-x:auto;flex-wrap:nowrap}.filter-bar select,.filter-bar button{flex:0 0 auto}.side{z-index:20}.nav button{padding:10px}.bulk-nav-btn{font-size:12px;margin-top:2px;border-style:dashed}@media(max-width:700px){.bulk-nav-btn{width:100%}}}
 .clickable-kpi{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
 .clickable-kpi:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(15,23,42,.08);}
 .clickable-kpi:focus{outline:2px solid #2563eb;outline-offset:2px;}
@@ -76,6 +77,9 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <button data-view="reports">▤ Reports & Settings</button>
 <button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
 <button id="addNav">＋ Add Case</button>
+<button id="downloadTemplateBtn" class="secondary bulk-nav-btn" type="button">📥 Download Excel Template</button>
+<button id="importExcelBtn" class="secondary bulk-nav-btn" type="button">📤 Import Excel</button>
+<input id="excelFileInput" type="file" accept=".xlsx,.xls" style="display:none">
 <button data-view="alerts">⚑ Alerts</button>
 </div>
 </aside>
@@ -271,6 +275,16 @@ NOID / Extensions
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
 
+<div id="excelModal" class="modal">
+  <div class="modal-box" style="max-width:1100px">
+    <div class="modal-head"><div><h2>Import Cases from Excel</h2><div class="muted">Review and validate your cases before importing them.</div></div><button id="excelClose" class="close" type="button">×</button></div>
+    <div id="excelMsg" class="notice">Choose an Excel file to begin.</div>
+    <div id="excelSummary" class="small" style="margin:10px 0"></div>
+    <div id="excelPreview" class="table-wrap" style="max-height:420px;overflow:auto"></div>
+    <div class="form-actions" style="margin-top:14px"><button type="button" id="excelCancel" class="secondary">Cancel</button><button type="button" id="confirmExcelImport" class="primary" disabled>✓ Import Valid Cases</button></div>
+  </div>
+</div>
+
 <div id="profileModal" class="modal">
   <div class="modal-box profile-box">
     <div class="modal-head">
@@ -354,6 +368,7 @@ function applyRolePermissions(){
   const teamCan=canManageTeam();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
   if($("teamNav"))$("teamNav").style.display=teamCan?"":"none";
+  ["downloadTemplateBtn","importExcelBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
   ["checkAllBtn","checkAllDashBtn","monitorNowBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
 }
 
@@ -1257,6 +1272,34 @@ async function init(){
 }
 
 init();
+
+
+/* Bulk Excel import */
+function excelDateToISO(value){
+  if(value===null||value===undefined||String(value).trim()==="")return "";
+  if(value instanceof Date&&!Number.isNaN(value.getTime()))return value.toISOString().slice(0,10);
+  const str=String(value).trim();
+  if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(str)){const a=str.split("-").map(Number);return `${a[0]}-${String(a[1]).padStart(2,"0")}-${String(a[2]).padStart(2,"0")}`;}
+  const m=str.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/);
+  if(m){let y=Number(m[3]);if(y<100)y+=2000;return `${y}-${String(Number(m[1])).padStart(2,"0")}-${String(Number(m[2])).padStart(2,"0")}`;}
+  const n=Number(str);if(Number.isFinite(n)&&n>20000&&n<70000){return new Date(Date.UTC(1899,11,30)+n*86400000).toISOString().slice(0,10);}
+  const d=new Date(str);return Number.isNaN(d.getTime())?"":d.toISOString().slice(0,10);
+}
+function excelBool(v,def){const s=String(v??"").trim().toLowerCase();if(v===true||v===1||["yes","y","true","enabled","1"].includes(s))return true;if(["no","n","false","off","disabled","0"].includes(s))return false;return def;}
+function normalizeExcelRow(r){
+  const m={};Object.keys(r||{}).forEach(k=>m[String(k).trim().toLowerCase().replace(/[^a-z0-9]+/g,"_")]=r[k]);
+  const g=(...ks)=>{for(const k of ks)if(m[k]!==undefined)return m[k];return "";};
+  const ar=g("amount","amount_usd","fee","cost"),dr=g("time_duration_days","duration_days","duration");
+  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),filing_date:excelDateToISO(g("filing_date","filed_date")),priority_date:excelDateToISO(g("priority_date","priority")),current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:excelDateToISO(g("status_date","status_updated")),case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),rfe_deadline_date:excelDateToISO(g("rfe_noid_deadline","rfe_deadline","rfe_deadline_date")),extension_target_date:excelDateToISO(g("extension_target_date","extension_target","extension_deadline")),monitoring_enabled:excelBool(g("automatic_monitoring","monitoring_enabled","monitoring"),true),notes:String(g("notes","note")||"").trim()};
+}
+let pendingExcelRows=[];
+function openExcelModal(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}$("excelFileInput").value="";pendingExcelRows=[];$("excelMsg").textContent="Choose an Excel file to begin.";$("excelMsg").className="notice";$("excelSummary").textContent="";$("excelPreview").innerHTML="";$("confirmExcelImport").disabled=true;$("excelModal").style.display="grid";}
+function closeExcelModal(){$("excelModal").style.display="none";}
+function renderExcelPreview(items){const good=items.filter(x=>x.ok);$("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;$("excelPreview").innerHTML=`<table style="min-width:1100px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>Filing Date</th><th>Amount</th><th>Monitoring</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.monitoring_enabled?"Yes":"No"}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;pendingExcelRows=good.map(x=>x.data);$("confirmExcelImport").disabled=!pendingExcelRows.length;}
+async function handleExcelFile(file){if(!file)return;if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}try{if(typeof XLSX==="undefined")throw new Error("Excel support could not load. Please refresh the page.");const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]];if(!ws)throw new Error("The workbook has no worksheet.");const raw=XLSX.utils.sheet_to_json(ws,{defval:""});if(!raw.length)throw new Error("The first worksheet is empty.");const existing=new Set(rows.map(c=>String(c.receipt_number||"").trim().toUpperCase())),seen=new Set();const items=raw.map((r,i)=>{const d=normalizeExcelRow(r);let error="";if(!/^[A-Z]{3}\d{10}$/.test(d.receipt_number))error="Invalid receipt";else if(!d.beneficiary_name)error="Beneficiary required";else if(seen.has(d.receipt_number))error="Duplicate in file";else if(existing.has(d.receipt_number))error="Already exists";else if(d.amount!==null&&(!Number.isFinite(d.amount)||d.amount<0))error="Invalid amount";else if(d.time_duration_days!==null&&(!Number.isFinite(d.time_duration_days)||d.time_duration_days<0))error="Invalid duration";if(!error)seen.add(d.receipt_number);return {row:i+2,data:d,ok:!error,error};});renderExcelPreview(items);$("excelMsg").textContent="Review the preview. Existing receipt numbers will not be imported.";$("excelMsg").className="notice";}catch(e){pendingExcelRows=[];$("confirmExcelImport").disabled=true;$("excelMsg").textContent=e.message||String(e);$("excelMsg").className="notice error";}}
+async function confirmExcelImport(){if(!canManageCases()||!pendingExcelRows.length)return;const btn=$("confirmExcelImport");btn.disabled=true;btn.textContent="Importing...";try{if(!currentOrgId)await loadOrganizationContext();const payload=pendingExcelRows.map(x=>({...x,organization_id:currentOrgId}));for(let i=0;i<payload.length;i+=100){const r=await db.from("cases").insert(payload.slice(i,i+100));if(r.error)throw r.error;}$("excelMsg").textContent=`Successfully imported ${payload.length} case(s).`;$("excelMsg").className="notice";pendingExcelRows=[];await load();setTimeout(closeExcelModal,700);}catch(e){$("excelMsg").textContent="Import failed: "+(e.message||e);$("excelMsg").className="notice error";}finally{btn.textContent="✓ Import Valid Cases";btn.disabled=!pendingExcelRows.length;}}
+function downloadExcelTemplate(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","RFE / NOID Deadline","Extension Target Date","Automatic Monitoring","Notes"],e=["IOE1234567890","John Smith","ABC LLC","I-129","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","2027-01-15","Yes","H-1B case"];const ws=XLSX.utils.aoa_to_sheet([h,e]);ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,14,14,28,14,20,12,20,20,20,22,20,35][i]}));const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended. Premium Processing and Automatic Monitoring: Yes/No."]]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");}
+$("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("importExcelBtn").addEventListener("click",openExcelModal);$("excelFileInput").addEventListener("change",e=>handleExcelFile(e.target.files?.[0]));$("excelClose").addEventListener("click",closeExcelModal);$("excelCancel").addEventListener("click",closeExcelModal);$("confirmExcelImport").addEventListener("click",confirmExcelImport);$("excelModal").addEventListener("click",e=>{if(e.target===$("excelModal"))closeExcelModal();});
 
 })();
 </script>
