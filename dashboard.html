@@ -53,7 +53,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:15px}.report-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px}.report-label{font-size:11px;color:#64748b;font-weight:700}.report-value{font-size:24px;font-weight:800;margin-top:5px}.report-table-wrap{padding:0 15px 15px}.report-actions{display:flex;gap:8px;flex-wrap:wrap}
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:15px}.setting-box{border:1px solid #e2e8f0;border-radius:12px;padding:15px;background:#fff}.setting-box h3{margin:0 0 7px;font-size:14px}.setting-box p{font-size:12px;color:#64748b;line-height:1.45}.security-ok{color:#059669;font-weight:800}.security-warn{color:#ea580c;font-weight:800}.role-pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:800;font-size:11px}
 .alert-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:15px}.alert-stat{border:1px solid #e2e8f0;border-radius:12px;padding:13px;background:#f8fafc}.alert-stat b{font-size:22px;display:block;margin-top:5px}
-.mobile-menu{display:none}.nav.mobile-open{display:block}
+.mobile-menu{display:none}.nav.mobile-open{display:block}.team-table-wrap{padding:0 15px 15px}.team-form{display:grid;grid-template-columns:minmax(220px,1fr) 180px auto;gap:10px;align-items:end;padding:15px}.team-form label{margin:0}.team-member-email{font-weight:700}.team-role-select{width:auto;min-width:130px;padding:8px}.team-note{padding:0 15px 15px;font-size:12px;color:#64748b}@media(max-width:700px){.team-form{grid-template-columns:1fr}.team-form button{width:100%}}
 @media(max-width:900px){.report-grid,.alert-summary{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}.calendar-day{min-height:95px}}
 @media(max-width:700px){.mobile-menu{display:block}.main{padding:12px}.top .actions{width:100%}.top .actions button{flex:1}.calendar-day{min-height:80px;padding:5px}.calendar-event{font-size:9px}.calendar-toolbar{align-items:flex-start}.report-grid,.alert-summary{grid-template-columns:1fr}.filter-bar{overflow-x:auto;flex-wrap:nowrap}.filter-bar select,.filter-bar button{flex:0 0 auto}.side{z-index:20}.nav button{padding:10px}}
 .clickable-kpi{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
@@ -73,6 +73,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <button data-view="history">◷ Case History</button>
 <button data-view="calendar">▣ Deadline Calendar</button>
 <button data-view="reports">▤ Reports & Settings</button>
+<button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
 <button id="addNav">＋ Add Case</button>
 <button data-view="alerts">⚑ Alerts</button>
 </div>
@@ -215,6 +216,20 @@ NOID / Extensions
 </div>
 </section>
 
+<section id="team" style="display:none">
+<div class="panel">
+<div class="panel-head"><div><h2>Team Management</h2><div class="small">Add existing Immigrants Guide users and manage organization roles.</div></div><span id="teamRolePill" class="role-pill">Admin only</span></div>
+<div id="teamNotice" class="notice">Only organization owners and admins can manage team members.</div>
+<div class="team-form" id="teamForm">
+<label>Email address<input id="teamEmail" type="email" placeholder="existing-user@example.com" autocomplete="off"></label>
+<label>Role<select id="teamRole"><option value="viewer">Viewer</option><option value="manager">Manager</option><option value="admin">Admin</option></select></label>
+<button id="addTeamMember" class="primary" type="button">＋ Add Member</button>
+</div>
+<div class="team-note">The user must already have an Immigrants Guide account. This screen changes organization membership; it does not create or delete the user&apos;s Supabase login.</div>
+<div class="table-wrap team-table-wrap"><table style="min-width:700px"><thead><tr><th>User</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="teamBody"></tbody></table></div>
+</div>
+</section>
+
 <section id="alerts" style="display:none">
 <div class="panel">
 <div class="panel-head"><h2>Alerts & Monitoring Health</h2><button id="runMonitorFromAlerts" class="secondary" type="button">⚙ Run Monitor</button></div>
@@ -276,7 +291,7 @@ const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
-let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null;
+let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null, teamMembers=[];
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -332,9 +347,12 @@ function caseActionButtons(c){
   if(!canManageCases()) return view+' <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button>';
   return view+' <button class="check-btn checkOneBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
 }
+function canManageTeam(){return ["owner","admin"].includes(String(currentOrgRole||"").toLowerCase());}
 function applyRolePermissions(){
   const can=canManageCases();
+  const teamCan=canManageTeam();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
+  if($("teamNav"))$("teamNav").style.display=teamCan?"":"none";
   ["checkAllBtn","checkAllDashBtn","monitorNowBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
 }
 
@@ -588,6 +606,79 @@ function drawAlertHealth(){
   if($("alertMonitorFailures"))$("alertMonitorFailures").textContent=fail;
   if($("monitorHealthNotice"))$("monitorHealthNotice").textContent=recentMonitorResult?"Latest monitor run: "+(recentMonitorResult.checked||0)+" checked, "+(recentMonitorResult.changed||0)+" changed, "+(recentMonitorResult.failed||0)+" failed.":"No monitor run result is stored in this browser session yet.";
 }
+async function loadTeamMembers(){
+  if(!canManageTeam())return;
+  const r=await db.rpc("ig_list_org_members");
+  if(r.error)throw r.error;
+  teamMembers=Array.isArray(r.data)?r.data:[];
+  renderTeamMembers();
+}
+function allowedTeamRoles(){
+  return String(currentOrgRole||"").toLowerCase()==="owner"?["admin","manager","viewer"]:["manager","viewer"];
+}
+function renderTeamMembers(){
+  const body=$("teamBody"); if(!body)return;
+  const can=canManageTeam();
+  if($("teamRolePill"))$("teamRolePill").textContent=(currentOrgRole||"viewer").toUpperCase();
+  if($("teamForm"))$("teamForm").style.display=can?"grid":"none";
+  if(!can){body.innerHTML='<tr><td colspan="4" class="empty">Team management is available to owners and admins only.</td></tr>';return;}
+  if(!teamMembers.length){body.innerHTML='<tr><td colspan="4" class="empty">No team members found.</td></tr>';return;}
+  const meEmail=String($("who")?.textContent||"").toLowerCase();
+  const roleOptions=allowedTeamRoles();
+  body.innerHTML=teamMembers.map(m=>{
+    const email=String(m.email||"");
+    const role=String(m.role||"viewer").toLowerCase();
+    const self=email.toLowerCase()===meEmail;
+    const canChange=!self && role!=="owner" && (String(currentOrgRole).toLowerCase()==="owner" || (String(currentOrgRole).toLowerCase()==="admin" && ["manager","viewer"].includes(role)));
+    const options=(role==="owner"?["owner"]:roleOptions).map(x=>'<option value="'+x+'"'+(x===role?' selected':'')+'>'+x.charAt(0).toUpperCase()+x.slice(1)+'</option>').join("");
+    const roleControl=canChange?'<select class="team-role-select teamRoleSelect" data-user-id="'+esc(m.user_id)+'">'+options+'</select>':'<span class="role-pill">'+esc(role.toUpperCase())+'</span>';
+    const removeControl=(!self&&role!=="owner"&&(String(currentOrgRole).toLowerCase()==="owner"||(String(currentOrgRole).toLowerCase()==="admin"&&["manager","viewer"].includes(role))))?'<button class="danger removeTeamBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button">Remove</button>':'—';
+    return '<tr><td class="team-member-email">'+esc(email)+(self?' <span class="small">(You)</span>':'')+'</td><td>'+roleControl+'</td><td>'+lastChecked(m.joined_at)+'</td><td>'+removeControl+'</td></tr>';
+  }).join("");
+}
+async function addTeamMember(){
+  if(!canManageTeam()){alert("Only organization owners and admins can manage team members.");return;}
+  const email=$("teamEmail").value.trim().toLowerCase();
+  const role=$("teamRole").value;
+  if(!email){alert("Enter the user's email address.");return;}
+  if(!allowedTeamRoles().includes(role)){alert("You cannot assign that role.");return;}
+  const btn=$("addTeamMember"); btn.disabled=true; btn.textContent="Adding...";
+  try{
+    const r=await db.rpc("ig_add_org_member",{p_email:email,p_role:role});
+    if(r.error)throw r.error;
+    $("teamEmail").value="";
+    $("teamNotice").textContent="Member added successfully.";
+    $("teamNotice").className="notice";
+    await loadTeamMembers();
+  }catch(e){
+    $("teamNotice").textContent="Could not add member: "+(e.message||e);
+    $("teamNotice").className="notice error";
+  }finally{btn.disabled=false;btn.textContent="＋ Add Member";}
+}
+async function changeTeamRole(userId,newRole){
+  if(!canManageTeam())return;
+  try{
+    const r=await db.rpc("ig_update_org_member_role",{p_user_id:userId,p_role:newRole});
+    if(r.error)throw r.error;
+    await loadTeamMembers();
+    $("teamNotice").textContent="Role updated successfully.";
+    $("teamNotice").className="notice";
+  }catch(e){
+    alert("Role update failed: "+(e.message||e));
+    await loadTeamMembers();
+  }
+}
+async function removeTeamMember(userId,email){
+  if(!canManageTeam())return;
+  if(!confirm("Remove "+email+" from Immigrants Guide? Their login will remain active, but they will lose organization access."))return;
+  try{
+    const r=await db.rpc("ig_remove_org_member",{p_user_id:userId});
+    if(r.error)throw r.error;
+    await loadTeamMembers();
+    $("teamNotice").textContent="Member removed from the organization.";
+    $("teamNotice").className="notice";
+  }catch(e){alert("Remove failed: "+(e.message||e));}
+}
 function renderSecurity(){
   if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"");
   if($("securityDb"))$("securityDb").innerHTML='<span class="security-ok">Supabase connection active</span>';
@@ -635,7 +726,7 @@ function draw(){
 
   const b=filteredCases();
   updateFilterSummary(b.length);
-  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
+  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
   $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -913,10 +1004,12 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   $("history").style.display=v==="history"?"block":"none";
   $("calendar").style.display=v==="calendar"?"block":"none";
   $("reports").style.display=v==="reports"?"block":"none";
-  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":"Alerts & Monitoring";
+  $("team").style.display=v==="team"?"block":"none";
+  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":v==="team"?"Team Management":"Alerts & Monitoring";
   if(v==="history")loadHistory();
   if(v==="calendar")drawCalendar();
   if(v==="reports"){drawReports();loadEmailPrefs();renderSecurity();}
+  if(v==="team"){if(!canManageTeam()){alert("Only organization owners and admins can manage team members.");return;} loadTeamMembers().catch(e=>{$("teamNotice").textContent="Team loading failed: "+(e.message||e);$("teamNotice").className="notice error";});}
   if(v==="alerts")renderAlerts();
 }));
 
@@ -944,6 +1037,7 @@ $("exportCases").addEventListener("click",exportCasesCSV);
 $("exportEmployer").addEventListener("click",exportEmployerCSV);
 $("exportManager").addEventListener("click",exportManagerCSV);
 $("saveEmailPrefs").addEventListener("click",saveEmailPrefs);
+$("addTeamMember").addEventListener("click",addTeamMember);
 $("runMonitorFromAlerts").addEventListener("click",monitorNow);
 $("employerSearch").addEventListener("input",draw);
 ["filterStatus","filterForm","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
@@ -1001,6 +1095,7 @@ document.addEventListener("click",async e=>{
       $("alerts").style.display="none";
       $("calendar").style.display="none";
       $("reports").style.display="none";
+      $("team").style.display="none";
       $("history").style.display="block";
       $("title").textContent="Case History";
       $("historySearch").value="";
@@ -1052,6 +1147,15 @@ document.addEventListener("click",async e=>{
       else await load();
     }
   }
+});
+
+document.addEventListener("change",e=>{
+  const roleSelect=e.target.closest(".teamRoleSelect");
+  if(roleSelect){changeTeamRole(roleSelect.dataset.userId,roleSelect.value);}
+});
+document.addEventListener("click",e=>{
+  const remove=e.target.closest(".removeTeamBtn");
+  if(remove)removeTeamMember(remove.dataset.userId,remove.dataset.email);
 });
 
 $("logout").addEventListener("click",async()=>{
