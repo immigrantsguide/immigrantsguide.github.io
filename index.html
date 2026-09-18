@@ -12,7 +12,7 @@ body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:linear-gra
 a{color:inherit}
 .header{height:82px;background:#fff;border-bottom:1px solid #e5edf6;display:flex;align-items:center;justify-content:space-between;padding:0 3.2%;gap:22px;position:sticky;top:0;z-index:20}
 .brand{display:flex;align-items:center;gap:12px;min-width:260px}.brand-name{font-size:25px;font-weight:850;color:var(--navy);line-height:1}.brand-tag{font-size:12px;color:#5b708c;margin-top:6px}
-.logo-mark{width:70px;height:70px;flex:none}.logo-mark text{font-family:Arial,sans-serif;font-weight:800}
+.logo-mark{width:70px;height:70px;flex:none;object-fit:cover;border-radius:12px;display:block}.footer-brand .logo-mark{object-fit:cover;border-radius:10px}
 .nav{display:flex;align-items:center;gap:27px;font-size:14px;color:#314765}.nav a{text-decoration:none}.nav a:hover{color:var(--blue)}
 .dash-btn{background:linear-gradient(135deg,#1769e8,#0755c8);color:#fff;text-decoration:none;padding:13px 18px;border-radius:9px;font-weight:800;box-shadow:0 8px 18px #1769e826;white-space:nowrap}.dash-btn:hover{transform:translateY(-1px)}
 .header-right{display:flex;align-items:center;gap:20px}.flag{text-align:center;font-size:12px;color:#425875;white-space:nowrap}.flag .emoji{font-size:27px;display:block;line-height:25px}
@@ -35,22 +35,7 @@ a{color:inherit}
 <body>
 <header class="header">
   <div class="brand">
-    <svg class="logo-mark" viewBox="0 0 100 100" aria-label="Immigrants Guide VK eagle globe USA logo">
-  <defs><linearGradient id="flagRedIndex" x1="0" x2="1"><stop offset="0" stop-color="#ef233c"/><stop offset="1" stop-color="#b91c1c"/></linearGradient></defs>
-  <circle cx="48" cy="52" r="35" fill="#05070b" stroke="#0d2b55" stroke-width="2.5"/>
-  <ellipse cx="48" cy="52" rx="17" ry="35" fill="none" stroke="#d1d5db" stroke-width="1.1"/>
-  <ellipse cx="48" cy="52" rx="29" ry="35" fill="none" stroke="#9ca3af" stroke-width=".9" opacity=".8"/>
-  <ellipse cx="48" cy="52" rx="35" ry="12" fill="none" stroke="#9ca3af" stroke-width="1"/>
-  <path d="M14 52h68M18 37h60M18 67h60" stroke="#9ca3af" stroke-width=".9" opacity=".8"/>
-  <path d="M24 42l8-5 9 2 6-3 8 4 8-1 7 5-3 5-9 0-6 5-7-2-6 4-8-3-6 1-5-5-7-1z" fill="#fff"/>
-  <text x="48" y="61" text-anchor="middle" font-size="24" font-family="Arial,sans-serif" font-weight="900" fill="#fff" letter-spacing="-2">VK</text>
-  <path d="M17 70 C36 87 65 88 82 70" fill="none" stroke="url(#flagRedIndex)" stroke-width="7" stroke-linecap="round"/>
-  <path d="M19 76 C38 91 64 91 80 77" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-  <path d="M21 81 C40 95 63 94 77 82" fill="none" stroke="url(#flagRedIndex)" stroke-width="5" stroke-linecap="round"/>
-  <path d="M44 21 C34 12 24 10 14 14 C21 19 29 23 38 25 C29 21 20 22 12 26 C22 31 31 33 41 30 L47 26Z" fill="#05070b" stroke="#0d2b55" stroke-width="1"/>
-  <path d="M51 23 C61 13 71 11 81 15 C74 20 66 24 57 26 C66 22 75 23 83 27 C73 32 64 33 54 30 L49 27Z" fill="#05070b" stroke="#0d2b55" stroke-width="1"/>
-  <path d="M45 22 C48 18 53 18 56 22 L59 28 53 34 47 34 42 28Z" fill="#05070b" stroke="#0d2b55" stroke-width="1"/>
-</svg>
+    <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
     <div><div class="brand-name">Immigrants Guide</div><div class="brand-tag">Your Partner in U.S. Immigration Journey</div></div>
   </div>
   <nav class="nav"><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#resources">Resources</a><a href="#contact">Contact</a></nav>
@@ -138,7 +123,7 @@ a{color:inherit}
 <footer class="footer" id="contact">
   <div class="footer-inner">
     <div class="footer-brand">
-      <svg class="logo-mark" viewBox="0 0 100 100"><circle cx="48" cy="51" r="35" fill="none" stroke="#fff" stroke-width="3"/><ellipse cx="48" cy="51" rx="17" ry="35" fill="none" stroke="#fff" stroke-width="2"/><ellipse cx="48" cy="51" rx="35" ry="13" fill="none" stroke="#fff" stroke-width="2"/><text x="48" y="58" text-anchor="middle" font-size="18" fill="#fff">VK</text><path d="M57 27 L88 10 L76 41 L68 31 L57 27Z" fill="#2e83ff"/><path d="M68 31 L80 22" stroke="#2e83ff" stroke-width="5" stroke-linecap="round"/></svg>
+      <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
       <div><strong>Immigrants Guide</strong><small>Your Partner in U.S. Immigration Journey</small></div>
     </div>
     <div class="footer-nav"><a href="#home">Home</a> | <a href="#about">About</a> | <a href="#services">Services</a> | <a href="#resources">Resources</a> | <a href="#contact">Contact</a></div>
