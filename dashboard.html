@@ -327,6 +327,11 @@ async function loadOrganizationContext(){
 }
 function canManageCases(){return ["owner","admin","manager"].includes(String(currentOrgRole||"").toLowerCase());}
 function canModifyCases(){return canManageCases();}
+function caseActionButtons(c){
+  const view='<button class="link profileBtn" data-id="'+esc(c.id)+'" type="button">View</button>';
+  if(!canManageCases()) return view+' <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button>';
+  return view+' <button class="check-btn checkOneBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
+}
 function applyRolePermissions(){
   const can=canManageCases();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
@@ -626,7 +631,7 @@ function draw(){
   renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="link profileBtn" data-id="'+c.id+'" type="button">View</button> <button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>caseActionButtons(c)</td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
 
   const b=filteredCases();
   updateFilterSummary(b.length);
@@ -640,7 +645,6 @@ async function load(){
   if(!db)return;
   setNotice("Loading cases from Supabase...");
   try{
-    if(!canManageCases()){throw new Error("Viewer access is read-only. You cannot add, edit, or delete cases.");}
     if(!currentOrgId)await loadOrganizationContext();
     const r=await db.from("cases").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false});
     if(r.error)throw r.error;
@@ -1007,6 +1011,7 @@ document.addEventListener("click",async e=>{
 
   const check=e.target.closest(".checkOneBtn");
   if(check){
+    if(!canManageCases()){alert("Viewer access is read-only. USCIS checks are restricted to case managers.");return;}
     const c=rows.find(x=>String(x.id)===String(check.dataset.id));
     if(c){
       await checkUSCIS(c,check);
@@ -1017,6 +1022,7 @@ document.addEventListener("click",async e=>{
 
   const edit=e.target.closest(".editBtn"),del=e.target.closest(".deleteBtn");
   if(edit){
+    if(!canModifyCases()){alert("Viewer access is read-only. You cannot edit cases.");return;}
     const c=rows.find(x=>String(x.id)===String(edit.dataset.id));
     if(c)openModal(c);
     return;
@@ -1037,6 +1043,7 @@ document.addEventListener("click",async e=>{
   }
 
   if(del){
+    if(!canModifyCases()){alert("Viewer access is read-only. You cannot delete cases.");return;}
     const c=rows.find(x=>String(x.id)===String(del.dataset.id));
     if(!c)return;
     if(confirm("Delete case "+c.receipt_number+"?")){
