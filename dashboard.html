@@ -326,6 +326,12 @@ async function loadOrganizationContext(){
   if($("orgInfo"))$("orgInfo").textContent=currentOrgName?"Organization: "+currentOrgName:"Organization connected";
 }
 function canManageCases(){return ["owner","admin","manager"].includes(String(currentOrgRole||"").toLowerCase());}
+function canModifyCases(){return canManageCases();}
+function applyRolePermissions(){
+  const can=canManageCases();
+  ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
+  ["checkAllBtn","checkAllDashBtn","monitorNowBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
+}
 
 function setNotice(text,error=false){
   $("notice").textContent=text;
@@ -580,7 +586,8 @@ function drawAlertHealth(){
 function renderSecurity(){
   if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"");
   if($("securityDb"))$("securityDb").innerHTML='<span class="security-ok">Supabase connection active</span>';
-  if($("rolePill"))$("rolePill").textContent="Authenticated User";
+  if($("rolePill"))$("rolePill").textContent=(currentOrgRole||"viewer").toUpperCase();
+  applyRolePermissions();
 }
 function renderAlerts(){
   const z=rows.filter(isRfe);
@@ -633,6 +640,7 @@ async function load(){
   if(!db)return;
   setNotice("Loading cases from Supabase...");
   try{
+    if(!canManageCases()){throw new Error("Viewer access is read-only. You cannot add, edit, or delete cases.");}
     if(!currentOrgId)await loadOrganizationContext();
     const r=await db.from("cases").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false});
     if(r.error)throw r.error;
@@ -867,6 +875,7 @@ async function openProfile(c){
 function closeProfile(){$("profileModal").style.display="none";}
 
 function openModal(c){
+  if(!canManageCases()){setNotice("Viewer access is read-only. You cannot add or edit cases.",true);return;}
   $("modal").style.display="grid";
   $("modalTitle").textContent=c?"Edit Case":"Add Case";
   $("caseId").value=c?.id||"";
@@ -1076,6 +1085,7 @@ $("caseForm").addEventListener("submit",async e=>{
     notes:$("notes").value.trim()||null
   };
   try{
+    if(!canManageCases()){throw new Error("Viewer access is read-only. You cannot add, edit, or delete cases.");}
     if(!currentOrgId)await loadOrganizationContext();
     if(!id)payload.organization_id=currentOrgId;
     const r=id?await db.from("cases").update(payload).eq("id",id).eq("organization_id",currentOrgId):await db.from("cases").insert(payload);
