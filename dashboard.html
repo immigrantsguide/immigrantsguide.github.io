@@ -743,7 +743,7 @@ function draw(){
   renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>caseActionButtons(c)</td></tr>').join(""):'<tr><td colspan="13" class="empty">No cases found.</td></tr>';
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="13" class="empty">No cases found.</td></tr>';
 
   const b=filteredCases();
   updateFilterSummary(b.length);
