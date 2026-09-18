@@ -12,12 +12,26 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .main{margin-left:286px;padding:30px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:22px}.top h1{margin:0 0 5px;font-size:29px}.muted{color:#64748b}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}.card,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}.card{padding:18px}.num{font-size:28px;font-weight:800;margin-top:8px}.red{color:#dc2626}.green{color:#059669}.orange{color:#ea580c}.deadline-panel{margin-bottom:20px}.deadline-table td,.deadline-table th{font-size:12px}.small{font-size:11px;color:#64748b;margin-top:3px}.overdue{color:#dc2626;font-weight:800}.due-soon{color:#ea580c;font-weight:800}.active-badge{background:#eff6ff;color:#2563eb}.stat-note{font-size:11px;color:#64748b;margin-top:5px}
 .panel{overflow:hidden}.panel-head{padding:17px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-head h2{margin:0;font-size:17px}.search{max-width:330px;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px}
 .notice{padding:10px 18px;background:#eff6ff;color:#1d4ed8;font-size:12px}.notice.error{background:#fef2f2;color:#991b1b}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:13px 14px;border-bottom:1px solid #eef2f7;text-align:left;font-size:13px;white-space:nowrap}th{color:#64748b;background:#f8fafc}.badge{display:inline-block;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:700;background:#eff6ff;color:#2563eb}.badge.rfe{background:#fff7ed;color:#ea580c}.badge.approved{background:#ecfdf5;color:#059669}.badge.denied{background:#fef2f2;color:#dc2626}.empty{text-align:center;color:#64748b;padding:40px}.link{border:0;background:none;color:#2563eb;font-weight:700}.danger{border:0;background:none;color:#dc2626;font-weight:700}.primary,.secondary,.check-btn{border-radius:9px;padding:9px 12px;font-weight:700}.primary{border:0;background:#2563eb;color:white}.secondary{border:1px solid #cbd5e1;background:#fff}.check-btn{border:1px solid #2563eb;background:#fff;color:#2563eb;font-size:12px}.check-btn:disabled{opacity:.55;cursor:wait}.uscis-cell{max-width:280px;white-space:normal}.uscis-desc{font-size:11px;color:#64748b;margin-top:4px;line-height:1.35}.last-check{font-size:11px;color:#64748b;margin-top:3px}
-.modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}textarea{min-height:100px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.msg{padding:10px;border-radius:9px;margin-top:12px;font-size:13px}.msg.error{background:#fef2f2;color:#991b1b}.msg.success{background:#f0fdf4;color:#166534}
+.modal{display:none;position:fixed;inset:0;background:#0f172a80;place-items:center;padding:20px;z-index:5}.modal-box{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;padding:25px}.profile-box{width:min(900px,100%);}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;}
+.profile-item{border:1px solid #e2e8f0;border-radius:10px;padding:11px;background:#f8fafc;}
+.profile-label{font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+.profile-value{font-size:14px;font-weight:700;margin-top:5px;word-break:break-word;}
+.profile-section{margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px;}
+.profile-section h3{font-size:14px;margin:0 0 10px;}
+.profile-notes{white-space:pre-wrap;line-height:1.5;color:#334155;font-size:13px;}
+.profile-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+.profile-status{padding:8px 10px;border-radius:9px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700;}
+@media(max-width:800px){.profile-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.profile-grid{grid-template-columns:1fr;}}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;border-radius:50%;width:34px;height:34px;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}.full{grid-column:1/-1}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px}textarea{min-height:100px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.msg{padding:10px;border-radius:9px;margin-top:12px;font-size:13px}.msg.error{background:#fef2f2;color:#991b1b}.msg.success{background:#f0fdf4;color:#166534}
 @media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}.side{width:250px}.main{margin-left:250px}}@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 
 .case-number{font-weight:700;white-space:nowrap;}
 .duration-cell{font-weight:700;white-space:nowrap;}
-.attention-panel{margin-bottom:20px;border:1px solid #fecaca;}
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid #e2e8f0;background:#f8fafc;}
+.filter-bar select{width:auto;min-width:145px;padding:9px 10px;}
+.filter-bar .muted{font-size:12px;margin-left:auto;}
+@media(max-width:900px){.filter-bar .muted{width:100%;margin-left:0;}}.attention-panel{margin-bottom:20px;border:1px solid #fecaca;}
 .attention-head{background:#fff7f7;}
 .attention-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:15px;}
 .attention-card{border:1px solid #e2e8f0;border-radius:12px;padding:14px;background:#fff;}
@@ -32,17 +46,33 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .attention-receipt{font-weight:700;color:#1e40af;}
 .attention-empty{color:#64748b;font-size:12px;}
 @media(max-width:900px){.attention-grid{grid-template-columns:1fr;}}
-</style>
+
+/* Phase 2.3 - 2.10 */
+.timeline{padding:18px}.timeline-item{position:relative;padding:0 0 18px 25px;border-left:2px solid #dbeafe;margin-left:8px}.timeline-item:last-child{border-left-color:transparent}.timeline-dot{position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 1px #93c5fd}.timeline-time{font-size:11px;color:#64748b}.timeline-title{font-weight:800;margin:3px 0}.timeline-meta{font-size:12px;color:#475569}
+.calendar-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:15px 18px;border-bottom:1px solid #e2e8f0}.calendar-title{font-size:20px;font-weight:800}.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid #e2e8f0}.calendar-day{min-height:115px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:8px;background:#fff}.calendar-day.muted-day{background:#f8fafc;color:#94a3b8}.calendar-day.today{box-shadow:inset 0 0 0 2px #2563eb}.calendar-num{font-weight:800;font-size:12px}.calendar-event{margin-top:5px;padding:5px 6px;border-radius:6px;font-size:10px;line-height:1.25;cursor:pointer;overflow:hidden;text-overflow:ellipsis}.calendar-event.rfe{background:#fff7ed;color:#c2410c}.calendar-event.ext{background:#eff6ff;color:#1d4ed8}.calendar-week{background:#f8fafc;color:#64748b;font-size:11px;font-weight:800;padding:8px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;text-align:center}
+.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:15px}.report-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px}.report-label{font-size:11px;color:#64748b;font-weight:700}.report-value{font-size:24px;font-weight:800;margin-top:5px}.report-table-wrap{padding:0 15px 15px}.report-actions{display:flex;gap:8px;flex-wrap:wrap}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:15px}.setting-box{border:1px solid #e2e8f0;border-radius:12px;padding:15px;background:#fff}.setting-box h3{margin:0 0 7px;font-size:14px}.setting-box p{font-size:12px;color:#64748b;line-height:1.45}.security-ok{color:#059669;font-weight:800}.security-warn{color:#ea580c;font-weight:800}.role-pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:800;font-size:11px}
+.alert-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:15px}.alert-stat{border:1px solid #e2e8f0;border-radius:12px;padding:13px;background:#f8fafc}.alert-stat b{font-size:22px;display:block;margin-top:5px}
+.mobile-menu{display:none}.nav.mobile-open{display:block}
+@media(max-width:900px){.report-grid,.alert-summary{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}.calendar-day{min-height:95px}}
+@media(max-width:700px){.mobile-menu{display:block}.main{padding:12px}.top .actions{width:100%}.top .actions button{flex:1}.calendar-day{min-height:80px;padding:5px}.calendar-event{font-size:9px}.calendar-toolbar{align-items:flex-start}.report-grid,.alert-summary{grid-template-columns:1fr}.filter-bar{overflow-x:auto;flex-wrap:nowrap}.filter-bar select,.filter-bar button{flex:0 0 auto}.side{z-index:20}.nav button{padding:10px}}
+.clickable-kpi{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.clickable-kpi:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(15,23,42,.08);}
+.clickable-kpi:focus{outline:2px solid #2563eb;outline-offset:2px;}
+.kpi-link{font-size:11px;color:#2563eb;font-weight:700;margin-top:6px;}</style>
 </head>
 <body>
 <aside class="side">
 <div class="brand-block">
   <img src="assets/immigrants-guide-logo.png" alt="Immigrants Guide VK Eagle Globe USA logo" class="ig-logo">
 </div>
+<button id="mobileNavToggle" class="secondary mobile-menu" type="button" style="margin:0 0 8px;width:100%">☰ Menu</button>
 <div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
 <button data-view="history">◷ Case History</button>
+<button data-view="calendar">▣ Deadline Calendar</button>
+<button data-view="reports">▤ Reports & Settings</button>
 <button id="addNav">＋ Add Case</button>
 <button data-view="alerts">⚑ Alerts</button>
 </div>
@@ -72,7 +102,11 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="card">Premium Cases<div id="premiumCount" class="num">0</div></div>
 <div class="card">Avg. Duration<div id="avgDuration" class="num">0 days</div></div>
 <div class="card">Case Managers<div id="managerCount" class="num">0</div></div>
-<div class="card">Active Cases<div id="activeCount" class="num">0</div></div>
+<div class="card clickable-kpi" id="noidExtensionsCard" role="button" tabindex="0" title="Open NOID / Extension deadlines">
+NOID / Extensions
+<div id="noidExtCount" class="num orange">0</div>
+<div class="kpi-link">Tap to view deadlines →</div>
+</div>
 
 
 </div>
@@ -112,15 +146,89 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
-<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search cases..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
+<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search receipt, beneficiary, employer..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
+<div class="filter-bar">
+  <select id="filterStatus"><option value="">All Statuses</option><option value="pending">Pending</option><option value="rfe">RFE / NOID</option><option value="approved">Approved</option><option value="denied">Denied</option></select>
+  <select id="filterForm"><option value="">All Forms</option></select>
+  <select id="filterEmployer"><option value="">All Employers</option></select>
+  <select id="filterManager"><option value="">All Case Managers</option></select>
+  <select id="filterPremium"><option value="">Premium: All</option><option value="true">Premium: Yes</option><option value="false">Premium: No</option></select>
+  <select id="filterMonitoring"><option value="">Monitoring: All</option><option value="true">Monitoring: Enabled</option><option value="false">Monitoring: Off</option></select>
+  <button id="clearFilters" class="secondary" type="button">Clear Filters</button>
+  <span id="filterSummary" class="muted">Showing all cases</span>
+</div>
 <div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Monitoring</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
 
-<section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."></div>
+<section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><div class="actions"><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."><select id="historyType" style="width:auto"><option value="">All Events</option><option value="USCIS">USCIS Only</option><option value="Case">Internal Case Only</option></select></div></div>
 <div class="notice" id="historyNotice">Loading history...</div>
 <div class="table-wrap"><table><thead><tr><th>Date / Time</th><th>Receipt</th><th>Beneficiary</th><th>Previous Status</th><th>New Status</th><th>Changed By</th></tr></thead><tbody id="historyBody"></tbody></table></div></div></section>
 
-<section id="alerts" style="display:none"><div class="panel"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div>
-<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div></section>
+<section id="calendar" style="display:none">
+<div class="panel">
+<div class="calendar-toolbar">
+<div><div class="calendar-title" id="calendarTitle">Deadline Calendar</div><div class="small">RFE/NOID deadlines and extension planning dates.</div></div>
+<div class="actions"><button id="prevMonth" class="secondary" type="button">← Previous</button><button id="todayMonth" class="secondary" type="button">Today</button><button id="nextMonth" class="secondary" type="button">Next →</button></div>
+</div>
+<div class="calendar-grid" id="calendarGrid"></div>
+</div>
+<div class="panel" style="margin-top:20px"><div class="panel-head"><h2>Upcoming Deadlines</h2></div><div class="table-wrap"><table><thead><tr><th>Type</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Date</th><th>Time Remaining</th><th>Action</th></tr></thead><tbody id="calendarDeadlineBody"></tbody></table></div></div>
+</section>
+
+<section id="reports" style="display:none">
+<div class="panel">
+<div class="panel-head"><div><h2>Reports & Settings</h2><div class="small">Employer reporting, case-manager workload, security status, and notification preferences.</div></div><div class="report-actions"><button id="exportCases" class="secondary" type="button">Export Cases CSV</button><button id="exportEmployer" class="secondary" type="button">Export Employer CSV</button><button id="exportManager" class="secondary" type="button">Export Manager CSV</button></div></div>
+<div class="report-grid">
+<div class="report-card"><div class="report-label">Total Case Value</div><div id="reportTotalAmount" class="report-value">$0</div></div>
+<div class="report-card"><div class="report-label">Average Duration</div><div id="reportAvgDuration" class="report-value">0 days</div></div>
+<div class="report-card"><div class="report-label">Employers</div><div id="reportEmployerCount" class="report-value">0</div></div>
+<div class="report-card"><div class="report-label">Managers</div><div id="reportManagerCount" class="report-value">0</div></div>
+</div>
+<div class="panel-head"><h2>Employer Report</h2></div>
+<div class="report-table-wrap"><div class="table-wrap"><table><thead><tr><th>Employer</th><th>Cases</th><th>Amount</th><th>Approved</th><th>Active</th><th>RFE/NOID</th><th>Premium</th><th>Avg Duration</th></tr></thead><tbody id="reportEmployerBody"></tbody></table></div></div>
+<div class="panel-head"><h2>Case Manager Workload</h2></div>
+<div class="report-table-wrap"><div class="table-wrap"><table><thead><tr><th>Case Manager</th><th>Total</th><th>Active</th><th>RFE/NOID</th><th>Approved</th><th>Denied</th><th>Amount</th><th>Avg Duration</th></tr></thead><tbody id="reportManagerBody"></tbody></table></div></div>
+</div>
+
+<div class="panel" style="margin-top:20px">
+<div class="panel-head"><h2>Security & Access</h2><span id="rolePill" class="role-pill">Checking role...</span></div>
+<div class="settings-grid">
+<div class="setting-box"><h3>Authentication</h3><p id="securityAuth">Checking...</p></div>
+<div class="setting-box"><h3>Database Access</h3><p id="securityDb">Checking...</p></div>
+<div class="setting-box"><h3>Row-Level Security</h3><p id="securityRls">RLS should be enabled in Supabase before production multi-user use.</p></div>
+<div class="setting-box"><h3>USCIS Environment</h3><p><span class="security-warn">Sandbox / environment-dependent</span><br>Live receipt monitoring requires approved USCIS Production access.</p></div>
+</div>
+</div>
+
+<div class="panel" style="margin-top:20px">
+<div class="panel-head"><h2>Email Notifications</h2><span id="emailState" class="role-pill">Preferences saved locally</span></div>
+<div class="settings-grid">
+<div class="setting-box"><h3>Notification Email</h3><input id="notifyEmail" type="email" placeholder="your@email.com"><p>Destination preference for future server-side email alerts.</p></div>
+<div class="setting-box"><h3>Alert Preferences</h3>
+<label><input id="emailRfe" type="checkbox"> RFE / NOID deadline alerts</label>
+<label><input id="emailExt" type="checkbox"> Extension planning alerts</label>
+<label><input id="emailStatus" type="checkbox"> USCIS status changes</label>
+<label><input id="emailMonitor" type="checkbox"> Monitoring failures</label>
+<button id="saveEmailPrefs" class="primary" type="button">Save Notification Preferences</button>
+</div>
+</div>
+<div class="notice">Preferences are stored locally in this browser. Actual automated email delivery requires a server-side mail provider/Edge Function.</div>
+</div>
+</section>
+
+<section id="alerts" style="display:none">
+<div class="panel">
+<div class="panel-head"><h2>Alerts & Monitoring Health</h2><button id="runMonitorFromAlerts" class="secondary" type="button">⚙ Run Monitor</button></div>
+<div class="alert-summary">
+<div class="alert-stat">RFE / NOID Cases<b id="alertRfeCount">0</b></div>
+<div class="alert-stat">Deadlines ≤ 30 Days<b id="alertDeadlineCount">0</b></div>
+<div class="alert-stat">Monitoring Enabled<b id="alertMonitoringCount">0</b></div>
+<div class="alert-stat">Latest Monitor Failures<b id="alertMonitorFailures">0</b></div>
+</div>
+<div class="notice" id="monitorHealthNotice">Monitoring health is based on the latest monitor run available in this browser session.</div>
+</div>
+<div class="panel" style="margin-top:20px"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div>
+<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Deadline</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div>
+</section>
 </main>
 
 <div id="modal" class="modal"><div class="modal-box">
@@ -147,6 +255,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
 
+<div id="profileModal" class="modal">
+  <div class="modal-box profile-box">
+    <div class="modal-head">
+      <div>
+        <h2 id="profileTitle">Case Profile</h2>
+        <div id="profileSubtitle" class="muted"></div>
+      </div>
+      <button id="profileClose" class="close" type="button">×</button>
+    </div>
+    <div id="profileContent"></div>
+  </div>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -155,7 +276,7 @@ const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
-let db=null, rows=[], recentUscisHistory=[], signingOut=false, initialized=false;
+let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false;
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -287,6 +408,8 @@ async function monitorNow(){
       throw new Error(msg);
     }
     const d=r.data||{};
+    recentMonitorResult=d;
+    try{localStorage.setItem("ig_last_monitor_result",JSON.stringify(d));}catch(_){}
     if($("monitorStatus"))$("monitorStatus").textContent=
       "Monitor complete: "+(d.checked||0)+" checked, "+(d.changed||0)+" changed, "+(d.failed||0)+" failed.";
     await load();
@@ -296,6 +419,152 @@ async function monitorNow(){
   }finally{
     if(btn){btn.disabled=false;btn.textContent="⚙ Monitor Now";}
   }
+}
+
+function isPremium(c){
+  return c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1";
+}
+function isMonitoring(c){
+  return c?.monitoring_enabled!==false&&c?.monitoring_enabled!=="false";
+}
+function populateFilterOptions(){
+  const fill=(id,values,label)=>{
+    const el=$(id); if(!el)return;
+    const current=el.value;
+    el.innerHTML='<option value="">'+label+'</option>'+values.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join("");
+    if(values.includes(current))el.value=current;
+  };
+  const forms=[...new Set(rows.map(c=>String(c.form_type||"").trim()).filter(Boolean))].sort();
+  const employers=[...new Set(rows.map(c=>String(c.employer||"").trim()).filter(Boolean))].sort();
+  const managers=[...new Set(rows.map(c=>String(c.case_manager||"").trim()).filter(Boolean))].sort();
+  fill("filterForm",forms,"All Forms");
+  fill("filterEmployer",employers,"All Employers");
+  fill("filterManager",managers,"All Case Managers");
+}
+function filteredCases(){
+  let a=filt(rows,$("caseSearch")?.value||"");
+  const status=$("filterStatus")?.value||"";
+  const form=$("filterForm")?.value||"";
+  const employer=$("filterEmployer")?.value||"";
+  const manager=$("filterManager")?.value||"";
+  const premium=$("filterPremium")?.value||"";
+  const monitoring=$("filterMonitoring")?.value||"";
+  if(status==="pending")a=a.filter(c=>isPending(c));
+  if(status==="rfe")a=a.filter(c=>isRfe(c));
+  if(status==="approved")a=a.filter(c=>isApproved(c));
+  if(status==="denied")a=a.filter(c=>isDenied(c));
+  if(form)a=a.filter(c=>String(c.form_type||"")===form);
+  if(employer)a=a.filter(c=>String(c.employer||"")===employer);
+  if(manager)a=a.filter(c=>String(c.case_manager||"")===manager);
+  if(premium)a=a.filter(c=>String(isPremium(c))===premium);
+  if(monitoring)a=a.filter(c=>String(isMonitoring(c))===monitoring);
+  return a;
+}
+function updateFilterSummary(count){
+  const el=$("filterSummary");
+  if(!el)return;
+  el.textContent="Showing "+count+" of "+rows.length+" case"+(rows.length===1?"":"s");
+}
+
+function openNoidExtensions(){
+  const btn=document.querySelector('.nav button[data-view="calendar"]');
+  if(btn)btn.click();
+}
+function deadlineItems(){
+  const items=[];
+  rows.forEach(c=>{
+    if(c.rfe_deadline_date)items.push({type:"RFE",date:c.rfe_deadline_date,c});
+    if(c.extension_target_date)items.push({type:"Extension",date:c.extension_target_date,c});
+  });
+  return items;
+}
+function drawCalendar(){
+  const grid=$("calendarGrid");if(!grid)return;
+  const y=calendarCursor.getFullYear(),m=calendarCursor.getMonth();
+  $("calendarTitle").textContent=new Date(y,m,1).toLocaleDateString("en-US",{month:"long",year:"numeric"});
+  const names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  let out=names.map(n=>'<div class="calendar-week">'+n+'</div>').join("");
+  const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),prevDays=new Date(y,m,0).getDate(),all=deadlineItems();
+  for(let i=0;i<42;i++){
+    const dayNum=i-first+1,d=new Date(y,m,dayNum),inMonth=dayNum>=1&&dayNum<=days;
+    const actualDay=inMonth?dayNum:(dayNum<1?prevDays+dayNum:new Date(y,m+1,dayNum-days).getDate());
+    const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    const today=new Date(),isToday=d.toDateString()===today.toDateString();
+    const events=all.filter(x=>String(x.date).slice(0,10)===iso);
+    out+='<div class="calendar-day '+(!inMonth?"muted-day ":"")+(isToday?"today":"")+'><div class="calendar-num">'+actualDay+'</div>'+events.map(x=>'<div class="calendar-event '+(x.type==="RFE"?"rfe":"ext")+' profileCalendarEvent" data-id="'+esc(x.c.id)+'">'+esc(x.type+": "+x.c.receipt_number)+'</div>').join("")+'</div>';
+  }
+  grid.innerHTML=out;
+  const sorted=all.sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
+  $("calendarDeadlineBody").innerHTML=sorted.length?sorted.map(x=>'<tr><td>'+deadlineTypeLabel(x.type)+'</td><td><b>'+esc(x.c.receipt_number)+'</b></td><td>'+esc(x.c.beneficiary_name)+'</td><td>'+esc(x.c.employer||"—")+'</td><td><b>'+date(x.date)+'</b></td><td>'+deadlineLabel(x.date)+'</td><td><button class="link profileBtn" data-id="'+esc(x.c.id)+'" type="button">View</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">No deadlines recorded.</td></tr>';
+}
+function managerReport(){
+  const map=new Map();
+  rows.forEach(c=>{
+    const name=String(c.case_manager||"Unassigned").trim()||"Unassigned";
+    if(!map.has(name))map.set(name,{total:0,active:0,rfe:0,approved:0,denied:0,amount:0,durations:[]});
+    const m=map.get(name);m.total++;m.amount+=Number(c.amount)||0;
+    if(isPending(c))m.active++;if(isRfe(c))m.rfe++;if(isApproved(c))m.approved++;if(isDenied(c))m.denied++;
+    const d=durationDays(c);if(d!==null)m.durations.push(d);
+  });
+  return [...map.entries()].map(([name,m])=>({name,...m,avg:m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length):null})).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name));
+}
+function employerReport(){
+  const map=new Map();
+  rows.forEach(c=>{
+    const name=String(c.employer||"Unassigned").trim()||"Unassigned";
+    if(!map.has(name))map.set(name,{total:0,amount:0,approved:0,active:0,rfe:0,premium:0,durations:[]});
+    const m=map.get(name);m.total++;m.amount+=Number(c.amount)||0;
+    if(isApproved(c))m.approved++;else if(isPending(c))m.active++;if(isRfe(c))m.rfe++;if(isPremium(c))m.premium++;
+    const d=durationDays(c);if(d!==null)m.durations.push(d);
+  });
+  return [...map.entries()].map(([name,m])=>({name,...m,avg:m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length):null})).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name));
+}
+function drawReports(){
+  if(!$("reportTotalAmount"))return;
+  $("reportTotalAmount").textContent=money(rows.reduce((s,c)=>s+(Number(c.amount)||0),0));
+  const ds=rows.map(durationDays).filter(x=>x!==null);
+  $("reportAvgDuration").textContent=ds.length?Math.round(ds.reduce((a,b)=>a+b,0)/ds.length)+" days":"0 days";
+  $("reportEmployerCount").textContent=employerReport().length;
+  $("reportManagerCount").textContent=managerReport().length;
+  const er=employerReport(),mr=managerReport();
+  $("reportEmployerBody").innerHTML=er.length?er.map(x=>'<tr><td><b>'+esc(x.name)+'</b></td><td>'+x.total+'</td><td>'+money(x.amount)+'</td><td>'+x.approved+'</td><td>'+x.active+'</td><td>'+x.rfe+'</td><td>'+x.premium+'</td><td>'+(x.avg===null?"—":x.avg+" days")+'</td></tr>').join(""):'<tr><td colspan="8" class="empty">No employer data.</td></tr>';
+  $("reportManagerBody").innerHTML=mr.length?mr.map(x=>'<tr><td><b>'+esc(x.name)+'</b></td><td>'+x.total+'</td><td>'+x.active+'</td><td>'+x.rfe+'</td><td>'+x.approved+'</td><td>'+x.denied+'</td><td>'+money(x.amount)+'</td><td>'+(x.avg===null?"—":x.avg+" days")+'</td></tr>').join(""):'<tr><td colspan="8" class="empty">No case-manager data.</td></tr>';
+}
+function csvEscape(v){return '"'+String(v??"").replace(/"/g,'""')+'"';}
+function downloadCSV(filename,headers,data){
+  const lines=[headers.map(csvEscape).join(",")].concat(data.map(r=>r.map(csvEscape).join(",")));
+  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Status","USCIS Status","Amount","Premium","Duration Days","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target","Monitoring"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.current_status,c.uscis_status_text,c.amount,isPremium(c)?"Yes":"No",durationDays(c),c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date,isMonitoring(c)?"Enabled":"Off"]));}
+function exportEmployerCSV(){downloadCSV("employer-report.csv",["Employer","Cases","Amount","Approved","Active","RFE/NOID","Premium","Average Duration"],employerReport().map(x=>[x.name,x.total,x.amount,x.approved,x.active,x.rfe,x.premium,x.avg===null?"":x.avg]));}
+function exportManagerCSV(){downloadCSV("case-manager-report.csv",["Case Manager","Total","Active","RFE/NOID","Approved","Denied","Amount","Average Duration"],managerReport().map(x=>[x.name,x.total,x.active,x.rfe,x.approved,x.denied,x.amount,x.avg===null?"":x.avg]));}
+function loadEmailPrefs(){
+  try{const p=JSON.parse(localStorage.getItem("ig_email_preferences")||"{}");$("notifyEmail").value=p.email||"";$("emailRfe").checked=p.rfe!==false;$("emailExt").checked=p.ext!==false;$("emailStatus").checked=p.status!==false;$("emailMonitor").checked=p.monitor!==false;}catch(_){}
+}
+function saveEmailPrefs(){
+  const p={email:$("notifyEmail").value.trim(),rfe:$("emailRfe").checked,ext:$("emailExt").checked,status:$("emailStatus").checked,monitor:$("emailMonitor").checked};
+  localStorage.setItem("ig_email_preferences",JSON.stringify(p));$("emailState").textContent="Saved "+new Date().toLocaleTimeString();
+}
+function drawAlertHealth(){
+  const rfe=rows.filter(isRfe).length;
+  const dl=rows.filter(c=>{const n=daysUntil(c.rfe_deadline_date);return n!==null&&n<=30;}).length;
+  const mon=rows.filter(isMonitoring).length,fail=Number(recentMonitorResult?.failed||0);
+  if($("alertRfeCount"))$("alertRfeCount").textContent=rfe;
+  if($("alertDeadlineCount"))$("alertDeadlineCount").textContent=dl;
+  if($("alertMonitoringCount"))$("alertMonitoringCount").textContent=mon;
+  if($("alertMonitorFailures"))$("alertMonitorFailures").textContent=fail;
+  if($("monitorHealthNotice"))$("monitorHealthNotice").textContent=recentMonitorResult?"Latest monitor run: "+(recentMonitorResult.checked||0)+" checked, "+(recentMonitorResult.changed||0)+" changed, "+(recentMonitorResult.failed||0)+" failed.":"No monitor run result is stored in this browser session yet.";
+}
+function renderSecurity(){
+  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"");
+  if($("securityDb"))$("securityDb").innerHTML='<span class="security-ok">Supabase connection active</span>';
+  if($("rolePill"))$("rolePill").textContent="Authenticated User";
+}
+function renderAlerts(){
+  const z=rows.filter(isRfe);
+  $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+date(c.rfe_deadline_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link profileBtn" data-id="'+esc(c.id)+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">No RFE / NOID alerts.</td></tr>';
+  drawAlertHealth();
 }
 
 function draw(){
@@ -314,16 +583,25 @@ function draw(){
   $("avgDuration").textContent=durations.length?Math.round(durations.reduce((a,b)=>a+b,0)/durations.length)+" days":"0 days";
   const managers=new Set(rows.map(x=>String(x.case_manager||"").trim()).filter(Boolean));
   $("managerCount").textContent=managers.size;
-  $("activeCount").textContent=rows.filter(isPending).length;
+  const noidExtensionCases=new Set();
+  rows.forEach(c=>{
+    if(isRfe(c)||c.extension_target_date)noidExtensionCases.add(String(c.id));
+  });
+  $("noidExtCount").textContent=noidExtensionCases.size;
   
   drawEmployerStats();
   drawDeadlines();
   drawAttention();
+  drawReports();
+  drawCalendar();
+  renderAlerts();
+  renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="link profileBtn" data-id="'+c.id+'" type="button">View</button> <button class="link profileBtn" data-id="'+c.id+'" type="button">View</button> <button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
 
-  const b=filt(rows,$("caseSearch").value);
+  const b=filteredCases();
+  updateFilterSummary(b.length);
   $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td><button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
@@ -337,6 +615,8 @@ async function load(){
     const r=await db.from("cases").select("*").order("created_at",{ascending:false});
     if(r.error)throw r.error;
     rows=r.data||[];
+    try{recentMonitorResult=JSON.parse(localStorage.getItem("ig_last_monitor_result")||"null");}catch(_){recentMonitorResult=null;}
+    populateFilterOptions();
     try{
       const uh=await db.from("uscis_status_history").select("*").order("created_at",{ascending:false}).limit(5);
       recentUscisHistory=uh.error?[]:(uh.data||[]);
@@ -479,6 +759,7 @@ async function loadHistory(caseId=null){
       if(!ur.error)uh=ur.data||[];
     }catch(_){}
     const search=($("historySearch").value||"").toLowerCase().trim();
+    const typeFilter=$("historyType")?.value||"";
     if(search){
       h=h.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_status,x.new_status,x.changed_by].some(v=>String(v||"").toLowerCase().includes(search)));
       uh=uh.filter(x=>[x.receipt_number,x.beneficiary_name,x.previous_uscis_status,x.new_uscis_status,x.checked_by].some(v=>String(v||"").toLowerCase().includes(search)));
@@ -486,7 +767,7 @@ async function loadHistory(caseId=null){
     const combined=[
       ...h.map(x=>({created_at:x.created_at,receipt_number:x.receipt_number,beneficiary_name:x.beneficiary_name,previous_status:x.previous_status||"—",new_status:x.new_status||"—",changed_by:x.changed_by||"—",kind:"Case"})),
       ...uh.map(x=>({created_at:x.created_at,receipt_number:x.receipt_number,beneficiary_name:x.beneficiary_name,previous_status:x.previous_uscis_status||"—",new_status:x.new_uscis_status||"—",changed_by:x.checked_by||"USCIS Monitor",kind:"USCIS"}))
-    ].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    ].filter(x=>!typeFilter||x.kind===typeFilter).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
     $("historyNotice").textContent=combined.length?"Showing "+combined.length+" history record(s).":"No history records yet.";
     $("historyBody").innerHTML=combined.length?combined.map(x=>'<tr><td>'+esc(new Date(x.created_at).toLocaleString())+'</td><td><b>'+esc(x.receipt_number)+'</b></td><td>'+esc(x.beneficiary_name)+'</td><td>'+esc(x.previous_status)+'</td><td>'+badge(x.new_status)+'</td><td>'+esc(x.changed_by)+" ("+esc(x.kind)+")"+'</td></tr>').join(""):'<tr><td colspan="6" class="empty">No history records yet.</td></tr>';
   }catch(e){
@@ -494,6 +775,69 @@ async function loadHistory(caseId=null){
     $("historyNotice").className="notice error";
   }
 }
+
+function profileValue(value){
+  return value===null||value===undefined||String(value)===""?"—":esc(value);
+}
+async function loadProfileHistory(c){
+  const box=$("profileHistoryBox");if(!box)return;
+  box.innerHTML='<div class="small">Loading history...</div>';
+  try{
+    const [a,b]=await Promise.all([
+      db.from("case_history").select("*").eq("case_id",c.id).order("created_at",{ascending:false}).limit(10),
+      db.from("uscis_status_history").select("*").eq("case_id",c.id).order("created_at",{ascending:false}).limit(10)
+    ]);
+    const events=[
+      ...(a.error?[]:(a.data||[])).map(x=>({t:x.created_at,p:x.previous_status||"—",n:x.new_status||"—",by:x.changed_by||"—",kind:"Internal"})),
+      ...(b.error?[]:(b.data||[])).map(x=>({t:x.created_at,p:x.previous_uscis_status||"—",n:x.new_uscis_status||"—",by:x.checked_by||"USCIS Monitor",kind:"USCIS"}))
+    ].sort((x,y)=>new Date(y.t)-new Date(x.t));
+    box.innerHTML=events.length?'<div class="timeline">'+events.map(x=>'<div class="timeline-item"><span class="timeline-dot"></span><div class="timeline-time">'+esc(new Date(x.t).toLocaleString())+'</div><div class="timeline-title">'+badge(x.n)+'</div><div class="timeline-meta">'+esc(x.p)+' → '+esc(x.n)+' • '+esc(x.kind)+' • '+esc(x.by)+'</div></div>').join("")+'</div>':'<div class="attention-empty">No history records for this case yet.</div>';
+  }catch(e){box.innerHTML='<div class="notice error">History could not be loaded.</div>';}
+}
+async function openProfile(c){
+  if(!c)return;
+  $("profileModal").style.display="grid";
+  $("profileTitle").textContent=c.beneficiary_name||"Case Profile";
+  $("profileSubtitle").textContent=(c.receipt_number||"")+(c.form_type?" • "+c.form_type:"");
+
+  const status=c.current_status||"—";
+  const uscis=c.uscis_status_text||"Not checked yet";
+  const statusClass=isApproved(c)?"approved":isDenied(c)?"denied":isRfe(c)?"rfe":"";
+
+  $("profileContent").innerHTML=
+    '<div class="profile-actions">'+
+      '<span class="profile-status '+statusClass+'">Internal Status: '+profileValue(status)+'</span>'+
+      '<span class="profile-status">USCIS: '+profileValue(uscis)+'</span>'+
+    '</div>'+
+    '<div class="profile-grid">'+
+      '<div class="profile-item"><div class="profile-label">Receipt Number</div><div class="profile-value">'+profileValue(c.receipt_number)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Beneficiary</div><div class="profile-value">'+profileValue(c.beneficiary_name)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Employer</div><div class="profile-value">'+profileValue(c.employer)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Form Type</div><div class="profile-value">'+profileValue(c.form_type)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Filing Date</div><div class="profile-value">'+date(c.filing_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Priority Date</div><div class="profile-value">'+date(c.priority_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Status Date</div><div class="profile-value">'+date(c.status_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Case Manager</div><div class="profile-value">'+profileValue(c.case_manager)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Amount</div><div class="profile-value">'+money(c.amount)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Premium Processing</div><div class="profile-value">'+(isPremium(c)?"Yes":"No")+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Duration</div><div class="profile-value">'+durationText(c)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Monitoring</div><div class="profile-value">'+(isMonitoring(c)?"Enabled":"Off")+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">RFE / NOID Deadline</div><div class="profile-value">'+date(c.rfe_deadline_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Extension Target</div><div class="profile-value">'+date(c.extension_target_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Last USCIS Check</div><div class="profile-value">'+profileValue(lastChecked(c.last_checked_at))+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">USCIS Modified Date</div><div class="profile-value">'+profileValue(c.uscis_modified_date)+'</div></div>'+
+    '</div>'+
+    '<div class="profile-section"><h3>USCIS Status Description</h3><div class="profile-notes">'+profileValue(c.uscis_status_desc)+'</div></div>'+
+    '<div class="profile-section"><h3>Case Timeline</h3><div id="profileHistoryBox"><div class="small">Loading history...</div></div></div>'+
+    '<div class="profile-section"><h3>Notes</h3><div class="profile-notes">'+profileValue(c.notes)+'</div></div>'+
+    '<div class="profile-actions">'+
+      '<button class="primary profileEditBtn" data-id="'+esc(c.id)+'" type="button">Edit Case</button>'+
+      '<button class="secondary profileCheckBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button>'+
+      '<button class="secondary profileHistoryBtn" data-id="'+esc(c.id)+'" type="button">View History</button>'+
+    '</div>';
+  loadProfileHistory(c);
+}
+function closeProfile(){$("profileModal").style.display="none";}
 
 function openModal(c){
   $("modal").style.display="grid";
@@ -527,14 +871,22 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   $("cases").style.display=v==="cases"?"block":"none";
   $("alerts").style.display=v==="alerts"?"block":"none";
   $("history").style.display=v==="history"?"block":"none";
-  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":"RFE / NOID Alerts";
+  $("calendar").style.display=v==="calendar"?"block":"none";
+  $("reports").style.display=v==="reports"?"block":"none";
+  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":"Alerts & Monitoring";
   if(v==="history")loadHistory();
+  if(v==="calendar")drawCalendar();
+  if(v==="reports"){drawReports();loadEmailPrefs();renderSecurity();}
+  if(v==="alerts")renderAlerts();
 }));
 
+$("mobileNavToggle").addEventListener("click",()=>document.querySelector(".nav").classList.toggle("mobile-open"));
 $("addBtn").addEventListener("click",()=>openModal(null));
 $("addNav").addEventListener("click",()=>openModal(null));
 $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
+$("profileClose").addEventListener("click",closeProfile);
+$("profileModal").addEventListener("click",e=>{if(e.target===$("profileModal"))closeProfile();});
 $("refresh").addEventListener("click",load);
 $("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
 $("monitorNowBtn").addEventListener("click",monitorNow);
@@ -542,9 +894,81 @@ $("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
 $("historySearch").addEventListener("input",()=>loadHistory());
+$("historyType").addEventListener("change",()=>loadHistory());
+$("noidExtensionsCard").addEventListener("click",openNoidExtensions);
+$("noidExtensionsCard").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openNoidExtensions();}});
+$("prevMonth").addEventListener("click",()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()-1,1);drawCalendar();});
+$("nextMonth").addEventListener("click",()=>{calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+1,1);drawCalendar();});
+$("todayMonth").addEventListener("click",()=>{calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1);drawCalendar();});
+$("exportCases").addEventListener("click",exportCasesCSV);
+$("exportEmployer").addEventListener("click",exportEmployerCSV);
+$("exportManager").addEventListener("click",exportManagerCSV);
+$("saveEmailPrefs").addEventListener("click",saveEmailPrefs);
+$("runMonitorFromAlerts").addEventListener("click",monitorNow);
 $("employerSearch").addEventListener("input",draw);
+["filterStatus","filterForm","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
+$("clearFilters").addEventListener("click",()=>{
+  $("caseSearch").value="";
+  ["filterStatus","filterForm","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).value="");
+  draw();
+});
 
 document.addEventListener("click",async e=>{
+  const cal=e.target.closest(".profileCalendarEvent");
+  if(cal){
+    const c=rows.find(x=>String(x.id)===String(cal.dataset.id));
+    if(c)openProfile(c);
+    return;
+  }
+
+  const profile=e.target.closest(".profileBtn");
+  if(profile){
+    const c=rows.find(x=>String(x.id)===String(profile.dataset.id));
+    if(c)openProfile(c);
+    return;
+  }
+
+  const profileEdit=e.target.closest(".profileEditBtn");
+  if(profileEdit){
+    const c=rows.find(x=>String(x.id)===String(profileEdit.dataset.id));
+    if(c){closeProfile();openModal(c);}
+    return;
+  }
+
+  const profileCheck=e.target.closest(".profileCheckBtn");
+  if(profileCheck){
+    const c=rows.find(x=>String(x.id)===String(profileCheck.dataset.id));
+    if(c){
+      profileCheck.disabled=true;
+      profileCheck.textContent="Checking...";
+      await checkUSCIS(c,null,true);
+      await load();
+      const fresh=rows.find(x=>String(x.id)===String(c.id));
+      if(fresh)openProfile(fresh);
+    }
+    return;
+  }
+
+  const profileHistory=e.target.closest(".profileHistoryBtn");
+  if(profileHistory){
+    const c=rows.find(x=>String(x.id)===String(profileHistory.dataset.id));
+    if(c){
+      closeProfile();
+      document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+      document.querySelector('.nav button[data-view="history"]').classList.add("active");
+      $("dashboard").style.display="none";
+      $("cases").style.display="none";
+      $("alerts").style.display="none";
+      $("calendar").style.display="none";
+      $("reports").style.display="none";
+      $("history").style.display="block";
+      $("title").textContent="Case History";
+      $("historySearch").value="";
+      loadHistory(c.id);
+    }
+    return;
+  }
+
   const check=e.target.closest(".checkOneBtn");
   if(check){
     const c=rows.find(x=>String(x.id)===String(check.dataset.id));
@@ -663,6 +1087,8 @@ async function init(){
 
     initialized=true;
     $("who").textContent=session.user?.email||"";
+    loadEmailPrefs();
+    renderSecurity();
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
     await load();
 
