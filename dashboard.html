@@ -82,7 +82,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div class="top">
 <div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
 <div class="actions">
-<span id="who" class="muted"></span>
+<span id="who" class="muted"></span><span id="orgInfo" class="muted" style="margin-left:10px"></span>
 <button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button>
 <button id="monitorNowBtn" class="secondary" type="button">⚙ Monitor Now</button>
 <span id="monitorStatus" class="muted">Auto-monitoring: scheduled</span>
@@ -276,7 +276,7 @@ const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
-let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false;
+let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null;
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -305,6 +305,27 @@ function deadlineLabel(value){
 function deadlineTypeLabel(type){
   return type==="RFE"?'<span class="badge rfe">RFE / NOID</span>':'<span class="badge">Extension</span>';
 }
+
+async function loadOrganizationContext(){
+  const userResult=await db.auth.getUser();
+  const user=userResult?.data?.user;
+  if(!user)throw new Error("Your login session could not be verified. Please sign in again.");
+  const r=await db.from("organization_members")
+    .select("organization_id,role")
+    .eq("user_id",user.id)
+    .order("organization_id",{ascending:true})
+    .limit(1);
+  if(r.error)throw r.error;
+  if(!r.data?.length)throw new Error("Your account is not assigned to an Immigrants Guide organization yet.");
+  currentOrgId=r.data[0].organization_id;
+  currentOrgRole=r.data[0].role||"viewer";
+  try{
+    const o=await db.from("organizations").select("id,name").eq("id",currentOrgId).maybeSingle();
+    if(!o.error&&o.data)currentOrgName=o.data.name||null;
+  }catch(_){}
+  if($("orgInfo"))$("orgInfo").textContent=currentOrgName?"Organization: "+currentOrgName:"Organization connected";
+}
+function canManageCases(){return ["owner","admin","manager"].includes(String(currentOrgRole||"").toLowerCase());}
 
 function setNotice(text,error=false){
   $("notice").textContent=text;
@@ -598,7 +619,7 @@ function draw(){
   renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="link profileBtn" data-id="'+c.id+'" type="button">View</button> <button class="link profileBtn" data-id="'+c.id+'" type="button">View</button> <button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td><button class="link profileBtn" data-id="'+c.id+'" type="button">View</button> <button class="check-btn checkOneBtn" data-id="'+c.id+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+c.id+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+c.id+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+c.id+'" type="button">Delete</button></td></tr>').join(""):'<tr><td colspan="12" class="empty">No cases found.</td></tr>';
 
   const b=filteredCases();
   updateFilterSummary(b.length);
@@ -612,13 +633,14 @@ async function load(){
   if(!db)return;
   setNotice("Loading cases from Supabase...");
   try{
-    const r=await db.from("cases").select("*").order("created_at",{ascending:false});
+    if(!currentOrgId)await loadOrganizationContext();
+    const r=await db.from("cases").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false});
     if(r.error)throw r.error;
     rows=r.data||[];
     try{recentMonitorResult=JSON.parse(localStorage.getItem("ig_last_monitor_result")||"null");}catch(_){recentMonitorResult=null;}
     populateFilterOptions();
     try{
-      const uh=await db.from("uscis_status_history").select("*").order("created_at",{ascending:false}).limit(5);
+      const uh=await db.from("uscis_status_history").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false}).limit(5);
       recentUscisHistory=uh.error?[]:(uh.data||[]);
     }catch(_){recentUscisHistory=[];}
     draw();
@@ -681,7 +703,7 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
       form_type:cs.formType||c.form_type||null
     };
 
-    const up=await db.from("cases").update(payload).eq("id",c.id);
+    const up=await db.from("cases").update(payload).eq("id",c.id).eq("organization_id",currentOrgId);
     if(up.error)throw up.error;
 
     const previousStatus=c.uscis_status_text||null;
@@ -689,6 +711,7 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
     if(previousStatus!==statusText || previousModified!==modified){
       const h=await db.from("uscis_status_history").insert({
         case_id:c.id,
+        organization_id:currentOrgId,
         receipt_number:c.receipt_number,
         beneficiary_name:c.beneficiary_name||null,
         previous_uscis_status:previousStatus,
@@ -754,8 +777,12 @@ async function loadHistory(caseId=null){
     if(r.error)throw r.error;
     let h=r.data||[];
     let uh=[];
+    const selectedCase=caseId?rows.find(x=>String(x.id)===String(caseId)):null;
     try{
-      const ur=await db.from("uscis_status_history").select("*").order("created_at",{ascending:false}).limit(500);
+      let urq=db.from("uscis_status_history").select("*").eq("organization_id",currentOrgId);
+      if(selectedCase)urq=urq.eq("receipt_number",selectedCase.receipt_number);
+      urq=urq.order("created_at",{ascending:false}).limit(500);
+      const ur=await urq;
       if(!ur.error)uh=ur.data||[];
     }catch(_){}
     const search=($("historySearch").value||"").toLowerCase().trim();
@@ -785,7 +812,7 @@ async function loadProfileHistory(c){
   try{
     const [a,b]=await Promise.all([
       db.from("case_history").select("*").eq("case_id",c.id).order("created_at",{ascending:false}).limit(10),
-      db.from("uscis_status_history").select("*").eq("case_id",c.id).order("created_at",{ascending:false}).limit(10)
+      db.from("uscis_status_history").select("*").eq("organization_id",currentOrgId).eq("receipt_number",c.receipt_number).order("created_at",{ascending:false}).limit(10)
     ]);
     const events=[
       ...(a.error?[]:(a.data||[])).map(x=>({t:x.created_at,p:x.previous_status||"—",n:x.new_status||"—",by:x.changed_by||"—",kind:"Internal"})),
@@ -1004,7 +1031,7 @@ document.addEventListener("click",async e=>{
     const c=rows.find(x=>String(x.id)===String(del.dataset.id));
     if(!c)return;
     if(confirm("Delete case "+c.receipt_number+"?")){
-      const r=await db.from("cases").delete().eq("id",c.id);
+      const r=await db.from("cases").delete().eq("id",c.id).eq("organization_id",currentOrgId);
       if(r.error)alert("Delete failed: "+r.error.message);
       else await load();
     }
@@ -1049,7 +1076,9 @@ $("caseForm").addEventListener("submit",async e=>{
     notes:$("notes").value.trim()||null
   };
   try{
-    const r=id?await db.from("cases").update(payload).eq("id",id):await db.from("cases").insert(payload);
+    if(!currentOrgId)await loadOrganizationContext();
+    if(!id)payload.organization_id=currentOrgId;
+    const r=id?await db.from("cases").update(payload).eq("id",id).eq("organization_id",currentOrgId):await db.from("cases").insert(payload);
     if(r.error)throw r.error;
     $("formMsg").innerHTML='<div class="msg success">Case saved successfully.</div>';
     setTimeout(()=>{closeModal();load();},500);
@@ -1090,6 +1119,7 @@ async function init(){
     loadEmailPrefs();
     renderSecurity();
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
+    await loadOrganizationContext();
     await load();
 
     db.auth.onAuthStateChange((event)=>{
