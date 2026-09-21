@@ -229,21 +229,63 @@ function openAsk(){askModal.style.display="grid";askModal.setAttribute("aria-hid
 function closeAsk(){askModal.style.display="none";askModal.setAttribute("aria-hidden","true");askMsg.className="ask-msg";askMsg.textContent="";}
 $("askVijayOpen")?.addEventListener("click",openAsk);$("askVijayClose")?.addEventListener("click",closeAsk);askModal?.addEventListener("click",e=>{if(e.target===askModal)closeAsk();});
 $("askVijayForm")?.addEventListener("submit",async e=>{e.preventDefault();const btn=$("askSubmit");const website=$("askWebsite").value.trim();if(website)return;btn.disabled=true;btn.textContent="Sending...";askMsg.className="ask-msg";askMsg.textContent="";try{if(!db)await init();const payload={name:$("askName").value.trim(),email:$("askEmail").value.trim(),subject:$("askSubject").value.trim(),question:$("askQuestion").value.trim()};if(!payload.name||!payload.email||!payload.subject||!payload.question)throw new Error("Please complete all required fields.");const r=await db.functions.invoke("google-gmail-send",{body:payload});if(r.error){let m=r.error.message||"Unable to send your question.";try{if(r.error.context?.json){const b=await r.error.context.json();m=b?.error||b?.message||m;}}catch(_){}throw new Error(m);}askMsg.className="ask-msg ok";askMsg.textContent="Thank you. Your question has been sent to Immigrants Guide.";$("askVijayForm").reset();}catch(err){askMsg.className="ask-msg err";askMsg.textContent=err?.message||"Unable to send your question. Please try again.";}finally{btn.disabled=false;btn.textContent="📨 Send Question";}});
-const aiModal=$("aiModal"),aiInput=$("aiQuestionInput"),aiAskBtn=$("aiAskBtn"),aiAnswer=$("aiAnswer"),aiSources=$("aiSources");
+const aiModal=$("aiModal"),aiInput=$("aiQuestionInput"),aiAskBtn=$("aiAskBtn");
 function openAi(){if(!aiModal)return;aiModal.style.display="grid";aiModal.setAttribute("aria-hidden","false");setTimeout(()=>aiInput?.focus(),30);}
 function closeAi(){if(!aiModal)return;aiModal.style.display="none";aiModal.setAttribute("aria-hidden","true");}
-function renderAiSources(sources){
-  if(!aiSources)return;
+
+function cleanAiText(text){
+  return String(text||"")
+    .replace(/\r/g,"")
+    .replace(/\*\*([^*]+)\*\*/g,"$1")
+    .replace(/__([^_]+)__/g,"$1")
+    .replace(/^#{1,6}\s*/gm,"")
+    .replace(/^\s*[-*]\s+/gm,"• ")
+    .replace(/^\s*\d+\.\s+/gm,m=>m.trim()+" ")
+    .replace(/`([^`]+)`/g,"$1")
+    .trim();
+}
+function aiAnswerHtml(text){
+  const cleaned=cleanAiText(text);
+  const lines=cleaned.split("\n");
+  let html="",inList=false;
+  for(const raw of lines){
+    const line=raw.trim();
+    if(!line){if(inList){html+="</ul>";inList=false;}continue;}
+    if(line.startsWith("• ")){
+      if(!inList){html+="<ul>";inList=true;}
+      html+="<li>"+esc(line.slice(2).trim())+"</li>";
+      continue;
+    }
+    if(inList){html+="</ul>";inList=false;}
+    const isTitle=/^(Key Details|Important Considerations|Important|Official Sources|What you can do|Next steps|Summary|Eligibility|Duration|Work authorization|Options|Disclaimer)\s*:?[\s]*$/i.test(line);
+    if(isTitle){html+="<h3>"+esc(line.replace(/:$/,""))+"</h3>";}
+    else html+="<p>"+esc(line)+"</p>";
+  }
+  if(inList)html+="</ul>";
+  return html;
+}
+function aiSourcesHtml(sources){
   const list=Array.isArray(sources)?sources.filter(s=>s&&s.url):[];
-  if(!list.length){aiSources.style.display="none";aiSources.innerHTML="";return;}
-  aiSources.style.display="block";
-  aiSources.innerHTML='<div class="ai-source-title">Official sources</div>'+list.slice(0,8).map(s=>'<a class="ai-source" href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.title||s.url)+'</a>').join("");
+  if(!list.length)return "";
+  return '<section class="sources"><h3>Official Sources</h3>'+list.slice(0,8).map(s=>'<a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.title||s.url)+'</a>').join("")+"</section>";
+}
+function openAiResultTab(question){
+  const tab=window.open("","_blank");
+  if(!tab){alert("Please allow pop-ups for immigrantsguide.github.io to open the AI answer in a new tab.");return null;}
+  tab.document.open();
+  tab.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Immigrants Guide AI — Answer</title><style>
+  *{box-sizing:border-box}body{margin:0;background:#f5f9ff;color:#172f50;font-family:Inter,Arial,Helvetica,sans-serif}.wrap{width:min(900px,92%);margin:35px auto 60px}.top{background:#fff;border:1px solid #dbe5f1;border-radius:16px;padding:20px 24px;box-shadow:0 8px 25px #15365d0b;display:flex;align-items:center;gap:14px}.robot{width:48px;height:48px;border-radius:12px;background:#e8f2ff;display:grid;place-items:center;font-size:27px}.brand{font-size:20px;font-weight:850;color:#0d2b55}.sub{font-size:12px;color:#647b98;margin-top:4px}.card{margin-top:18px;background:#fff;border:1px solid #dbe5f1;border-radius:16px;padding:28px;box-shadow:0 8px 25px #15365d0b}.question{font-size:13px;color:#647b98;margin-bottom:8px;font-weight:700}.qtext{font-size:17px;color:#0d2b55;font-weight:700;line-height:1.5;margin-bottom:24px}.answer h2{font-size:27px;color:#0d2b55;margin:0 0 18px}.answer h3{font-size:19px;color:#1769e8;margin:24px 0 9px}.answer p{font-size:15px;line-height:1.7;margin:0 0 12px}.answer ul{margin:8px 0 15px;padding-left:25px}.answer li{font-size:15px;line-height:1.7;margin:6px 0}.loading{padding:25px 0;color:#46617f;font-weight:700}.error{background:#fff1f2;color:#991b1b;border:1px solid #fecdd3;padding:14px;border-radius:10px;font-weight:700}.sources{margin-top:28px;padding-top:18px;border-top:1px solid #e3ebf4}.sources h3{font-size:18px;color:#0d2b55;margin:0 0 10px}.sources a{display:block;color:#1265d7;text-decoration:underline;font-size:14px;margin:7px 0;overflow-wrap:anywhere}.disclaimer{margin-top:24px;padding:14px;background:#f5faff;border:1px solid #cfe0f5;border-radius:10px;color:#60748e;font-size:12px;line-height:1.55}.back{display:inline-block;margin-top:18px;color:#1769e8;font-size:13px;font-weight:800;text-decoration:none}.back:hover{text-decoration:underline}
+  </style></head><body><main class="wrap"><div class="top"><div class="robot">🤖</div><div><div class="brand">Immigrants Guide AI</div><div class="sub">Clear U.S. immigration information · General information, not legal advice</div></div></div><div class="card"><div class="question">YOUR QUESTION</div><div class="qtext">${esc(question)}</div><div id="result" class="answer"><div class="loading">🔎 Preparing your answer...</div></div><div class="disclaimer">This information is for general educational purposes only and is not legal advice. Immigration rules can change. For advice about your specific situation, consult a qualified U.S. immigration attorney.</div><a class="back" href="javascript:window.close()">Close this tab</a></div></main></body></html>`);
+  tab.document.close();
+  return tab;
 }
 async function askImmigrationAI(){
   const question=(aiInput?.value||"").trim();
   if(!question)return;
-  if(question.length>2000){aiAnswer.style.display="block";aiAnswer.innerHTML='<div class="ai-error">Please keep your question under 2,000 characters.</div>';return;}
-  aiAskBtn.disabled=true;aiAskBtn.textContent="Checking...";aiAnswer.style.display="block";aiAnswer.innerHTML='<div class="ai-loading">🔎 Checking current official immigration sources and preparing an answer...</div>';renderAiSources([]);
+  if(question.length>2000){alert("Please keep your question under 2,000 characters.");return;}
+  const tab=openAiResultTab(question);
+  if(!tab)return;
+  aiAskBtn.disabled=true;aiAskBtn.textContent="Opening...";
   try{
     if(!db)await init();
     const r=await db.functions.invoke("immigration-ai",{body:{question}});
@@ -254,11 +296,13 @@ async function askImmigrationAI(){
     }
     const answer=r.data?.answer;
     if(!answer)throw new Error("The AI service returned no answer.");
-    aiAnswer.innerHTML=esc(answer).replace(/\n/g,"<br>");
-    renderAiSources(r.data?.sources||[]);
+    const result=tab.document.getElementById("result");
+    if(result)result.innerHTML=aiAnswerHtml(answer)+aiSourcesHtml(r.data?.sources||[]);
+    tab.focus();
   }catch(err){
-    aiAnswer.innerHTML='<div class="ai-error">'+esc(err?.message||"Unable to get an AI response. Please try again.")+'</div>';
-    renderAiSources([]);
+    const result=tab.document.getElementById("result");
+    if(result)result.innerHTML='<div class="error">'+esc(err?.message||"Unable to get an AI response. Please try again.")+'</div>';
+    tab.focus();
   }finally{
     aiAskBtn.disabled=false;aiAskBtn.textContent="Ask";
   }
@@ -266,7 +310,6 @@ async function askImmigrationAI(){
 $("askAiOpen")?.addEventListener("click",openAi);$("aiClose")?.addEventListener("click",closeAi);aiModal?.addEventListener("click",e=>{if(e.target===aiModal)closeAi();});
 aiAskBtn?.addEventListener("click",askImmigrationAI);
 aiInput?.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();askImmigrationAI();}});
-$("askVijayFromAi")?.addEventListener("click",()=>{closeAi();$("ask-vijay")?.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(openAsk,350);});
 $("askVijayFromAi")?.addEventListener("click",()=>{closeAi();$("ask-vijay")?.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(openAsk,350);});
 init();
 })();
