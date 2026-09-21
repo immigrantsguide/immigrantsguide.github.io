@@ -19,6 +19,8 @@ a{color:inherit}
 .container{width:min(1480px,94%);margin:0 auto}
 .hero{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(300px,.9fr);gap:22px;padding:38px 0 20px}.hero-main{padding:10px 6px}.eyebrow{font-size:13px;color:#526b8a;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}.hero h1{font-size:48px;line-height:1.05;margin:0;color:var(--navy);letter-spacing:-1.5px}.hero h1 span{color:var(--green)}.hero p{font-size:18px;color:#425b7a;line-height:1.55;margin:14px 0 26px;max-width:780px}
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:16px}.tool-card{border:1px solid var(--line);border-radius:14px;padding:20px;background:#fff;box-shadow:0 8px 25px #15365d0b}.tool-card.uscis{background:linear-gradient(135deg,#eef6ff,#fff)}.tool-card.i94{background:linear-gradient(135deg,#effcf8,#fff)}.tool-head{display:flex;align-items:center;gap:12px}.tool-icon{font-size:29px}.tool-card h2{font-size:22px;margin:0;color:var(--navy)}.tool-card.i94 h2{color:var(--green)}.tool-card p{font-size:14px;line-height:1.55;margin:12px 0;color:#49617e}.tool-input{width:100%;padding:13px 14px;border:1px solid #bfd0e4;border-radius:9px;font-size:14px;outline:none}.tool-input:focus{border-color:#3981ef;box-shadow:0 0 0 3px #3981ef18}.tool-btn{width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;font-weight:800;color:#fff;cursor:pointer;font-size:15px}.tool-btn.blue{background:linear-gradient(135deg,#1769e8,#0757cf)}.tool-btn.green{background:linear-gradient(135deg,#0c9674,#08785f)}.official-link{display:block;text-align:center;margin-top:13px;color:#1265d7;font-size:13px;font-weight:700;text-decoration:underline}.official-link.green{color:#087f63}
+
+.youtube-immigration{margin-top:18px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 8px 25px #15365d0b;overflow:hidden}.youtube-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid #e9eff6}.youtube-head h2{margin:0;color:var(--navy);font-size:18px}.youtube-head a{color:#1769e8;font-size:12px;font-weight:800;text-decoration:underline;white-space:nowrap}.youtube-frame{position:relative;width:100%;aspect-ratio:16/9;background:#081b32}.youtube-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.youtube-note{padding:8px 14px 11px;color:#6a7e96;font-size:11px;text-align:center}
 .lookup-result{display:none;margin-top:12px;padding:13px;border:1px solid var(--line);border-radius:10px;background:#fff}.lookup-result.show{display:block}.status{font-weight:800;font-size:16px;margin-bottom:5px}.meta{font-size:12px;color:#627792;line-height:1.55}
 .side{display:flex;flex-direction:column;gap:16px}.side-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 25px #15365d0b;overflow:hidden}.side-head{display:flex;justify-content:space-between;align-items:center;padding:18px 19px 13px}.side-head h2{font-size:20px;margin:0;color:var(--navy)}.side-head a{font-size:12px;color:#1265d7;font-weight:800}.news-list{padding:0 19px 10px}.news-item{display:block;text-decoration:none;padding:12px 0;border-top:1px solid #e9eff6}.news-item:first-child{border-top:0}.news-item .label{font-size:11px;color:#6b7e96;margin-bottom:4px}.news-item strong{font-size:13px;line-height:1.35;color:#17365d}.news-item:hover strong{text-decoration:underline}
 .forms{padding:0 14px 14px}.form-row{display:flex;align-items:center;gap:10px;padding:11px 5px;border-top:1px solid #e9eff6}.pdf{color:#ef3340;font-size:22px}.form-info{flex:1}.form-info strong{display:block;font-size:13px;color:#17365d}.form-info span{font-size:11px;color:#687c96}.download{font-size:11px;font-weight:800;color:#1769e8;border:1px solid #b9cce4;border-radius:7px;padding:7px 9px;text-decoration:none}.download:hover{background:#eff6ff}.browse{display:block;padding:8px 5px 0;color:#1265d7;font-size:13px;font-weight:800;text-decoration:underline}
@@ -66,6 +68,23 @@ a{color:inherit}
           <div id="i94Msg" class="lookup-result"></div>
           <a class="official-link green" href="https://i94.cbp.dhs.gov/home" target="_blank" rel="noopener">↗ Open Official CBP I-94 Website</a>
         </div>
+      </div>
+
+      <div class="youtube-immigration">
+        <div class="youtube-head">
+          <h2>▶ U.S. Immigration Videos</h2>
+          <a href="https://www.youtube.com/@uscis" target="_blank" rel="noopener noreferrer">Open YouTube →</a>
+        </div>
+        <div class="youtube-frame">
+          <iframe
+            src="https://www.youtube.com/embed?listType=user_uploads&list=USCIS&autoplay=1&mute=1&loop=1&rel=0&playsinline=1"
+            title="U.S. immigration videos from USCIS"
+            loading="lazy"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="youtube-note">Official USCIS immigration videos • Autoplay is muted by browser policy</div>
       </div>
     </div>
     <aside class="side" id="resources">
