@@ -33,7 +33,7 @@ a{color:inherit}
 
 .ai-section{margin:18px 0 28px;border:1px solid #c7dbf7;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#eef6ff 0%,#fff 55%,#f4f9ff 100%);box-shadow:0 10px 30px #15365d12}.ai-inner{display:grid;grid-template-columns:minmax(300px,.95fr) minmax(0,1.25fr);align-items:stretch;min-height:410px}.ai-visual{display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(180deg,#edf6ff,#fff);overflow:hidden}.ai-visual img{width:100%;height:100%;max-height:430px;object-fit:contain;object-position:center bottom;display:block}.ai-copy{padding:42px 42px 36px;display:flex;flex-direction:column;justify-content:center}.ai-kicker{display:inline-flex;align-self:flex-start;align-items:center;gap:7px;background:#e7efff;color:#1769e8;border-radius:999px;padding:7px 12px;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase}.ai-copy h2{font-size:38px;line-height:1.05;color:var(--navy);margin:16px 0 10px;letter-spacing:-.8px}.ai-copy h2 span{color:#1769e8}.ai-copy>p{font-size:16px;color:#526b8a;line-height:1.55;margin:0 0 20px;max-width:650px}.ai-features{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px;margin:3px 0 22px}.ai-feature{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:#314d70}.ai-feature b{display:block;color:var(--navy);margin-bottom:2px}.ai-icon{font-size:21px;line-height:1}.ai-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.ai-btn{border:0;border-radius:10px;background:linear-gradient(135deg,#1769e8,#0757cf);color:#fff;padding:14px 22px;font-size:15px;font-weight:850;cursor:pointer;box-shadow:0 8px 18px #1769e826}.ai-btn:hover{transform:translateY(-1px)}.ai-human-link{border:0;background:none;color:#1265d7;text-decoration:underline;font-weight:800;font-size:13px;cursor:pointer}.ai-disclaimer{font-size:11px;color:#71839a;margin-top:13px;line-height:1.45;max-width:690px}@media(max-width:900px){.ai-inner{grid-template-columns:1fr}.ai-visual{max-height:330px}.ai-visual img{max-height:330px}.ai-copy{padding:30px 24px}.ai-copy h2{font-size:32px}}@media(max-width:720px){.ai-features{grid-template-columns:1fr}.ai-actions{align-items:stretch;flex-direction:column}.ai-btn,.ai-human-link{width:100%}}
 .ai-modal{display:none;position:fixed;inset:0;background:#071a31b8;place-items:center;padding:20px;z-index:125}.ai-card{width:min(720px,100%);background:#fff;border-radius:18px;box-shadow:0 25px 80px #0005;overflow:hidden}.ai-modal-head{display:flex;justify-content:space-between;align-items:flex-start;padding:22px 24px;border-bottom:1px solid #e6edf6}.ai-modal-head h2{margin:0;color:var(--navy);font-size:23px}.ai-modal-head p{margin:5px 0 0;color:#647b98;font-size:12px}.ai-chat{padding:22px 24px}.ai-welcome{border:1px solid #c8dbf5;background:#f5faff;border-radius:12px;padding:16px;color:#355170;font-size:14px;line-height:1.55}.ai-welcome strong{color:var(--navy)}.ai-question{margin-top:16px;display:flex;gap:10px}.ai-question input{flex:1}.ai-question button{border:0;border-radius:9px;background:#1769e8;color:#fff;font-weight:800;padding:0 18px;cursor:pointer}.ai-coming{margin-top:12px;color:#71839a;font-size:11px}.
-</style>
+.ai-answer{margin-top:16px;border:1px solid #d7e3f2;background:#fff;border-radius:12px;padding:16px;color:#243b53;font-size:14px;line-height:1.65;max-height:360px;overflow:auto}.ai-loading{color:#46617f;font-weight:700}.ai-error{color:#991b1b;font-weight:700}.ai-sources{margin-top:12px;border-top:1px solid #e6edf6;padding-top:12px}.ai-source-title{font-size:12px;font-weight:850;color:#17365d;margin-bottom:7px}.ai-source{display:block;color:#1265d7;text-decoration:underline;font-size:12px;margin:5px 0;overflow-wrap:anywhere}</style>
 </head>
 <body>
 <header class="header">
@@ -183,9 +183,11 @@ a{color:inherit}
   <div class="ai-card">
     <div class="ai-modal-head"><div><h2>🤖 Immigrants Guide AI</h2><p>U.S. immigration information assistant</p></div><button id="aiClose" class="close" type="button">×</button></div>
     <div class="ai-chat">
-      <div class="ai-welcome"><strong>Immigrants Guide AI is ready for the next step.</strong><br>We can connect this chat to a secure AI backend and official USCIS resources so visitors can ask immigration questions here. For now, this interface is a preview and does not send questions to an AI service.</div>
-      <div class="ai-question"><input id="aiQuestionInput" type="text" placeholder="Ask a U.S. immigration question..." disabled><button type="button" disabled>Ask</button></div>
-      <div class="ai-coming">AI responses should be based on current, verified sources and are for general information only—not legal advice.</div>
+      <div class="ai-welcome"><strong>Ask Immigrants Guide AI.</strong><br>Ask a U.S. immigration question and the assistant will check current official government sources before answering. Responses are for general information only—not legal advice.</div>
+      <div class="ai-question"><input id="aiQuestionInput" type="text" maxlength="2000" placeholder="Ask a U.S. immigration question..."><button id="aiAskBtn" type="button">Ask</button></div>
+      <div id="aiAnswer" class="ai-answer" style="display:none"></div>
+      <div id="aiSources" class="ai-sources" style="display:none"></div>
+      <div id="aiComing" class="ai-coming">For current immigration information, the AI checks official government sources such as USCIS, CBP, the Department of State, DOL, EOIR, eCFR and Federal Register.</div>
     </div>
   </div>
 </div>
@@ -227,10 +229,44 @@ function openAsk(){askModal.style.display="grid";askModal.setAttribute("aria-hid
 function closeAsk(){askModal.style.display="none";askModal.setAttribute("aria-hidden","true");askMsg.className="ask-msg";askMsg.textContent="";}
 $("askVijayOpen")?.addEventListener("click",openAsk);$("askVijayClose")?.addEventListener("click",closeAsk);askModal?.addEventListener("click",e=>{if(e.target===askModal)closeAsk();});
 $("askVijayForm")?.addEventListener("submit",async e=>{e.preventDefault();const btn=$("askSubmit");const website=$("askWebsite").value.trim();if(website)return;btn.disabled=true;btn.textContent="Sending...";askMsg.className="ask-msg";askMsg.textContent="";try{if(!db)await init();const payload={name:$("askName").value.trim(),email:$("askEmail").value.trim(),subject:$("askSubject").value.trim(),question:$("askQuestion").value.trim()};if(!payload.name||!payload.email||!payload.subject||!payload.question)throw new Error("Please complete all required fields.");const r=await db.functions.invoke("google-gmail-send",{body:payload});if(r.error){let m=r.error.message||"Unable to send your question.";try{if(r.error.context?.json){const b=await r.error.context.json();m=b?.error||b?.message||m;}}catch(_){}throw new Error(m);}askMsg.className="ask-msg ok";askMsg.textContent="Thank you. Your question has been sent to Immigrants Guide.";$("askVijayForm").reset();}catch(err){askMsg.className="ask-msg err";askMsg.textContent=err?.message||"Unable to send your question. Please try again.";}finally{btn.disabled=false;btn.textContent="📨 Send Question";}});
-const aiModal=$("aiModal");
-function openAi(){if(!aiModal)return;aiModal.style.display="grid";aiModal.setAttribute("aria-hidden","false");}
+const aiModal=$("aiModal"),aiInput=$("aiQuestionInput"),aiAskBtn=$("aiAskBtn"),aiAnswer=$("aiAnswer"),aiSources=$("aiSources");
+function openAi(){if(!aiModal)return;aiModal.style.display="grid";aiModal.setAttribute("aria-hidden","false");setTimeout(()=>aiInput?.focus(),30);}
 function closeAi(){if(!aiModal)return;aiModal.style.display="none";aiModal.setAttribute("aria-hidden","true");}
+function renderAiSources(sources){
+  if(!aiSources)return;
+  const list=Array.isArray(sources)?sources.filter(s=>s&&s.url):[];
+  if(!list.length){aiSources.style.display="none";aiSources.innerHTML="";return;}
+  aiSources.style.display="block";
+  aiSources.innerHTML='<div class="ai-source-title">Official sources</div>'+list.slice(0,8).map(s=>'<a class="ai-source" href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.title||s.url)+'</a>').join("");
+}
+async function askImmigrationAI(){
+  const question=(aiInput?.value||"").trim();
+  if(!question)return;
+  if(question.length>2000){aiAnswer.style.display="block";aiAnswer.innerHTML='<div class="ai-error">Please keep your question under 2,000 characters.</div>';return;}
+  aiAskBtn.disabled=true;aiAskBtn.textContent="Checking...";aiAnswer.style.display="block";aiAnswer.innerHTML='<div class="ai-loading">🔎 Checking current official immigration sources and preparing an answer...</div>';renderAiSources([]);
+  try{
+    if(!db)await init();
+    const r=await db.functions.invoke("immigration-ai",{body:{question}});
+    if(r.error){
+      let m=r.error.message||"Unable to get an AI response.";
+      try{if(r.error.context?.json){const b=await r.error.context.json();m=b?.error||b?.message||m;}}catch(_){}
+      throw new Error(m);
+    }
+    const answer=r.data?.answer;
+    if(!answer)throw new Error("The AI service returned no answer.");
+    aiAnswer.innerHTML=esc(answer).replace(/\n/g,"<br>");
+    renderAiSources(r.data?.sources||[]);
+  }catch(err){
+    aiAnswer.innerHTML='<div class="ai-error">'+esc(err?.message||"Unable to get an AI response. Please try again.")+'</div>';
+    renderAiSources([]);
+  }finally{
+    aiAskBtn.disabled=false;aiAskBtn.textContent="Ask";
+  }
+}
 $("askAiOpen")?.addEventListener("click",openAi);$("aiClose")?.addEventListener("click",closeAi);aiModal?.addEventListener("click",e=>{if(e.target===aiModal)closeAi();});
+aiAskBtn?.addEventListener("click",askImmigrationAI);
+aiInput?.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();askImmigrationAI();}});
+$("askVijayFromAi")?.addEventListener("click",()=>{closeAi();$("ask-vijay")?.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(openAsk,350);});
 $("askVijayFromAi")?.addEventListener("click",()=>{closeAi();$("ask-vijay")?.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(openAsk,350);});
 init();
 })();
