@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Immigrants Guide AI — Answer</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f9ff;color:#172f50;font-family:Inter,Arial,Helvetica,sans-serif}.wrap{width:min(900px,92%);margin:35px auto 60px}.top{background:#fff;border:1px solid #dbe5f1;border-radius:16px;padding:20px 24px;box-shadow:0 8px 25px #15365d0b;display:flex;align-items:center;gap:14px}.robot{width:48px;height:48px;border-radius:12px;background:#e8f2ff;display:grid;place-items:center;font-size:27px}.brand{font-size:20px;font-weight:850;color:#0d2b55}.sub{font-size:12px;color:#647b98;margin-top:4px}.card{margin-top:18px;background:#fff;border:1px solid #dbe5f1;border-radius:16px;padding:28px;box-shadow:0 8px 25px #15365d0b}.question{font-size:13px;color:#647b98;margin-bottom:8px;font-weight:700}.qtext{font-size:17px;color:#0d2b55;font-weight:700;line-height:1.5;margin-bottom:24px}.answer h3{font-size:19px;color:#1769e8;margin:24px 0 9px}.answer p{font-size:15px;line-height:1.7;margin:0 0 12px}.answer ul{margin:8px 0 15px;padding-left:25px}.answer li{font-size:15px;line-height:1.7;margin:6px 0}.loading{padding:25px 0;color:#46617f;font-weight:700}.error{background:#fff1f2;color:#991b1b;border:1px solid #fecdd3;padding:14px;border-radius:10px;font-weight:700}.sources{margin-top:28px;padding-top:18px;border-top:1px solid #e3ebf4}.sources h3{font-size:18px;color:#0d2b55;margin:0 0 10px}.sources a{display:block;color:#1265d7;text-decoration:underline;font-size:14px;margin:7px 0;overflow-wrap:anywhere}.disclaimer{margin-top:24px;padding:14px;background:#f5faff;border:1px solid #cfe0f5;border-radius:10px;color:#60748e;font-size:12px;line-height:1.55}.back{display:inline-block;margin-top:18px;color:#1769e8;font-size:13px;font-weight:800;text-decoration:none}.back:hover{text-decoration:underline}
+</style></head>
+<body><main class="wrap">
+<div class="top"><div class="robot">🤖</div><div><div class="brand">Immigrants Guide AI</div><div class="sub">Clear U.S. immigration information · General information, not legal advice</div></div></div>
+<div class="card"><div class="question">YOUR QUESTION</div><div id="question" class="qtext"></div><div id="result" class="answer"><div class="loading">🔎 Preparing your answer...</div></div><div class="disclaimer">This information is for general educational purposes only and is not legal advice. Immigration rules can change. For advice about your specific situation, consult a qualified U.S. immigration attorney.</div><a class="back" href="javascript:window.close()">Close this tab</a></div>
+</main>
+<script>
+const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
+const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+function cleanAiText(text){return String(text||"").replace(/\r/g,"").replace(/\*\*(.*?)\*\*/g,"$1").replace(/\*([^*\n]+)\*/g,"$1").replace(/^#{1,6}\s*/gm,"").replace(/^\s*[-*]\s+/gm,"• ").replace(/^\s*\d+\.\s+/gm,m=>m.trim()+" ").replace(/`([^`]+)`/g,"$1").trim();}
+function answerHtml(text){let html="",list=false;for(const raw of cleanAiText(text).split("\n")){const line=raw.trim();if(!line){if(list){html+="</ul>";list=false}continue}if(line.startsWith("• ")){if(!list){html+="<ul>";list=true}html+="<li>"+esc(line.slice(2))+"</li>";continue}if(list){html+="</ul>";list=false}const title=/^(Key Details|Important Considerations|Important|Official Sources|What you can do|Next steps|Summary|Eligibility|Duration|Work authorization|Options|Disclaimer)$/i.test(line.replace(/:$/,""));if(title)html+="<h3>"+esc(line.replace(/:$/,""))+'</h3>';else html+="<p>"+esc(line)+"</p>"}if(list)html+="</ul>";return html}
+function sourcesHtml(sources){const a=Array.isArray(sources)?sources.filter(s=>s&&s.url):[];return a.length?' <section class="sources"><h3>Official Sources</h3>'+a.slice(0,8).map(s=>'<a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.title||s.url)+'</a>').join("")+"</section>":""}
+(async()=>{
+ const q=new URLSearchParams(location.search).get("question")||"";
+ document.getElementById("question").textContent=q;
+ const result=document.getElementById("result");
+ if(!q){result.innerHTML='<div class="error">No question was provided.</div>';return}
+ try{
+   const r=await db.functions.invoke("immigration-ai",{body:{question:q}});
+   if(r.error){let m=r.error.message||"Unable to get an AI response.";try{if(r.error.context?.json){const b=await r.error.context.json();m=b?.error||b?.message||m}}catch(_){}throw new Error(m)}
+   const answer=r.data?.answer;if(!answer)throw new Error("The AI service returned no answer.");
+   result.innerHTML=answerHtml(answer)+sourcesHtml(r.data?.sources||[]);
+ }catch(e){result.innerHTML='<div class="error">'+esc(e?.message||"Unable to get an AI response. Please try again.")+'</div>'}
+})();
+</script></body></html>
