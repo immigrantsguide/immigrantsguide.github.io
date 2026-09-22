@@ -350,12 +350,18 @@ async function loadOrganizationContext(){
   const r=await db.from("organization_members")
     .select("organization_id,role")
     .eq("user_id",user.id)
-    .order("organization_id",{ascending:true})
-    .limit(1);
+    .order("organization_id",{ascending:true});
   if(r.error)throw r.error;
   if(!r.data?.length)throw new Error("Your account is not assigned to an Immigrants Guide organization yet.");
-  currentOrgId=r.data[0].organization_id;
-  currentOrgRole=r.data[0].role||"viewer";
+  // Use the first accessible organization for this dashboard. If a user is
+  // a member of multiple organizations, the first one remains the default.
+  const membership=r.data[0];
+  currentOrgId=membership.organization_id;
+  currentOrgRole=membership.role||"viewer";
+  try{
+    const org=await db.from("organizations").select("id,name").eq("id",currentOrgId).maybeSingle();
+    if(!org.error) currentOrgName=org.data?.name||null;
+  }catch(_){}
 }
 function canManageCases(){return ["owner","admin","manager"].includes(String(currentOrgRole||"").toLowerCase());}
 function canModifyCases(){return canManageCases();}
@@ -698,7 +704,7 @@ async function removeTeamMember(userId,email){
   }catch(e){alert("Remove failed: "+(e.message||e));}
 }
 function renderSecurity(){
-  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"");
+  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"")+(currentOrgName?'<br>Organization: '+esc(currentOrgName):'');
   if($("securityDb"))$("securityDb").innerHTML='<span class="security-ok">Supabase connection active</span>';
   if($("rolePill"))$("rolePill").textContent=(currentOrgRole||"viewer").toUpperCase();
   applyRolePermissions();
@@ -756,9 +762,24 @@ async function load(){
   setNotice("Loading cases from Supabase...");
   try{
     if(!currentOrgId)await loadOrganizationContext();
-    const r=await db.from("cases").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false});
+    // Load only cases the signed-in user is allowed to see.
+    // The cases RLS policy already enforces organization membership, so this
+    // avoids showing 0 cases when the local organization context is stale.
+    let r=await db.from("cases").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false});
     if(r.error)throw r.error;
     rows=r.data||[];
+
+    // Safety fallback: if the org membership context resolves but returns no
+    // rows, let Supabase RLS return the rows this user can actually access.
+    // We still keep currentOrgId for all write operations and never bypass RLS.
+    if(!rows.length){
+      const fallback=await db.from("cases").select("*").order("created_at",{ascending:false});
+      if(!fallback.error && Array.isArray(fallback.data) && fallback.data.length){
+        rows=fallback.data;
+        const orgIds=[...new Set(rows.map(x=>x.organization_id).filter(Boolean))];
+        if(orgIds.length===1) currentOrgId=orgIds[0];
+      }
+    }
     try{recentMonitorResult=JSON.parse(localStorage.getItem("ig_last_monitor_result")||"null");}catch(_){recentMonitorResult=null;}
     populateFilterOptions();
     try{
@@ -766,7 +787,15 @@ async function load(){
       recentUscisHistory=uh.error?[]:(uh.data||[]);
     }catch(_){recentUscisHistory=[];}
     draw();
-    if($("notice"))$("notice").style.display="none";
+    if($("notice")){
+      if(rows.length){
+        $("notice").style.display="none";
+      }else{
+        $("notice").className="notice";
+        $("notice").textContent="No cases are currently visible for this organization. If you expect cases here, click Refresh once.";
+        $("notice").style.display="block";
+      }
+    }
   }catch(e){
     setNotice("Database error: "+(e.message||e),true);
     draw();
@@ -1271,7 +1300,7 @@ async function init(){
 
     initialized=true;
     $("who").textContent=session.user?.email||"";
-        renderSecurity();
+    renderSecurity();
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
     await loadOrganizationContext();
     await load();
