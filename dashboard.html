@@ -100,10 +100,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
 <div class="actions">
 <span id="who" class="muted"></span>
-<button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button>
-<button id="monitorNowBtn" class="secondary" type="button">⚙ Monitor Now</button>
-<span id="monitorStatus" class="muted">Auto-monitoring: scheduled</span>
-<button id="refresh" class="secondary" type="button">↻ Refresh</button>
 <button id="logout" class="secondary" type="button" onclick="window.__igEmergencyLogout&&window.__igEmergencyLogout()">Log out</button>
 </div>
 </div>
@@ -180,7 +176,7 @@ NOID / Extensions
 <div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
-<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search receipt, beneficiary, employer..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
+<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search receipt, beneficiary, employer..."><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
 <div class="filter-bar">
   <select id="filterStatus"><option value="">All Statuses</option><option value="pending">Pending</option><option value="rfe">RFE / NOID</option><option value="approved">Approved</option><option value="denied">Denied</option></select>
   <select id="filterForm"><option value="">All Forms</option></select>
@@ -266,7 +262,7 @@ NOID / Extensions
 
 <section id="alerts" style="display:none">
 <div class="panel">
-<div class="panel-head"><h2>Alerts & Monitoring Health</h2><button id="runMonitorFromAlerts" class="secondary" type="button">⚙ Run Monitor</button></div>
+<div class="panel-head"><h2>Alerts & Monitoring Health</h2></div>
 <div class="alert-summary">
 <div class="alert-stat">RFE / NOID Cases<b id="alertRfeCount">0</b></div>
 <div class="alert-stat">Deadlines ≤ 30 Days<b id="alertDeadlineCount">0</b></div>
@@ -435,7 +431,6 @@ function applyRolePermissions(){
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
   if($("teamNav"))$("teamNav").style.display=teamCan?"":"none";
   ["downloadTemplateBtn","importExcelBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
-  ["checkAllBtn","checkAllDashBtn","monitorNowBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
 }
 
 function setNotice(text,error=false){
@@ -528,7 +523,6 @@ function monitoringLabel(x){
 }
 
 async function monitorNow(){
-  const btn=$("monitorNowBtn");
   if(btn){btn.disabled=true;btn.textContent="Monitoring...";}
   if($("monitorStatus"))$("monitorStatus").textContent="Checking eligible cases...";
   try{
@@ -944,7 +938,6 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
 }
 
 async function checkAllUSCIS(){
-  const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
   if(!rows.length){alert("There are no cases to check.");return;}
   if(!confirm("Check USCIS for all "+rows.length+" case(s)?"))return;
   buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
@@ -1127,7 +1120,6 @@ $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
 $("profileClose").addEventListener("click",closeProfile);
 $("profileModal").addEventListener("click",e=>{if(e.target===$("profileModal"))closeProfile();});
-$("refresh").addEventListener("click",load);
 $("debugRetry").addEventListener("click",async()=>{
   try{
     $("debugCases").textContent="Retrying...";
@@ -1142,9 +1134,6 @@ $("debugRetry").addEventListener("click",async()=>{
     setNotice("Retry failed: "+(e.message||e),true);
   }
 });
-$("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
-$("monitorNowBtn").addEventListener("click",monitorNow);
-$("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
 $("historySearch").addEventListener("input",()=>loadHistory());
@@ -1159,7 +1148,6 @@ $("exportEmployer").addEventListener("click",exportEmployerCSV);
 $("exportManager").addEventListener("click",exportManagerCSV);
 $("saveEmailPrefs").addEventListener("click",saveEmailPrefs);
 $("addTeamMember").addEventListener("click",addTeamMember);
-$("runMonitorFromAlerts").addEventListener("click",monitorNow);
 $("employerSearch").addEventListener("input",draw);
 ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
 $("clearFilters").addEventListener("click",()=>{
