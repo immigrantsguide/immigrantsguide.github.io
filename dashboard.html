@@ -103,7 +103,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <button id="monitorNowBtn" class="secondary" type="button">⚙ Monitor Now</button>
 <span id="monitorStatus" class="muted">Auto-monitoring: scheduled</span>
 <button id="refresh" class="secondary" type="button">↻ Refresh</button>
-<button id="logout" class="secondary" type="button">Log out</button>
+<button id="logout" class="secondary" type="button" onclick="window.__igEmergencyLogout&&window.__igEmergencyLogout()">Log out</button>
 </div>
 </div>
 
@@ -334,6 +334,23 @@ NOID / Extensions
 <script>
 (function(){
 "use strict";
+
+// Emergency logout is intentionally independent of Supabase initialization.
+// This guarantees the button works even if another startup step fails.
+window.__igEmergencyLogout=function(){
+  try{
+    if(window.supabase && db){
+      db.auth.signOut({scope:"local"}).catch(function(){});
+    }
+  }catch(_){}
+  try{
+    Object.keys(localStorage).forEach(function(k){
+      if(k.indexOf("sb-euzifpjzeuqdznkelxdq")===0 || k.indexOf("supabase.auth.token")>=0) localStorage.removeItem(k);
+    });
+  }catch(_){}
+  try{sessionStorage.clear();}catch(_){}
+  window.location.replace("index.html?logout=1&v="+Date.now());
+};
 
 const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
@@ -1261,20 +1278,75 @@ document.addEventListener("click",e=>{
   if(remove)removeTeamMember(remove.dataset.userId,remove.dataset.email);
 });
 
-$("logout").addEventListener("click",async()=>{
-  if(signingOut)return;
-  signingOut=true;
-  const btn=$("logout");
-  btn.disabled=true;
-  btn.textContent="Logging out...";
+async function init(){
+  const showStartup=function(message){
+    console.error("Dashboard startup:",message);
+    try{
+      if($("debugDbError")){
+        $("debugDbError").textContent=message;
+        $("debugDbError").className="debug-value bad";
+      }
+      if($("notice")){
+        $("notice").textContent="Dashboard startup error: "+message;
+        $("notice").className="notice error";
+        $("notice").style.display="block";
+      }
+    }catch(_){}
+  };
+
   try{
-    if(db)await db.auth.signOut({scope:"local"});
+    if(!window.supabase){
+      showStartup("Supabase library did not load. Please hard refresh the page.");
+      return;
+    }
+
+    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true,
+        storageKey:"sb-euzifpjzeuqdznkelxdq-auth-token"
+      }
+    });
+
+    const result=await db.auth.getSession();
+    if(result?.error)throw result.error;
+    const session=result?.data?.session;
+
+    if(!session){
+      showStartup("No active Supabase session was found. Please sign in again from the homepage.");
+      return;
+    }
+
+    initialized=true;
+    const email=session.user?.email||"";
+    if($("who"))$("who").textContent=email||"Authenticated user";
+    if($("debugUser"))$("debugUser").textContent=email||session.user?.id||"Authenticated";
+    if($("debugBuild"))$("debugBuild").textContent="2026-09-22-role-fix-03";
+
+    // Organization and role MUST be resolved before rendering any role-based UI.
+    await loadOrganizationContext();
+    if($("debugOrg"))$("debugOrg").textContent=currentOrgName||"Immigrants Guide";
+    if($("debugRole"))$("debugRole").textContent=String(currentOrgRole||"viewer").toUpperCase();
+    if($("debugOrgId"))$("debugOrgId").textContent=currentOrgId||"—";
+
+    applyRolePermissions();
+    renderSecurity();
+    loadEmailPrefs();
+    if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
+    await load();
+
+    db.auth.onAuthStateChange(function(event){
+      if(event==="SIGNED_OUT"&&!signingOut){
+        window.location.replace("index.html?logout=1");
+      }
+    });
   }catch(e){
-    console.error("Logout error:",e);
-  }finally{
-    window.location.replace("index.html?logout=1");
+    showStartup(e?.message||String(e));
   }
-});
+}
+
+init();
 
 $("caseForm").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -1328,52 +1400,91 @@ window.addEventListener("unhandledrejection",e=>{
    We deliberately do not redirect on generic auth events,
    which prevents the login/dashboard redirect loop. */
 async function init(){
+  const showStartup=function(message){
+    console.error("Dashboard startup:",message);
+    try{
+      if($("debugDbError")){
+        $("debugDbError").textContent=message;
+        $("debugDbError").className="debug-value bad";
+      }
+      if($("notice")){
+        $("notice").textContent="Dashboard startup error: "+message;
+        $("notice").className="notice error";
+        $("notice").style.display="block";
+      }
+    }catch(_){}
+  };
+
   try{
-    if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
+    if(!window.supabase){
+      showStartup("Supabase library did not load. Please hard refresh the page.");
+      return;
+    }
 
     db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
       auth:{
         persistSession:true,
         autoRefreshToken:true,
-        detectSessionInUrl:true
+        detectSessionInUrl:true,
+        storageKey:"sb-euzifpjzeuqdznkelxdq-auth-token"
       }
     });
 
     const result=await db.auth.getSession();
+    if(result?.error)throw result.error;
     const session=result?.data?.session;
 
     if(!session){
-      window.location.replace("index.html");
+      showStartup("No active Supabase session was found. Please sign in again from the homepage.");
       return;
     }
 
     initialized=true;
-    $("who").textContent=session.user?.email||"";
-    if($("debugUser"))$("debugUser").textContent=session.user?.email||session.user?.id||"Authenticated";
-    if($("debugBuild"))$("debugBuild").textContent="2026-09-22-role-fix-02";
+    const email=session.user?.email||"";
+    if($("who"))$("who").textContent=email||"Authenticated user";
+    if($("debugUser"))$("debugUser").textContent=email||session.user?.id||"Authenticated";
+    if($("debugBuild"))$("debugBuild").textContent="2026-09-22-role-fix-03";
 
-    // IMPORTANT: resolve organization + role BEFORE any role-based rendering.
-    // This fixes the previous startup race where the owner was temporarily treated as viewer.
+    // Organization and role MUST be resolved before rendering any role-based UI.
     await loadOrganizationContext();
+    if($("debugOrg"))$("debugOrg").textContent=currentOrgName||"Immigrants Guide";
+    if($("debugRole"))$("debugRole").textContent=String(currentOrgRole||"viewer").toUpperCase();
+    if($("debugOrgId"))$("debugOrgId").textContent=currentOrgId||"—";
+
     applyRolePermissions();
     renderSecurity();
     loadEmailPrefs();
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
     await load();
 
-    db.auth.onAuthStateChange((event)=>{
+    db.auth.onAuthStateChange(function(event){
       if(event==="SIGNED_OUT"&&!signingOut){
         window.location.replace("index.html?logout=1");
       }
     });
-
   }catch(e){
-    console.error("Dashboard startup error:",e);
-    if($("debugDbError")){$("debugDbError").textContent=e?.message||String(e);$("debugDbError").className="debug-value bad";}
-    setNotice("Startup error: "+(e.message||e),true);
+    showStartup(e?.message||String(e));
   }
 }
 
+window.addEventListener("error",function(e){
+  try{
+    const msg=e?.error?.message||e?.message||"Unknown JavaScript error";
+    if($("debugDbError")){
+      $("debugDbError").textContent="JavaScript error: "+msg;
+      $("debugDbError").className="debug-value bad";
+    }
+  }catch(_){}
+});
+window.addEventListener("unhandledrejection",function(e){
+  try{
+    const msg=e?.reason?.message||String(e?.reason||"Unhandled promise rejection");
+    if($("debugDbError")){
+      $("debugDbError").textContent="Promise error: "+msg;
+      $("debugDbError").className="debug-value bad";
+    }
+  }catch(_){}
+});
 
 init();
 
