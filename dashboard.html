@@ -1300,9 +1300,13 @@ async function init(){
 
     initialized=true;
     $("who").textContent=session.user?.email||"";
+
+    // Resolve the user's organization/role BEFORE applying role-based UI.
+    // Previously renderSecurity() ran while currentOrgRole was still null,
+    // which made every user look like a viewer and hid Add Case/Edit controls.
+    await loadOrganizationContext();
     renderSecurity();
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
-    await loadOrganizationContext();
     await load();
 
     db.auth.onAuthStateChange((event)=>{
