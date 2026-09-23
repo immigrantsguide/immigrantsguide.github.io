@@ -471,6 +471,7 @@ function durationDays(c){
   return Number.isFinite(d)&&d>=0?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
+function nextDay(value){if(!value)return null;const d=new Date(String(value).slice(0,10)+"T00:00:00");if(Number.isNaN(d.getTime()))return null;d.setDate(d.getDate()+1);return d.toISOString().slice(0,10);}
 function validityText(value){return value?date(value):"—";}
 function displayDuration(c){return isApproved(c)?"N/A":durationText(c);}
 function caseGroup(c){if(isApproved(c))return "Approved";if(isRfe(c))return "RFE / NOID";if(isDenied(c))return "Denied";return "In Process";}
@@ -800,11 +801,13 @@ function draw(){
   renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="13" class="empty">No cases found.</td></tr>';
+  const dashRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
+  $("dashBody").innerHTML=a.length?groupedRowsHTML(a,dashRow,14):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
 
   const b=filteredCases();
   updateFilterSummary(b.length);
-  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="15" class="empty">No cases found.</td></tr>';
+  const caseRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
+  $("caseBody").innerHTML=b.length?groupedRowsHTML(b,caseRow,17):'<tr><td colspan="17" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
   $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -1046,7 +1049,10 @@ async function openProfile(c){
       '<div class="profile-item"><div class="profile-label">Case Manager</div><div class="profile-value">'+profileValue(c.case_manager)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Amount</div><div class="profile-value">'+money(c.amount)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Premium Processing</div><div class="profile-value">'+(isPremium(c)?"Yes":"No")+'</div></div>'+
-      '<div class="profile-item"><div class="profile-label">Duration</div><div class="profile-value">'+durationText(c)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Duration</div><div class="profile-value">'+displayDuration(c)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Validity Start</div><div class="profile-value">'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Validity End</div><div class="profile-value">'+validityText(c.validity_end_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">Previous Validity End</div><div class="profile-value">'+validityText(c.previous_validity_end_date)+'</div></div>'+ 
       '<div class="profile-item"><div class="profile-label">Monitoring</div><div class="profile-value">'+(isMonitoring(c)?"Enabled":"Off")+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">RFE / NOID Deadline</div><div class="profile-value">'+date(c.rfe_deadline_date)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Extension Target</div><div class="profile-value">'+date(c.extension_target_date)+'</div></div>'+
