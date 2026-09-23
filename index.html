@@ -397,71 +397,69 @@ body{overflow-x:hidden}
 
 
 
-<style id="ig-clean-reference-hero">
-/* ===== ONE-LAYER REFERENCE HERO ===== */
+
+<style id="ig-final-hero-composition">
+/* ===== FINAL: single hero artwork, no overlapping reference page ===== */
+.header{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
 .ref-hero{
   position:relative!important;
-  min-height:525px!important;
+  height:535px!important;
+  min-height:535px!important;
   padding:0!important;
+  margin:0!important;
   overflow:hidden!important;
   isolation:isolate!important;
-  background:#061735 url("assets/reference-homepage.png") center -70px / 100% auto no-repeat!important;
+  background:#061735 url("assets/hero-bg.png") center top / 100% 535px no-repeat!important;
 }
-
-/* The reference image already contains the eagle, Statue of Liberty,
-   White House, flag, hero typography and feature row. Hide the old
-   duplicated HTML artwork/text so nothing overlaps. */
-.ref-hero-inner{
-  visibility:hidden!important;
-  opacity:0!important;
-  pointer-events:none!important;
-  position:absolute!important;
-  inset:0!important;
-  z-index:1!important;
-}
+.ref-hero-inner{display:none!important}
 .ig-patriotic-scene{display:none!important}
+.ref-hotspots{display:none!important}
 
-/* Keep the real navigation/header on top. */
-.header{z-index:1000!important}
+/* Functional invisible navigation over the artwork */
+.ig-image-nav{
+  position:absolute;z-index:50;top:17px;left:29.2%;width:50.2%;height:54px;
+  display:grid;grid-template-columns:repeat(5,1fr);pointer-events:none;
+}
+.ig-image-nav a{pointer-events:auto;display:block;border-radius:28px;background:transparent}
+.ig-image-dashboard{
+  position:absolute;z-index:50;right:2.7%;top:18px;width:185px;height:54px;
+  border-radius:30px;pointer-events:auto;
+}
+.ig-image-quicklinks{
+  position:absolute;z-index:50;left:3.8%;right:4%;bottom:35px;height:115px;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:15px;pointer-events:none;
+}
+.ig-image-quicklinks a{pointer-events:auto;display:block;border-radius:55px;background:transparent}
 
-/* Transparent functional hotspots over the five reference shortcuts. */
-.ref-hotspots{
-  position:absolute;left:3.5%;right:3.5%;top:350px;height:145px;
-  z-index:20;display:grid;grid-template-columns:repeat(5,1fr);
-  gap:18px;pointer-events:none;
+/* Tool cards start exactly after the artwork */
+.ref-tools{
+  position:relative!important;
+  z-index:100!important;
+  margin:0!important;
+  clear:both!important;
 }
-.ref-hotspots a{
-  display:block;border-radius:60px;pointer-events:auto;
-  background:transparent;outline:none;
-}
-.ref-hotspots a:focus{outline:2px solid rgba(38,205,255,.9);outline-offset:3px}
-
-@media(max-width:1200px){
-  .ref-hero{min-height:500px!important;background-position:center -60px!important}
-  .ref-hotspots{top:335px}
-}
-@media(max-width:720px){
+@media(max-width:900px){
   .ref-hero{
-    min-height:545px!important;
-    background-size:auto 545px!important;
-    background-position:center top!important;
+    height:500px!important;min-height:500px!important;
+    background-size:auto 500px!important;
   }
-  .ref-hotspots{
-    top:350px;left:4%;right:4%;height:155px;
-    grid-template-columns:repeat(2,1fr);gap:10px;
+  .ig-image-nav{left:30%;width:48%;top:12px}
+  .ig-image-dashboard{right:2%;top:12px;width:150px}
+  .ig-image-quicklinks{bottom:24px;height:105px}
+}
+@media(max-width:600px){
+  .ref-hero{
+    height:545px!important;min-height:545px!important;
+    background-size:auto 545px!important;background-position:center top!important;
   }
-  .ref-hotspots a:last-child{grid-column:1/-1}
+  .ig-image-nav{left:18%;width:61%;top:10px;height:48px}
+  .ig-image-dashboard{right:2%;top:10px;width:105px;height:46px}
+  .ig-image-quicklinks{left:4%;right:4%;bottom:25px;height:130px;grid-template-columns:repeat(2,1fr)}
+  .ig-image-quicklinks a:last-child{grid-column:1/-1}
 }
-</style>
-
-<style id="ig-reference-header-final">
-.header{
-  position:absolute!important;top:0!important;left:0!important;right:0!important;
-  height:70px!important;padding:7px 3.6%!important;
-  background:linear-gradient(180deg,rgba(3,18,48,.92),rgba(3,18,48,.12))!important;
-  border:0!important;box-shadow:none!important;z-index:1000!important;
-}
-.nav{background:rgba(5,24,59,.78)!important;border:1px solid rgba(120,190,255,.10)!important}
 </style>
 </head>
 <body>
@@ -484,6 +482,22 @@ body{overflow-x:hidden}
 
 <main id="home" class="ref-home">
   <section class="ref-hero">
+<div class="ig-image-nav" aria-label="Homepage navigation">
+  <a href="#home" aria-label="Home"></a>
+  <a href="#about" aria-label="About"></a>
+  <a href="#resources" aria-label="Services"></a>
+  <a href="#resources" aria-label="Resources"></a>
+  <a href="#resources" aria-label="Contact"></a>
+</div>
+<a class="ig-image-dashboard" id="igImageDashboard" href="#" aria-label="Go to Dashboard"></a>
+<div class="ig-image-quicklinks" aria-label="Quick tools">
+  <a href="#uscis-tools" aria-label="USCIS Case Status"></a>
+  <a href="#uscis-tools" aria-label="I-94 Lookup"></a>
+  <a href="#dol-tools" aria-label="DOL Wage Lookup"></a>
+  <a href="#dol-tools" aria-label="LCA Case Search"></a>
+  <a href="#resources" aria-label="Latest Updates and Resources"></a>
+</div>
+
 <div class="ref-hotspots" aria-label="Homepage quick links">
   <a href="#uscis-tools" aria-label="USCIS Case Status"></a>
   <a href="#uscis-tools" aria-label="I-94 Lookup"></a>
@@ -755,5 +769,18 @@ init();
 })();
 </script>
 
+
+<script>
+(function(){
+  const a=document.getElementById('igImageDashboard');
+  const original=document.getElementById('dashboardBtn');
+  if(a && original){
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      original.click();
+    });
+  }
+})();
+</script>
 </body>
 </html>
