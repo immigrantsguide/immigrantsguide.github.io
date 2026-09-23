@@ -347,7 +347,7 @@ body{overflow-x:hidden}
 .ref-capitol{position:absolute;right:1%;bottom:-25px;width:340px;height:300px;opacity:.28}
 .ref-capitol:before{content:"";position:absolute;left:35px;bottom:0;width:270px;height:170px;background:linear-gradient(#b9d0ea,#6787aa);clip-path:polygon(0 100%,6% 48%,20% 48%,20% 40%,27% 40%,27% 34%,34% 34%,34% 28%,41% 28%,41% 22%,50% 0,59% 22%,66% 28%,66% 34%,73% 34%,73% 40%,80% 40%,80% 48%,94% 48%,100% 100%)}
 .ref-capitol:after{content:"";position:absolute;left:145px;bottom:150px;width:50px;height:70px;border-radius:50% 50% 0 0;background:#b9d0ea}
-.ref-hero-inner{position:relative;z-index:3;max-width:1440px;margin:auto}
+.ref-hero-inner{position:relative;z-index:5;max-width:1440px;margin:auto}
 .ref-kicker{font-size:16px;letter-spacing:.48em;font-weight:800;margin-bottom:8px}
 .ref-hero h1{font-family:"Outfit",sans-serif;font-size:72px;line-height:.98;letter-spacing:-2.5px;margin:0;font-weight:800;text-shadow:0 8px 35px rgba(0,0,0,.25)}
 .ref-hero h1 strong{color:#18d8f6}.ref-hero h2{font-family:"Outfit",sans-serif;font-size:31px;margin:10px 0 12px}.ref-hero h2 em{font-style:normal;color:#ffd22b}.ref-hero p{font-size:18px;line-height:1.55;margin:0 0 30px;color:#eef7ff}
@@ -509,6 +509,68 @@ body{font-family:"DM Sans",Arial,sans-serif!important}
 }
 </style>
 
+
+<style id="ig-captain-css">
+.ig-resource-grid article:has(#askAiOpen){position:relative;overflow:hidden;z-index:3}
+.ig-cap-figure{position:absolute;right:12px;top:8px;width:70px;height:95px;pointer-events:none;filter:drop-shadow(0 5px 7px rgba(10,30,70,.18));transform:scale(.9)}
+.cap-head{position:absolute;left:24px;top:0;width:31px;height:31px;border-radius:50%;background:linear-gradient(145deg,#f2c39b,#c77c58)}
+.cap-head:before{content:"";position:absolute;inset:-2px 1px 10px;background:linear-gradient(#2463bd,#153b86);border-radius:55% 55% 35% 35%}
+.cap-head:after{content:"★";position:absolute;left:10px;top:3px;color:#fff;font-size:10px}
+.cap-body{position:absolute;left:18px;top:29px;width:45px;height:62px;border-radius:13px 13px 8px 8px;background:linear-gradient(90deg,#c91e35 0 18%,#f5f5f5 19% 29%,#2459aa 30% 70%,#f5f5f5 71% 81%,#c91e35 82%);box-shadow:inset 0 -10px rgba(10,35,90,.18)}
+.cap-shield{position:absolute;z-index:3;right:-1px;top:41px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;background:radial-gradient(circle,#fff 0 19%,#d21f35 20% 34%,#fff 35% 49%,#d21f35 50% 100%);border:2px solid #173f83}
+</style>
+
+
+<style id="ig-patriotic-assets-css">
+/* Uploaded patriotic artwork from /assets */
+.ig-patriotic-scene{
+  position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;
+}
+.ig-patriotic-scene .ig-asset-eagle{
+  position:absolute;right:9%;top:48px;width:min(43vw,655px);height:auto;
+  object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.35));
+  animation:igAssetEagleFloat 5s ease-in-out infinite;
+}
+.ig-patriotic-scene .ig-asset-whitehouse{
+  position:absolute;right:-12px;bottom:5px;width:min(25vw,286px);height:auto;
+  opacity:.86;filter:drop-shadow(0 8px 14px rgba(0,0,0,.32));
+}
+.ig-patriotic-scene .ig-asset-statue{
+  position:absolute;left:-2px;bottom:2px;width:min(25vw,286px);height:auto;
+  opacity:.9;filter:drop-shadow(0 8px 14px rgba(0,0,0,.34));
+}
+.ig-patriotic-scene .ig-asset-flag{
+  position:absolute;left:0;right:0;bottom:-4px;width:100%;height:auto;
+  min-height:125px;object-fit:cover;object-position:center bottom;
+  opacity:.98;filter:drop-shadow(0 -8px 20px rgba(239,51,64,.18));
+  z-index:1;
+}
+.ig-patriotic-scene:after{
+  content:"";position:absolute;inset:auto 0 0 0;height:145px;
+  background:linear-gradient(180deg,transparent,rgba(2,16,40,.16));
+  z-index:2;pointer-events:none;
+}
+.ref-hero-inner{z-index:6!important}
+@keyframes igAssetEagleFloat{
+  0%,100%{transform:translate3d(0,0,0) rotate(-2deg)}
+  50%{transform:translate3d(-10px,-13px,0) rotate(1deg)}
+}
+@media(max-width:900px){
+  .ig-patriotic-scene .ig-asset-eagle{right:-4%;top:92px;width:55vw}
+  .ig-patriotic-scene .ig-asset-whitehouse{right:-45px;width:30vw}
+  .ig-patriotic-scene .ig-asset-statue{left:-38px;width:30vw}
+}
+@media(max-width:600px){
+  .ig-patriotic-scene .ig-asset-eagle{right:-20%;top:88px;width:72vw}
+  .ig-patriotic-scene .ig-asset-whitehouse{right:-90px;bottom:15px;width:48vw}
+  .ig-patriotic-scene .ig-asset-statue{left:-70px;bottom:12px;width:48vw}
+  .ig-patriotic-scene .ig-asset-flag{min-height:78px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ig-patriotic-scene .ig-asset-eagle{animation:none}
+}
+</style>
+
 </head>
 <body>
 
@@ -530,6 +592,37 @@ body{font-family:"DM Sans",Arial,sans-serif!important}
 
 <main id="home" class="ref-home">
   <section class="ref-hero">
+
+<div class="ig-patriotic-scene" aria-hidden="true">
+  <img class="ig-asset-eagle" src="assets/eagle.png" alt="">
+  <img class="ig-asset-statue" src="assets/statue-of-liberty.png" alt="">
+  <img class="ig-asset-whitehouse" src="assets/white-house.png" alt="">
+  <img class="ig-asset-flag" src="assets/bottom-us-flag.png" alt="">
+</div>
+<div class="eagle-body"></div>
+    <div class="eagle-head"><i></i></div><div class="eagle-wing right"></div>
+    <div class="eagle-tail"></div>
+  </div>
+
+  <div class="ig-statue">
+    <div class="statue-torch"></div>
+    <div class="statue-head"></div>
+    <div class="statue-body"></div>
+    <div class="statue-base"></div>
+  </div>
+
+  <div class="ig-whitehouse">
+    <div class="wh-dome"></div>
+    <div class="wh-roof"></div>
+    <div class="wh-main"></div>
+    <div class="wh-columns"></div>
+  </div>
+
+  <div class="ig-bottom-flag">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
     <div class="ref-sky-glow"></div>
     <div class="ref-stars"></div>
     <div class="ref-flag-wave wave-a"></div>
@@ -603,7 +696,13 @@ body{font-family:"DM Sans",Arial,sans-serif!important}
     <div class="ref-section-title"><span>✦</span><div><h2>Immigration Resources &amp; Assistance</h2><p>Helpful tools and resources for your U.S. immigration journey.</p></div></div>
     <div class="ref-resource-grid">
       <article><span class="r-icon blue-bg">📄</span><h3>USCIS Forms &amp; Instructions</h3><p>Access official USCIS forms, filing instructions and government resources.</p><a href="https://www.uscis.gov/forms" target="_blank" rel="noopener">Browse USCIS Forms →</a></article>
-      <article><span class="r-icon green-bg">🤖</span><h3>Immigrants Guide AI</h3><p>Ask immigration questions and find relevant official government resources.</p><button id="askAiOpen">Ask Immigration AI →</button></article>
+      <article><span class="r-icon green-bg">🤖</span><h3>Immigrants Guide AI</h3>
+<div class="ig-cap-figure" aria-hidden="true">
+  <div class="cap-shield">★</div>
+  <div class="cap-head"></div>
+  <div class="cap-body"></div>
+</div>
+<p>Ask immigration questions and find relevant official government resources.</p><button id="askAiOpen">Ask Immigration AI →</button></article>
       <article><span class="r-icon purple-bg">💬</span><h3>Ask Vijay Krishna</h3><p>Send your immigration question to the Immigrants Guide team.</p><button id="askVijayOpen">Ask Vijay Krishna →</button></article>
     </div>
     <div class="ref-services">
