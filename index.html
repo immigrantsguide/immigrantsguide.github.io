@@ -344,9 +344,6 @@ body{overflow-x:hidden}
 .ref-flag-wave{position:absolute;height:80px;width:110%;left:-5%;border-radius:50%;filter:blur(1px);opacity:.62;transform:rotate(-4deg)}
 .wave-a{top:125px;background:linear-gradient(180deg,transparent 0 16%,#ef3340 17% 32%,#fff 33% 49%,#2356b6 50% 70%,transparent 71%)}
 .wave-b{bottom:45px;background:linear-gradient(180deg,transparent 0 18%,#ef3340 19% 35%,#fff 36% 51%,#1d4ed8 52% 72%,transparent 73%);opacity:.35;transform:rotate(3deg)}
-.ref-capitol{position:absolute;right:1%;bottom:-25px;width:340px;height:300px;opacity:.28}
-.ref-capitol:before{content:"";position:absolute;left:35px;bottom:0;width:270px;height:170px;background:linear-gradient(#b9d0ea,#6787aa);clip-path:polygon(0 100%,6% 48%,20% 48%,20% 40%,27% 40%,27% 34%,34% 34%,34% 28%,41% 28%,41% 22%,50% 0,59% 22%,66% 28%,66% 34%,73% 34%,73% 40%,80% 40%,80% 48%,94% 48%,100% 100%)}
-.ref-capitol:after{content:"";position:absolute;left:145px;bottom:150px;width:50px;height:70px;border-radius:50% 50% 0 0;background:#b9d0ea}
 .ref-hero-inner{position:relative;z-index:3;max-width:1440px;margin:auto}
 .ref-kicker{font-size:16px;letter-spacing:.48em;font-weight:800;margin-bottom:8px}
 .ref-hero h1{font-family:"Outfit",sans-serif;font-size:72px;line-height:.98;letter-spacing:-2.5px;margin:0;font-weight:800;text-shadow:0 8px 35px rgba(0,0,0,.25)}
@@ -383,6 +380,195 @@ body{overflow-x:hidden}
 @media(max-width:720px){.header{padding:9px 4%!important}.brand-tag{display:none}.brand-name{font-size:19px!important}.dash-btn{padding:10px 14px!important;font-size:12px}.ref-hero{padding:110px 5% 28px}.ref-kicker{font-size:11px;letter-spacing:.3em}.ref-hero h1{font-size:46px}.ref-hero h2{font-size:22px}.ref-hero p{font-size:14px}.ref-features{grid-template-columns:1fr 1fr;gap:14px}.ref-features .ico{width:46px;height:46px;font-size:21px}.ref-features b{font-size:11px}.ref-features small{font-size:9px}.ref-tools{padding:0 5% 25px}.ref-grid{grid-template-columns:1fr}.ref-side{grid-column:auto;grid-template-columns:1fr}.ref-trust{grid-template-columns:1fr 1fr}.ref-trust i{display:none}.ref-resource-grid{grid-template-columns:1fr}.ref-services{grid-template-columns:1fr 1fr}.ref-question{flex-direction:column;align-items:flex-start}.ref-question>div:last-child{width:100%;flex-direction:column}.ref-question button,.ref-question a{text-align:center}}
 </style>
 
+
+<style id="ig-forms-fees-final">
+.ig-forms-fees{
+  position:relative;
+  z-index:8;
+  padding:42px 4% 46px;
+  background:linear-gradient(180deg,#f5f8fd 0%,#ffffff 100%);
+  color:#15243d;
+  border-top:1px solid #dbe7f5;
+}
+.ig-ff-heading{
+  max-width:1440px;
+  margin:0 auto 20px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.ig-ff-icon{
+  width:50px;height:50px;border-radius:14px;
+  display:grid;place-items:center;font-size:24px;
+  background:linear-gradient(135deg,#e8f2ff,#f1eaff);
+  box-shadow:0 8px 22px rgba(31,56,95,.10);
+}
+.ig-ff-heading h2{
+  margin:0;
+  font:750 28px "Outfit",sans-serif;
+  color:#102a56;
+}
+.ig-ff-heading p{
+  margin:5px 0 0;
+  color:#647b96;
+  font-size:13px;
+}
+.ig-ff-grid{
+  max-width:1440px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+.ig-ff-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #d9e4f1;
+  border-radius:18px;
+  padding:22px;
+  background:#fff;
+  box-shadow:0 12px 32px rgba(31,56,95,.09);
+}
+.ig-ff-card:before{
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:4px;
+  background:linear-gradient(90deg,#2563eb,#06b6d4,#10b981,#7c3aed,#ec4899,#f59e0b);
+}
+.ig-ff-card.fees-card{
+  background:linear-gradient(135deg,#fffaf0 0%,#fff 62%,#f7f1ff 100%);
+}
+.ig-ff-card-head{
+  display:flex;align-items:center;gap:13px;
+  margin-bottom:15px;
+}
+.ig-ff-card-icon{
+  width:50px;height:50px;flex:none;
+  display:grid;place-items:center;
+  border-radius:13px;
+  background:#e8f2ff;
+  font-size:24px;
+}
+.ig-ff-card-icon.green{background:#e8fff7}
+.ig-ff-card-icon.gold{background:#fff3d4}
+.ig-ff-card-head h3{
+  margin:0;
+  font:700 20px "Outfit",sans-serif;
+  color:#102a56;
+}
+.ig-ff-card-head p{
+  margin:4px 0 0;
+  color:#647b96;
+  font-size:12px;
+  line-height:1.45;
+}
+.ig-form-list{
+  display:grid;
+  gap:9px;
+}
+.ig-form-item{
+  display:grid;
+  grid-template-columns:78px 1fr auto;
+  align-items:center;
+  gap:11px;
+  padding:12px;
+  border:1px solid #e1e9f3;
+  border-radius:12px;
+  background:#fbfdff;
+  transition:.22s;
+}
+.ig-form-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(31,56,95,.08);
+}
+.ig-form-badge{
+  min-height:40px;
+  display:grid;place-items:center;
+  border-radius:10px;
+  background:#e8f2ff;
+  color:#1769e8;
+  font:800 13px "Outfit",sans-serif;
+}
+.ig-form-badge.green{background:#e8fff7;color:#087f63}
+.ig-form-badge.purple{background:#f1e9ff;color:#7c3aed}
+.ig-form-copy strong{
+  display:block;
+  color:#17365d;
+  font-size:13px;
+}
+.ig-form-copy span{
+  display:block;
+  color:#71839a;
+  font-size:10.5px;
+  line-height:1.35;
+  margin-top:3px;
+}
+.ig-form-fee{
+  display:block;
+  color:#087f63;
+  font-size:10px;
+  margin-top:4px;
+}
+.ig-form-item>a,
+.ig-ff-main-link{
+  color:#1769e8;
+  font-weight:800;
+  font-size:11px;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.ig-form-item>a:hover,.ig-ff-main-link:hover{text-decoration:underline}
+.ig-ff-main-link{
+  display:inline-block;
+  margin-top:13px;
+  font-size:12px;
+}
+.ig-fee-list{
+  border:1px solid #eadfca;
+  border-radius:12px;
+  overflow:hidden;
+  background:rgba(255,255,255,.78);
+}
+.ig-fee-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 13px;
+  border-bottom:1px solid #eee7da;
+  font-size:11.5px;
+}
+.ig-fee-row:last-child{border-bottom:0}
+.ig-fee-row span{color:#526b86}
+.ig-fee-row strong{
+  color:#17365d;
+  font:800 11px "Outfit",sans-serif;
+  text-align:right;
+}
+.ig-fee-note{
+  margin-top:10px;
+  color:#71839a;
+  font-size:10px;
+  line-height:1.45;
+}
+.ig-ff-main-link.gold-link{color:#9a6400}
+@media(max-width:900px){
+  .ig-ff-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .ig-forms-fees{padding:32px 5% 38px}
+  .ig-ff-heading h2{font-size:23px}
+  .ig-form-item{grid-template-columns:65px 1fr}
+  .ig-form-item>a{grid-column:2}
+  .ig-fee-row{align-items:flex-start;flex-direction:column;gap:4px}
+  .ig-fee-row strong{text-align:left}
+}
+</style>
+
+
+<style id="ig-remove-capitol-final">
+.ref-capitol,.ref-capitol:before,.ref-capitol:after{display:none!important;content:none!important}
+</style>
+
 </head>
 <body>
 
@@ -408,7 +594,6 @@ body{overflow-x:hidden}
     <div class="ref-stars"></div>
     <div class="ref-flag-wave wave-a"></div>
     <div class="ref-flag-wave wave-b"></div>
-    <div class="ref-capitol"><span></span></div>
 
     <div class="ref-hero-inner">
       <div class="ref-kicker">WELCOME TO</div>
@@ -470,6 +655,109 @@ body{overflow-x:hidden}
       <i></i><div><span>✓</span><b>Easy to Use</b><small>Simple &amp; Fast Access</small></div>
       <i></i><div><span>ϟ</span><b>All Essential Tools</b><small>USCIS, I-94, DOL &amp; More</small></div>
       <i></i><div><span>♟</span><b>Trusted by Thousands</b><small>Immigration Community</small></div>
+    </div>
+  </section>
+
+
+  <section class="ig-forms-fees" id="forms-fees">
+    <div class="ig-ff-heading">
+      <span class="ig-ff-icon">📋</span>
+      <div>
+        <h2>USCIS Forms &amp; Immigration Fees</h2>
+        <p>Quick access to commonly used USCIS payment forms, address reporting and H-1B fee information.</p>
+      </div>
+    </div>
+
+    <div class="ig-ff-grid">
+      <article class="ig-ff-card forms-card">
+        <div class="ig-ff-card-head">
+          <div class="ig-ff-card-icon">📄</div>
+          <div>
+            <h3>Important USCIS Forms</h3>
+            <p>Download official forms and instructions directly from USCIS.</p>
+          </div>
+        </div>
+
+        <div class="ig-form-list">
+          <div class="ig-form-item">
+            <div class="ig-form-badge">G-1450</div>
+            <div class="ig-form-copy">
+              <strong>Authorization for Credit Card Transactions</strong>
+              <span>Use for eligible USCIS filing fee payments by credit card.</span>
+              <b class="ig-form-fee">USCIS fee: $0</b>
+            </div>
+            <a href="https://www.uscis.gov/g-1450" target="_blank" rel="noopener">View ↗</a>
+          </div>
+
+          <div class="ig-form-item">
+            <div class="ig-form-badge green">G-1650</div>
+            <div class="ig-form-copy">
+              <strong>Authorization for ACH Transactions</strong>
+              <span>Authorization form for eligible USCIS fee payments by ACH.</span>
+              <b class="ig-form-fee">USCIS fee: $0</b>
+            </div>
+            <a href="https://www.uscis.gov/g-1650" target="_blank" rel="noopener">View ↗</a>
+          </div>
+
+          <div class="ig-form-item">
+            <div class="ig-form-badge purple">AR-11</div>
+            <div class="ig-form-copy">
+              <strong>Alien's Change of Address Card</strong>
+              <span>Use the official USCIS process to report a change of address.</span>
+              <b class="ig-form-fee">USCIS fee: $0</b>
+            </div>
+            <a href="https://www.uscis.gov/ar-11" target="_blank" rel="noopener">View ↗</a>
+          </div>
+        </div>
+
+        <a class="ig-ff-main-link" href="https://www.uscis.gov/forms" target="_blank" rel="noopener">
+          Browse All USCIS Forms &amp; Instructions →
+        </a>
+      </article>
+
+      <article class="ig-ff-card fees-card">
+        <div class="ig-ff-card-head">
+          <div class="ig-ff-card-icon gold">💳</div>
+          <div>
+            <h3>H-1B Fee Reference</h3>
+            <p>Common H-1B filing and registration fees. Verify the exact amount for your filing.</p>
+          </div>
+        </div>
+
+        <div class="ig-fee-list">
+          <div class="ig-fee-row">
+            <span>H-1B electronic registration</span><strong>$215</strong>
+          </div>
+          <div class="ig-fee-row">
+            <span>Form I-129 H-1B — regular filing</span><strong>$780 paper / $730 online*</strong>
+          </div>
+          <div class="ig-fee-row">
+            <span>Form I-129 — small employer / nonprofit</span><strong>$460*</strong>
+          </div>
+          <div class="ig-fee-row">
+            <span>ACWIA fee</span><strong>$750 small / $1,500 regular</strong>
+          </div>
+          <div class="ig-fee-row">
+            <span>Fraud Prevention &amp; Detection fee</span><strong>$500 when applicable</strong>
+          </div>
+          <div class="ig-fee-row">
+            <span>Asylum Program Fee</span><strong>$300 small / $600 regular</strong>
+          </div>
+          <div class="ig-fee-row">
+            <span>Additional Public Law 114-113 fee</span><strong>$4,000 when applicable</strong>
+          </div>
+        </div>
+
+        <div class="ig-fee-note">
+          *Online filing eligibility and the exact total depend on the petition and petitioner.
+          Some employers and petition types may qualify for exemptions or different fee requirements.
+          Always confirm the current USCIS Fee Schedule before filing.
+        </div>
+
+        <a class="ig-ff-main-link gold-link" href="https://www.uscis.gov/g-1055" target="_blank" rel="noopener">
+          Open Official USCIS Fee Schedule →
+        </a>
+      </article>
     </div>
   </section>
 
