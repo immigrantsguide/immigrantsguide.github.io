@@ -100,7 +100,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
 <div class="actions">
 <span id="who" class="muted"></span>
-    <a class="secondary" href="https://egov.uscis.gov/" target="_blank" rel="noopener noreferrer" style="text-decoration:none">USCIS Case Status Online ↗</a>
+    <a class="secondary" href="https://egov.uscis.gov/casestatus/landing.do" target="_blank" rel="noopener noreferrer" style="text-decoration:none">USCIS Case Status Online ↗</a>
 
 
 
@@ -189,11 +189,10 @@ NOID / Extensions
   <select id="filterEmployer"><option value="">All Employers</option></select>
   <select id="filterManager"><option value="">All Case Managers</option></select>
   <select id="filterPremium"><option value="">Premium: All</option><option value="true">Premium: Yes</option><option value="false">Premium: No</option></select>
-  <select id="filterMonitoring"><option value="">Monitoring: All</option><option value="true">Monitoring: Enabled</option><option value="false">Monitoring: Off</option></select>
   <button id="clearFilters" class="secondary" type="button">Clear Filters</button>
   <span id="filterSummary" class="muted">Showing all cases</span>
 </div>
-<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Monitoring</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
+<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Filed</th><th>Priority</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
 
 <section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><div class="actions"><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."><select id="historyType" style="width:auto"><option value="">All Events</option><option value="USCIS">USCIS Only</option><option value="Case">Internal Case Only</option></select></div></div>
 <div class="notice" id="historyNotice">Loading history...</div>
@@ -307,7 +306,6 @@ NOID / Extensions
 <div><label>Validity End Date</label><input id="validityEnd" type="date"></div>
 <div><label>RFE / NOID Deadline</label><input id="rfeDeadline" type="date"></div>
 <div><label>Extension Deadline / Target Date</label><input id="extensionTarget" type="date"><div class="small">Enter the date your team wants to target for filing the extension.</div></div>
-<div><label>Automatic Monitoring</label><select id="monitoring"><option value="true">Enabled</option><option value="false">Off</option></select></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -471,7 +469,6 @@ function durationDays(c){
   return Number.isFinite(d)&&d>=0?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
-function nextDay(value){if(!value)return null;const d=new Date(String(value).slice(0,10)+"T00:00:00");if(Number.isNaN(d.getTime()))return null;d.setDate(d.getDate()+1);return d.toISOString().slice(0,10);}
 function validityText(value){return value?date(value):"—";}
 function displayDuration(c){return isApproved(c)?"N/A":durationText(c);}
 function caseGroup(c){if(isApproved(c))return "Approved";if(isRfe(c))return "RFE / NOID";if(isDenied(c))return "Denied";return "In Process";}
@@ -576,7 +573,6 @@ function filteredCases(){
   const employer=$("filterEmployer")?.value||"";
   const manager=$("filterManager")?.value||"";
   const premium=$("filterPremium")?.value||"";
-  const monitoring=$("filterMonitoring")?.value||"";
   if(status==="pending")a=a.filter(c=>isPending(c));
   if(status==="rfe")a=a.filter(c=>isRfe(c));
   if(status==="approved")a=a.filter(c=>isApproved(c));
@@ -586,7 +582,6 @@ function filteredCases(){
   if(employer)a=a.filter(c=>String(c.employer||"")===employer);
   if(manager)a=a.filter(c=>String(c.case_manager||"")===manager);
   if(premium)a=a.filter(c=>String(isPremium(c))===premium);
-  if(monitoring)a=a.filter(c=>String(isMonitoring(c))===monitoring);
   return a;
 }
 function updateFilterSummary(count){
@@ -665,7 +660,7 @@ function downloadCSV(filename,headers,data){
   const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
-function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Case Type","Status","Amount","Premium","Duration Days","Previous Validity End","Validity Start","Validity End","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target","Monitoring"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.case_type,c.current_status,c.amount,isPremium(c)?"Yes":"No",isApproved(c)?"N/A":durationDays(c),c.previous_validity_end_date,c.validity_start_date,c.validity_end_date,c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date,isMonitoring(c)?"Enabled":"Off"]));}
+function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Case Type","Status","Amount","Premium","Duration","Validity Start","Validity End","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.case_type,c.current_status,c.amount,isPremium(c)?"Yes":"No",isApproved(c)?"N/A":durationDays(c),c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):""),c.validity_end_date,c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date]));}
 function exportEmployerCSV(){downloadCSV("employer-report.csv",["Employer","Cases","Amount","Approved","Active","RFE/NOID","Premium","Average Duration"],employerReport().map(x=>[x.name,x.total,x.amount,x.approved,x.active,x.rfe,x.premium,x.avg===null?"":x.avg]));}
 function exportManagerCSV(){downloadCSV("case-manager-report.csv",["Case Manager","Total","Active","RFE/NOID","Approved","Denied","Amount","Average Duration"],managerReport().map(x=>[x.name,x.total,x.active,x.rfe,x.approved,x.denied,x.amount,x.avg===null?"":x.avg]));}
 function loadEmailPrefs(){
@@ -806,8 +801,8 @@ function draw(){
 
   const b=filteredCases();
   updateFilterSummary(b.length);
-  const caseRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
-  $("caseBody").innerHTML=b.length?groupedRowsHTML(b,caseRow,17):'<tr><td colspan="17" class="empty">No cases found.</td></tr>';
+  const caseRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
+  $("caseBody").innerHTML=b.length?groupedRowsHTML(b,caseRow,15):'<tr><td colspan="15" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
   $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -1049,10 +1044,7 @@ async function openProfile(c){
       '<div class="profile-item"><div class="profile-label">Case Manager</div><div class="profile-value">'+profileValue(c.case_manager)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Amount</div><div class="profile-value">'+money(c.amount)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Premium Processing</div><div class="profile-value">'+(isPremium(c)?"Yes":"No")+'</div></div>'+
-      '<div class="profile-item"><div class="profile-label">Duration</div><div class="profile-value">'+displayDuration(c)+'</div></div>'+
-      '<div class="profile-item"><div class="profile-label">Validity Start</div><div class="profile-value">'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</div></div>'+
-      '<div class="profile-item"><div class="profile-label">Validity End</div><div class="profile-value">'+validityText(c.validity_end_date)+'</div></div>'+
-      '<div class="profile-item"><div class="profile-label">Previous Validity End</div><div class="profile-value">'+validityText(c.previous_validity_end_date)+'</div></div>'+ 
+      '<div class="profile-item"><div class="profile-label">Duration</div><div class="profile-value">'+durationText(c)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Monitoring</div><div class="profile-value">'+(isMonitoring(c)?"Enabled":"Off")+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">RFE / NOID Deadline</div><div class="profile-value">'+date(c.rfe_deadline_date)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Extension Target</div><div class="profile-value">'+date(c.extension_target_date)+'</div></div>'+
@@ -1092,7 +1084,7 @@ function openModal(c){
   $("validityEnd").value=c?.validity_end_date||"";
   $("rfeDeadline").value=c?.rfe_deadline_date||"";
   $("extensionTarget").value=c?.extension_target_date||"";
-  $("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
+  if($("monitoring"))$("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
   $("notes").value=c?.notes||"";
   $("formMsg").innerHTML="";
 }
@@ -1155,10 +1147,10 @@ $("exportManager").addEventListener("click",exportManagerCSV);
 $("saveEmailPrefs").addEventListener("click",saveEmailPrefs);
 $("addTeamMember").addEventListener("click",addTeamMember);
 $("employerSearch").addEventListener("input",draw);
-["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
+["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium"].forEach(id=>$(id).addEventListener("change",draw));
 $("clearFilters").addEventListener("click",()=>{
   $("caseSearch").value="";
-  ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).value="");
+  ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium"].forEach(id=>$(id).value="");
   draw();
 });
 
@@ -1366,7 +1358,7 @@ $("caseForm").addEventListener("submit",async e=>{
     validity_end_date:$("validityEnd").value||null,
     rfe_deadline_date:$("rfeDeadline").value||null,
     extension_target_date:$("extensionTarget").value||null,
-    monitoring_enabled:$("monitoring").value==="true",
+    monitoring_enabled:true,
     notes:$("notes").value.trim()||null
   };
   try{
@@ -1513,15 +1505,30 @@ function normalizeExcelRow(r){
   const validityEnd=excelDateToISO(g("validity_end_date","validity_end","end_date"));
   const caseType=String(g("case_type","case_type_name","h1b_case_type")||"").trim();
   if(!validityStart && previousValidityEnd && /extension/i.test(caseType)){const d=new Date(previousValidityEnd+"T00:00:00");if(!Number.isNaN(d.getTime())){d.setDate(d.getDate()+1);validityStart=d.toISOString().slice(0,10);}}
-  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),case_type:caseType,filing_date:filing||null,priority_date:priority||null,current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:statusDate||null,case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),previous_validity_end_date:previousValidityEnd||null,validity_start_date:validityStart||null,validity_end_date:validityEnd||null,rfe_deadline_date:rfeDeadline||null,extension_target_date:extensionTarget||null,monitoring_enabled:excelBool(g("automatic_monitoring","monitoring_enabled","monitoring"),true),notes:String(g("notes","note")||"").trim()};
+  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),case_type:caseType,filing_date:filing||null,priority_date:priority||null,current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:statusDate||null,case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),previous_validity_end_date:previousValidityEnd||null,validity_start_date:validityStart||null,validity_end_date:validityEnd||null,rfe_deadline_date:rfeDeadline||null,extension_target_date:extensionTarget||null,notes:String(g("notes","note")||"").trim()};
 }
 let pendingExcelRows=[];
 function openExcelModal(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}$("excelFileInput").value="";pendingExcelRows=[];$("excelMsg").textContent="Choose an Excel file to begin.";$("excelMsg").className="notice";$("excelSummary").textContent="";$("excelPreview").innerHTML="";$("confirmExcelImport").disabled=true;$("excelModal").style.display="grid";}
 function closeExcelModal(){$("excelModal").style.display="none";}
-function renderExcelPreview(items){const good=items.filter(x=>x.ok);$("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;$("excelPreview").innerHTML=`<table style="min-width:1100px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Filing Date</th><th>Validity Start</th><th>Validity End</th><th>Amount</th><th>Monitoring</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.case_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${esc(x.data.validity_start_date||"—")}</td><td>${esc(x.data.validity_end_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.monitoring_enabled?"Yes":"No"}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;pendingExcelRows=good.map(x=>x.data);$("confirmExcelImport").disabled=!pendingExcelRows.length;}
+function renderExcelPreview(items){
+  const good=items.filter(x=>x.ok);
+  $("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;
+  $("excelPreview").innerHTML=`<table style="min-width:1200px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Filing Date</th><th>Priority</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.case_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${esc(x.data.priority_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.premium_processing?"Yes":"No"}</td><td>${isApproved(x.data)?"N/A":(x.data.time_duration_days==null?"—":esc(x.data.time_duration_days+" days"))}</td><td>${esc(x.data.validity_start_date||"—")}</td><td>${esc(x.data.validity_end_date||"—")}</td><td>${esc(x.data.case_manager||"—")}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;
+  pendingExcelRows=good.map(x=>x.data);
+  $("confirmExcelImport").disabled=!pendingExcelRows.length;
+}
 async function handleExcelFile(file){if(!file)return;if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}try{if(typeof XLSX==="undefined")throw new Error("Excel support could not load. Please refresh the page.");const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]];if(!ws)throw new Error("The workbook has no worksheet.");const raw=XLSX.utils.sheet_to_json(ws,{defval:""});if(!raw.length)throw new Error("The first worksheet is empty.");const existing=new Set(rows.map(c=>String(c.receipt_number||"").trim().toUpperCase())),seen=new Set();const items=raw.map((r,i)=>{const d=normalizeExcelRow(r);let error="";if(!/^[A-Z]{3}\d{10}$/.test(d.receipt_number))error="Invalid receipt";else if(!d.beneficiary_name)error="Beneficiary required";else if(seen.has(d.receipt_number))error="Duplicate in file";else if(existing.has(d.receipt_number))error="Already exists";else if(d.amount!==null&&(!Number.isFinite(d.amount)||d.amount<0))error="Invalid amount";else if(d.time_duration_days!==null&&(!Number.isFinite(d.time_duration_days)||d.time_duration_days<0))error="Invalid duration";if(!error)seen.add(d.receipt_number);return {row:i+2,data:d,ok:!error,error};});renderExcelPreview(items);$("excelMsg").textContent="Review the preview. Existing receipt numbers will not be imported.";$("excelMsg").className="notice";}catch(e){pendingExcelRows=[];$("confirmExcelImport").disabled=true;$("excelMsg").textContent=e.message||String(e);$("excelMsg").className="notice error";}}
 async function confirmExcelImport(){if(!canManageCases()||!pendingExcelRows.length)return;const btn=$("confirmExcelImport");btn.disabled=true;btn.textContent="Importing...";try{if(!currentOrgId)await loadOrganizationContext();const payload=pendingExcelRows.map(x=>({...x,organization_id:currentOrgId}));for(let i=0;i<payload.length;i+=100){const r=await db.from("cases").insert(payload.slice(i,i+100));if(r.error)throw r.error;}$("excelMsg").textContent=`Successfully imported ${payload.length} case(s).`;$("excelMsg").className="notice";pendingExcelRows=[];await load();setTimeout(closeExcelModal,700);}catch(e){$("excelMsg").textContent="Import failed: "+(e.message||e);$("excelMsg").className="notice error";}finally{btn.textContent="✓ Import Valid Cases";btn.disabled=!pendingExcelRows.length;}}
-function downloadExcelTemplate(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Case Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","Previous Validity End Date","Validity Start Date","Validity End Date","RFE / NOID Deadline","Extension Target Date","Automatic Monitoring","Notes"],e=["IOE1234567890","John Smith","ABC LLC","I-129","H1B CAP","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","","","","2027-01-15","Yes","H-1B case"];const ws=XLSX.utils.aoa_to_sheet([h,e]);ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,22,14,14,28,14,20,12,20,22,22,18,18,20,22,20,35][i]}));const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended. Premium Processing and Automatic Monitoring: Yes/No."]]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");}
+function downloadExcelTemplate(){
+  if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}
+  if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}
+  const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Case Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","Previous Validity End Date","Validity Start Date","Validity End Date","RFE / NOID Deadline","Extension Target Date","Notes"];
+  const e=["IOE1234567890","John Smith","ABC LLC","I-129","H1B CAP","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","","","","2027-01-15","H-1B case"];
+  const ws=XLSX.utils.aoa_to_sheet([h,e]);
+  ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,22,14,14,28,14,20,12,20,22,24,20,20,22,22,35][i]}));
+  const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended."],["For extensions, Previous Validity End Date is optional; if supplied and Validity Start Date is blank, the system calculates Validity Start as the next day."]]);
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");
+}
 $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("importExcelBtn").addEventListener("click",openExcelModal);$("chooseExcelBtn").addEventListener("click",()=>{if(canManageCases())$("excelFileInput").click();});$("excelFileInput").addEventListener("change",e=>handleExcelFile(e.target.files?.[0]));$("excelClose").addEventListener("click",closeExcelModal);$("excelCancel").addEventListener("click",closeExcelModal);$("confirmExcelImport").addEventListener("click",confirmExcelImport);$("excelModal").addEventListener("click",e=>{if(e.target===$("excelModal"))closeExcelModal();});
 
 })();
