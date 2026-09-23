@@ -347,7 +347,7 @@ body{overflow-x:hidden}
 .ref-capitol{position:absolute;right:1%;bottom:-25px;width:340px;height:300px;opacity:.28}
 .ref-capitol:before{content:"";position:absolute;left:35px;bottom:0;width:270px;height:170px;background:linear-gradient(#b9d0ea,#6787aa);clip-path:polygon(0 100%,6% 48%,20% 48%,20% 40%,27% 40%,27% 34%,34% 34%,34% 28%,41% 28%,41% 22%,50% 0,59% 22%,66% 28%,66% 34%,73% 34%,73% 40%,80% 40%,80% 48%,94% 48%,100% 100%)}
 .ref-capitol:after{content:"";position:absolute;left:145px;bottom:150px;width:50px;height:70px;border-radius:50% 50% 0 0;background:#b9d0ea}
-.ref-hero-inner{position:relative;z-index:5;max-width:1440px;margin:auto}
+.ref-hero-inner{position:relative;z-index:3;max-width:1440px;margin:auto}
 .ref-kicker{font-size:16px;letter-spacing:.48em;font-weight:800;margin-bottom:8px}
 .ref-hero h1{font-family:"Outfit",sans-serif;font-size:72px;line-height:.98;letter-spacing:-2.5px;margin:0;font-weight:800;text-shadow:0 8px 35px rgba(0,0,0,.25)}
 .ref-hero h1 strong{color:#18d8f6}.ref-hero h2{font-family:"Outfit",sans-serif;font-size:31px;margin:10px 0 12px}.ref-hero h2 em{font-style:normal;color:#ffd22b}.ref-hero p{font-size:18px;line-height:1.55;margin:0 0 30px;color:#eef7ff}
@@ -383,84 +383,6 @@ body{overflow-x:hidden}
 @media(max-width:720px){.header{padding:9px 4%!important}.brand-tag{display:none}.brand-name{font-size:19px!important}.dash-btn{padding:10px 14px!important;font-size:12px}.ref-hero{padding:110px 5% 28px}.ref-kicker{font-size:11px;letter-spacing:.3em}.ref-hero h1{font-size:46px}.ref-hero h2{font-size:22px}.ref-hero p{font-size:14px}.ref-features{grid-template-columns:1fr 1fr;gap:14px}.ref-features .ico{width:46px;height:46px;font-size:21px}.ref-features b{font-size:11px}.ref-features small{font-size:9px}.ref-tools{padding:0 5% 25px}.ref-grid{grid-template-columns:1fr}.ref-side{grid-column:auto;grid-template-columns:1fr}.ref-trust{grid-template-columns:1fr 1fr}.ref-trust i{display:none}.ref-resource-grid{grid-template-columns:1fr}.ref-services{grid-template-columns:1fr 1fr}.ref-question{flex-direction:column;align-items:flex-start}.ref-question>div:last-child{width:100%;flex-direction:column}.ref-question button,.ref-question a{text-align:center}}
 </style>
 
-
-<style id="ig-captain-css">
-.ig-resource-grid article:has(#askAiOpen){position:relative;overflow:hidden;z-index:3}
-.ig-cap-figure{position:absolute;right:12px;top:8px;width:70px;height:95px;pointer-events:none;filter:drop-shadow(0 5px 7px rgba(10,30,70,.18));transform:scale(.9)}
-.cap-head{position:absolute;left:24px;top:0;width:31px;height:31px;border-radius:50%;background:linear-gradient(145deg,#f2c39b,#c77c58)}
-.cap-head:before{content:"";position:absolute;inset:-2px 1px 10px;background:linear-gradient(#2463bd,#153b86);border-radius:55% 55% 35% 35%}
-.cap-head:after{content:"★";position:absolute;left:10px;top:3px;color:#fff;font-size:10px}
-.cap-body{position:absolute;left:18px;top:29px;width:45px;height:62px;border-radius:13px 13px 8px 8px;background:linear-gradient(90deg,#c91e35 0 18%,#f5f5f5 19% 29%,#2459aa 30% 70%,#f5f5f5 71% 81%,#c91e35 82%);box-shadow:inset 0 -10px rgba(10,35,90,.18)}
-.cap-shield{position:absolute;z-index:3;right:-1px;top:41px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;background:radial-gradient(circle,#fff 0 19%,#d21f35 20% 34%,#fff 35% 49%,#d21f35 50% 100%);border:2px solid #173f83}
-</style>
-
-
-
-
-
-<style id="ig-final-hero-composition">
-/* ===== FINAL: single hero artwork, no overlapping reference page ===== */
-.header{
-  visibility:hidden!important;
-  pointer-events:none!important;
-}
-.ref-hero{
-  position:relative!important;
-  height:535px!important;
-  min-height:535px!important;
-  padding:0!important;
-  margin:0!important;
-  overflow:hidden!important;
-  isolation:isolate!important;
-  background:#061735 url("assets/hero-bg.png") center top / 100% 535px no-repeat!important;
-}
-.ref-hero-inner{display:none!important}
-.ig-patriotic-scene{display:none!important}
-.ref-hotspots{display:none!important}
-
-/* Functional invisible navigation over the artwork */
-.ig-image-nav{
-  position:absolute;z-index:50;top:17px;left:29.2%;width:50.2%;height:54px;
-  display:grid;grid-template-columns:repeat(5,1fr);pointer-events:none;
-}
-.ig-image-nav a{pointer-events:auto;display:block;border-radius:28px;background:transparent}
-.ig-image-dashboard{
-  position:absolute;z-index:50;right:2.7%;top:18px;width:185px;height:54px;
-  border-radius:30px;pointer-events:auto;
-}
-.ig-image-quicklinks{
-  position:absolute;z-index:50;left:3.8%;right:4%;bottom:35px;height:115px;
-  display:grid;grid-template-columns:repeat(5,1fr);gap:15px;pointer-events:none;
-}
-.ig-image-quicklinks a{pointer-events:auto;display:block;border-radius:55px;background:transparent}
-
-/* Tool cards start exactly after the artwork */
-.ref-tools{
-  position:relative!important;
-  z-index:100!important;
-  margin:0!important;
-  clear:both!important;
-}
-@media(max-width:900px){
-  .ref-hero{
-    height:500px!important;min-height:500px!important;
-    background-size:auto 500px!important;
-  }
-  .ig-image-nav{left:30%;width:48%;top:12px}
-  .ig-image-dashboard{right:2%;top:12px;width:150px}
-  .ig-image-quicklinks{bottom:24px;height:105px}
-}
-@media(max-width:600px){
-  .ref-hero{
-    height:545px!important;min-height:545px!important;
-    background-size:auto 545px!important;background-position:center top!important;
-  }
-  .ig-image-nav{left:18%;width:61%;top:10px;height:48px}
-  .ig-image-dashboard{right:2%;top:10px;width:105px;height:46px}
-  .ig-image-quicklinks{left:4%;right:4%;bottom:25px;height:130px;grid-template-columns:repeat(2,1fr)}
-  .ig-image-quicklinks a:last-child{grid-column:1/-1}
-}
-</style>
 </head>
 <body>
 
@@ -482,42 +404,11 @@ body{overflow-x:hidden}
 
 <main id="home" class="ref-home">
   <section class="ref-hero">
-<div class="ig-image-nav" aria-label="Homepage navigation">
-  <a href="#home" aria-label="Home"></a>
-  <a href="#about" aria-label="About"></a>
-  <a href="#resources" aria-label="Services"></a>
-  <a href="#resources" aria-label="Resources"></a>
-  <a href="#resources" aria-label="Contact"></a>
-</div>
-<a class="ig-image-dashboard" id="igImageDashboard" href="#" aria-label="Go to Dashboard"></a>
-<div class="ig-image-quicklinks" aria-label="Quick tools">
-  <a href="#uscis-tools" aria-label="USCIS Case Status"></a>
-  <a href="#uscis-tools" aria-label="I-94 Lookup"></a>
-  <a href="#dol-tools" aria-label="DOL Wage Lookup"></a>
-  <a href="#dol-tools" aria-label="LCA Case Search"></a>
-  <a href="#resources" aria-label="Latest Updates and Resources"></a>
-</div>
-
-<div class="ref-hotspots" aria-label="Homepage quick links">
-  <a href="#uscis-tools" aria-label="USCIS Case Status"></a>
-  <a href="#uscis-tools" aria-label="I-94 Lookup"></a>
-  <a href="#dol-tools" aria-label="DOL Wage Lookup"></a>
-  <a href="#dol-tools" aria-label="LCA Case Search"></a>
-  <a href="#resources" aria-label="Latest Updates and Resources"></a>
-</div>
-
-
-
-<div class="ig-statue-wrap">
-    <img src="assets/statue-of-liberty.png" alt="">
-  </div>
-  <div class="ig-capitol-wrap">
-    <img src="assets/white-house.png" alt="">
-  </div>
-  <img class="ig-asset-flag" src="assets/bottom-us-flag.png" alt="">
-</div>
-<div class="ref-sky-glow"></div>
+    <div class="ref-sky-glow"></div>
     <div class="ref-stars"></div>
+    <div class="ref-flag-wave wave-a"></div>
+    <div class="ref-flag-wave wave-b"></div>
+    <div class="ref-capitol"><span></span></div>
 
     <div class="ref-hero-inner">
       <div class="ref-kicker">WELCOME TO</div>
@@ -586,13 +477,7 @@ body{overflow-x:hidden}
     <div class="ref-section-title"><span>✦</span><div><h2>Immigration Resources &amp; Assistance</h2><p>Helpful tools and resources for your U.S. immigration journey.</p></div></div>
     <div class="ref-resource-grid">
       <article><span class="r-icon blue-bg">📄</span><h3>USCIS Forms &amp; Instructions</h3><p>Access official USCIS forms, filing instructions and government resources.</p><a href="https://www.uscis.gov/forms" target="_blank" rel="noopener">Browse USCIS Forms →</a></article>
-      <article><span class="r-icon green-bg">🤖</span><h3>Immigrants Guide AI</h3>
-<div class="ig-cap-figure" aria-hidden="true">
-  <div class="cap-shield">★</div>
-  <div class="cap-head"></div>
-  <div class="cap-body"></div>
-</div>
-<p>Ask immigration questions and find relevant official government resources.</p><button id="askAiOpen">Ask Immigration AI →</button></article>
+      <article><span class="r-icon green-bg">🤖</span><h3>Immigrants Guide AI</h3><p>Ask immigration questions and find relevant official government resources.</p><button id="askAiOpen">Ask Immigration AI →</button></article>
       <article><span class="r-icon purple-bg">💬</span><h3>Ask Vijay Krishna</h3><p>Send your immigration question to the Immigrants Guide team.</p><button id="askVijayOpen">Ask Vijay Krishna →</button></article>
     </div>
     <div class="ref-services">
@@ -769,18 +654,5 @@ init();
 })();
 </script>
 
-
-<script>
-(function(){
-  const a=document.getElementById('igImageDashboard');
-  const original=document.getElementById('dashboardBtn');
-  if(a && original){
-    a.addEventListener('click',function(e){
-      e.preventDefault();
-      original.click();
-    });
-  }
-})();
-</script>
 </body>
 </html>
