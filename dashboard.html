@@ -72,6 +72,891 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:900px){.debug-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:600px){.debug-grid{grid-template-columns:1fr;}}
 .debug-panel{display:none !important;}
+
+/* =========================================================
+   Immigrants Guide — Dashboard UI Refresh
+   UI layer only; existing data/auth/business logic preserved.
+   ========================================================= */
+:root{
+  --ig-navy:#07111f;
+  --ig-navy-2:#0d1b2e;
+  --ig-blue:#2563eb;
+  --ig-blue-2:#3b82f6;
+  --ig-sky:#eff6ff;
+  --ig-border:#e5eaf2;
+  --ig-text:#172033;
+  --ig-muted:#64748b;
+  --ig-bg:#f3f6fb;
+  --ig-card:#ffffff;
+  --ig-green:#059669;
+  --ig-orange:#ea580c;
+  --ig-red:#dc2626;
+  --ig-shadow:0 8px 30px rgba(15,23,42,.06);
+}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 80% -10%,rgba(37,99,235,.08),transparent 30%),
+    var(--ig-bg);
+  color:var(--ig-text);
+}
+.side{
+  width:272px;
+  padding:18px 13px;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(59,130,246,.18),transparent 25%),
+    linear-gradient(180deg,#06101e 0%,#0a1525 55%,#050b14 100%);
+  border-right:1px solid rgba(255,255,255,.06);
+  box-shadow:12px 0 35px rgba(2,6,23,.12);
+}
+.brand-block{
+  justify-content:flex-start;
+  padding:4px 8px 20px;
+}
+.ig-logo{max-width:230px}
+.nav button{
+  position:relative;
+  color:#b9c5d6;
+  padding:12px 13px;
+  border-radius:11px;
+  margin:4px 0;
+  font-weight:600;
+  transition:.18s ease;
+}
+.nav button:hover{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  transform:translateX(2px);
+}
+.nav button.active{
+  background:linear-gradient(90deg,rgba(37,99,235,.9),rgba(59,130,246,.7));
+  color:#fff;
+  box-shadow:0 6px 18px rgba(37,99,235,.25);
+}
+.main{
+  margin-left:272px;
+  padding:28px 32px 40px;
+  max-width:1700px;
+}
+.top{
+  margin-bottom:25px;
+  padding:4px 0;
+}
+.top h1{
+  font-size:31px;
+  letter-spacing:-.7px;
+  font-weight:800;
+}
+.top .muted{font-size:13px}
+.actions{gap:8px}
+.secondary,.primary,.check-btn{
+  border-radius:10px;
+  transition:.18s ease;
+}
+.secondary:hover{
+  border-color:#94a3b8;
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(15,23,42,.06);
+}
+.primary{
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
+  box-shadow:0 5px 14px rgba(37,99,235,.2);
+}
+.primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 18px rgba(37,99,235,.28);
+}
+
+/* KPI dashboard */
+#dashboard>.cards{
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:15px;
+  margin-bottom:22px;
+}
+#dashboard>.cards .card{
+  position:relative;
+  min-height:112px;
+  padding:17px 18px;
+  border:1px solid var(--ig-border);
+  border-radius:16px;
+  box-shadow:var(--ig-shadow);
+  overflow:hidden;
+  transition:.2s ease;
+}
+#dashboard>.cards .card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 35px rgba(15,23,42,.09);
+}
+#dashboard>.cards .card::after{
+  content:"";
+  position:absolute;
+  right:-20px;
+  bottom:-25px;
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  background:rgba(37,99,235,.05);
+}
+#dashboard>.cards .num{
+  font-size:29px;
+  line-height:1;
+  letter-spacing:-.5px;
+}
+#dashboard>.cards .card:nth-child(1)::before{content:"▦";}
+#dashboard>.cards .card:nth-child(2)::before{content:"◷";}
+#dashboard>.cards .card:nth-child(3)::before{content:"!";}
+#dashboard>.cards .card:nth-child(4)::before{content:"✓";}
+#dashboard>.cards .card:nth-child(5)::before{content:"×";}
+#dashboard>.cards .card:nth-child(6)::before{content:"$";}
+#dashboard>.cards .card:nth-child(7)::before{content:"⚡";}
+#dashboard>.cards .card:nth-child(8)::before{content:"◌";}
+#dashboard>.cards .card:nth-child(9)::before{content:"♟";}
+#dashboard>.cards .card:nth-child(10)::before{content:"◷";}
+#dashboard>.cards .card::before{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:30px;
+  height:30px;
+  margin-bottom:9px;
+  border-radius:9px;
+  background:var(--ig-sky);
+  color:var(--ig-blue);
+  font-size:14px;
+  font-weight:900;
+}
+
+/* Panels */
+.panel,.card{
+  border-color:var(--ig-border);
+  box-shadow:var(--ig-shadow);
+}
+.panel{
+  border-radius:16px;
+}
+.panel-head{
+  min-height:62px;
+  padding:15px 19px;
+}
+.panel-head h2{
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:-.15px;
+}
+.search{
+  border-radius:10px;
+  background:#fbfcfe;
+}
+.notice{
+  border-radius:0;
+}
+
+/* Attention section */
+.attention-panel{
+  border:1px solid #e8edf5;
+  box-shadow:var(--ig-shadow);
+}
+.attention-head{
+  background:linear-gradient(90deg,#fff,#f8fbff);
+}
+.attention-grid{gap:14px;padding:16px}
+.attention-card{
+  border-radius:13px;
+  box-shadow:0 3px 14px rgba(15,23,42,.04);
+}
+.attention-count{font-size:28px}
+
+/* Tables */
+.table-wrap{scrollbar-width:thin}
+table{min-width:1200px}
+th{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.035em;
+  font-weight:800;
+  color:#64748b;
+  background:#f8fafc;
+}
+td{font-size:12.5px}
+tbody tr:hover td{background:#fbfdff}
+.badge{
+  border:1px solid rgba(37,99,235,.08);
+  font-size:10.5px;
+  letter-spacing:.01em;
+}
+
+/* Employer and deadline cards */
+#dashboard .deadline-panel{
+  margin-top:2px;
+}
+#dashboard .deadline-panel .panel-head,
+#dashboard>.panel:not(.attention-panel) .panel-head{
+  background:linear-gradient(90deg,#fff,#fbfcff);
+}
+
+/* Search/filter controls */
+.filter-bar{
+  background:#f8fafc;
+  padding:13px 18px;
+}
+.filter-bar select{
+  border-radius:9px;
+  background:#fff;
+}
+
+/* Calendar / reports */
+.calendar-day{
+  transition:.12s ease;
+}
+.calendar-day:hover{
+  background:#f8fbff;
+}
+.calendar-event{
+  border:1px solid rgba(37,99,235,.08);
+}
+.report-card,.setting-box,.alert-stat{
+  border-radius:13px;
+  box-shadow:0 3px 14px rgba(15,23,42,.035);
+}
+
+/* Modals */
+.modal{
+  backdrop-filter:blur(4px);
+  background:rgba(15,23,42,.58);
+}
+.modal-box{
+  border:1px solid #e2e8f0;
+  box-shadow:0 24px 70px rgba(2,6,23,.22);
+}
+.close{
+  background:#f1f5f9;
+  color:#475569;
+}
+.close:hover{background:#e2e8f0}
+
+/* Mobile */
+@media(max-width:1200px){
+  .main{padding:25px}
+  #dashboard>.cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:900px){
+  .main{padding:20px}
+  #dashboard>.cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .side{
+    position:static;
+    width:auto;
+    border-right:0;
+    box-shadow:none;
+  }
+  .main{padding:14px}
+  .top h1{font-size:25px}
+  #dashboard>.cards{grid-template-columns:1fr 1fr;gap:10px}
+  #dashboard>.cards .card{min-height:105px;padding:14px}
+  #dashboard>.cards .num{font-size:25px}
+}
+@media(max-width:480px){
+  #dashboard>.cards{grid-template-columns:1fr}
+  .actions{width:100%}
+}
+
+
+/* =========================================================
+   IMMIGRANTS GUIDE — SUPERHERO COMMAND CENTER THEME
+   UI-only layer. Existing application logic is untouched.
+   ========================================================= */
+:root{
+  --hero-blue:#1d4ed8;
+  --hero-blue-bright:#3b82f6;
+  --hero-red:#dc2626;
+  --hero-gold:#f59e0b;
+  --hero-cyan:#06b6d4;
+  --hero-dark:#020617;
+  --hero-dark-2:#0b1222;
+}
+
+/* Hero background */
+body{
+  background:
+    radial-gradient(circle at 78% 0%,rgba(37,99,235,.14),transparent 27%),
+    radial-gradient(circle at 15% 35%,rgba(6,182,212,.07),transparent 24%),
+    linear-gradient(135deg,#f7f9fc 0%,#eef3f9 100%);
+}
+
+/* Superhero-style sidebar */
+.side{
+  width:278px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(59,130,246,.22),transparent 28%),
+    linear-gradient(180deg,#020617 0%,#071426 50%,#020617 100%);
+  border-right:1px solid rgba(59,130,246,.18);
+  box-shadow:14px 0 45px rgba(2,6,23,.18);
+}
+.brand-block{
+  position:relative;
+  padding:10px 7px 22px;
+}
+.brand-block:after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:8px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#3b82f6,transparent);
+  box-shadow:0 0 10px rgba(59,130,246,.7);
+}
+
+/* Attractive tab buttons */
+.nav button{
+  position:relative;
+  overflow:hidden;
+  border:1px solid transparent;
+  padding:13px 14px;
+  margin:5px 0;
+  border-radius:12px;
+  color:#aebbd0;
+  font-weight:700;
+  letter-spacing:.1px;
+  transition:all .2s ease;
+}
+.nav button:before{
+  content:"";
+  position:absolute;
+  left:-45px;
+  top:0;
+  width:35px;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  transform:skewX(-20deg);
+  transition:.45s ease;
+}
+.nav button:hover:before,
+.nav button.active:before{
+  left:110%;
+}
+.nav button:hover{
+  color:#fff;
+  border-color:rgba(59,130,246,.28);
+  background:linear-gradient(90deg,rgba(30,64,175,.38),rgba(37,99,235,.14));
+  box-shadow:0 5px 18px rgba(37,99,235,.13);
+  transform:translateX(3px);
+}
+.nav button.active{
+  color:#fff;
+  border-color:rgba(96,165,250,.55);
+  background:
+    linear-gradient(100deg,#1d4ed8 0%,#2563eb 48%,#1e40af 100%);
+  box-shadow:
+    0 8px 25px rgba(37,99,235,.35),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+.nav button.active:after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:8px;
+  bottom:8px;
+  width:3px;
+  border-radius:3px 0 0 3px;
+  background:#93c5fd;
+  box-shadow:0 0 10px #60a5fa;
+}
+
+/* Add/import action tabs */
+#addNav,
+#downloadTemplateBtn,
+#importExcelBtn{
+  margin-top:8px;
+}
+#addNav{
+  background:linear-gradient(100deg,#b91c1c,#ef4444);
+  color:#fff;
+  border-color:rgba(248,113,113,.5);
+  box-shadow:0 7px 20px rgba(220,38,38,.22);
+}
+#addNav:hover{
+  background:linear-gradient(100deg,#dc2626,#f87171);
+  box-shadow:0 9px 25px rgba(220,38,38,.3);
+}
+#downloadTemplateBtn,
+#importExcelBtn{
+  background:rgba(255,255,255,.045);
+  border-color:rgba(148,163,184,.2);
+}
+#importExcelBtn:hover{
+  border-color:rgba(96,165,250,.55);
+}
+
+/* Main heading */
+.top h1{
+  font-size:33px;
+  font-weight:900;
+  letter-spacing:-1px;
+  background:linear-gradient(90deg,#0f172a,#1d4ed8 65%,#0e7490);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.top{
+  position:relative;
+}
+
+/* USCIS official button */
+.top .actions>a{
+  border:1px solid #93c5fd;
+  color:#1d4ed8;
+  background:linear-gradient(180deg,#fff,#eff6ff);
+  box-shadow:0 5px 16px rgba(37,99,235,.12);
+  font-weight:800;
+}
+.top .actions>a:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(37,99,235,.2);
+}
+
+/* Hero KPI cards */
+#dashboard>.cards .card{
+  min-height:128px;
+  border-radius:18px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 9px 28px rgba(15,23,42,.07);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+#dashboard>.cards .card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 16px 35px rgba(15,23,42,.12);
+}
+#dashboard>.cards .card:nth-child(1){
+  border-top:3px solid #2563eb;
+}
+#dashboard>.cards .card:nth-child(2){
+  border-top:3px solid #06b6d4;
+}
+#dashboard>.cards .card:nth-child(3){
+  border-top:3px solid #f97316;
+}
+#dashboard>.cards .card:nth-child(4){
+  border-top:3px solid #10b981;
+}
+#dashboard>.cards .card:nth-child(5){
+  border-top:3px solid #ef4444;
+}
+#dashboard>.cards .card:nth-child(6){
+  border-top:3px solid #8b5cf6;
+}
+#dashboard>.cards .card:nth-child(7){
+  border-top:3px solid #f59e0b;
+}
+#dashboard>.cards .card:nth-child(8){
+  border-top:3px solid #0ea5e9;
+}
+#dashboard>.cards .card:nth-child(9){
+  border-top:3px solid #64748b;
+}
+#dashboard>.cards .card:nth-child(10){
+  border-top:3px solid #f97316;
+}
+#dashboard>.cards .num{
+  font-size:31px;
+  font-weight:900;
+}
+
+/* Floating superhero glow */
+#dashboard>.cards .card:after{
+  content:"";
+  position:absolute;
+  width:110px;
+  height:110px;
+  right:-40px;
+  bottom:-45px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,.13),transparent 70%);
+}
+
+/* Section headers */
+.panel-head{
+  background:linear-gradient(100deg,#ffffff,#f8fbff);
+}
+.panel-head h2{
+  font-size:16px;
+  font-weight:900;
+}
+
+/* Attention panel */
+.attention-panel{
+  border:1px solid #dbe5f2;
+  box-shadow:0 10px 30px rgba(15,23,42,.07);
+}
+.attention-card{
+  transition:.2s ease;
+}
+.attention-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 9px 25px rgba(15,23,42,.08);
+}
+
+/* Attractive table status pills */
+.badge{
+  padding:7px 10px;
+  border:0;
+  box-shadow:0 2px 7px rgba(15,23,42,.05);
+}
+.badge.approved{
+  background:linear-gradient(135deg,#059669,#10b981);
+  color:#fff;
+}
+.badge.denied{
+  background:linear-gradient(135deg,#dc2626,#ef4444);
+  color:#fff;
+}
+.badge.rfe{
+  background:linear-gradient(135deg,#ea580c,#f97316);
+  color:#fff;
+}
+
+/* Action buttons inside tables */
+.link,.danger{
+  padding:6px 9px;
+  border-radius:8px;
+  text-decoration:none;
+  transition:.15s ease;
+}
+.link:hover{
+  background:#eff6ff;
+}
+.danger:hover{
+  background:#fef2f2;
+}
+
+/* Calendar */
+.calendar-toolbar{
+  background:linear-gradient(100deg,#071426,#0f2a4a);
+  color:#fff;
+}
+.calendar-toolbar .small{color:#cbd5e1}
+.calendar-toolbar .secondary{
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  border-color:rgba(255,255,255,.22);
+}
+.calendar-toolbar .secondary:hover{
+  background:rgba(255,255,255,.18);
+}
+.calendar-title{
+  color:#fff;
+}
+
+/* Modal */
+.modal-box{
+  border-radius:20px;
+  box-shadow:0 30px 90px rgba(2,6,23,.3);
+}
+
+/* Mobile */
+@media(max-width:1200px){
+  .main{margin-left:278px}
+}
+@media(max-width:700px){
+  .side{width:auto}
+  .main{margin-left:0}
+  .top h1{font-size:27px}
+}
+
+
+/* =========================================================
+   IMMIGRANTS GUIDE — COLORFUL SUPERHERO COMMAND CENTER
+   Owner-only Reports & Settings + richer dashboard visuals.
+   ========================================================= */
+:root{
+  --hero-blue:#2563eb;
+  --hero-cyan:#06b6d4;
+  --hero-purple:#7c3aed;
+  --hero-pink:#db2777;
+  --hero-orange:#f97316;
+  --hero-yellow:#f59e0b;
+  --hero-green:#10b981;
+  --hero-red:#ef4444;
+}
+body{
+  background:
+    radial-gradient(circle at 8% 0%,rgba(59,130,246,.10),transparent 22%),
+    radial-gradient(circle at 95% 18%,rgba(168,85,247,.09),transparent 24%),
+    linear-gradient(135deg,#f8fbff,#eef4ff 55%,#f8f5ff);
+}
+.side{
+  background:
+    radial-gradient(circle at 20% 8%,rgba(37,99,235,.30),transparent 23%),
+    radial-gradient(circle at 90% 55%,rgba(124,58,237,.20),transparent 28%),
+    linear-gradient(180deg,#020617,#07172d 52%,#020617);
+}
+.nav button.active{
+  background:linear-gradient(105deg,#2563eb,#7c3aed,#db2777);
+  border-color:rgba(255,255,255,.32);
+  box-shadow:0 9px 27px rgba(99,102,241,.34);
+}
+#addNav{
+  background:linear-gradient(105deg,#ef4444,#f97316,#f59e0b)!important;
+  border-color:rgba(255,255,255,.22)!important;
+  box-shadow:0 9px 25px rgba(249,115,22,.30)!important;
+}
+#downloadTemplateBtn{
+  color:#bfdbfe;
+  border-color:rgba(59,130,246,.35);
+}
+#importExcelBtn{
+  color:#a7f3d0;
+  border-color:rgba(16,185,129,.35);
+}
+#dashboard>.cards .card{
+  border:0;
+  color:#172033;
+  overflow:hidden;
+}
+#dashboard>.cards .card:nth-child(1){
+  background:linear-gradient(135deg,#eff6ff,#dbeafe);
+  border-top:4px solid #2563eb;
+}
+#dashboard>.cards .card:nth-child(2){
+  background:linear-gradient(135deg,#ecfeff,#cffafe);
+  border-top:4px solid #06b6d4;
+}
+#dashboard>.cards .card:nth-child(3){
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  border-top:4px solid #f97316;
+}
+#dashboard>.cards .card:nth-child(4){
+  background:linear-gradient(135deg,#ecfdf5,#d1fae5);
+  border-top:4px solid #10b981;
+}
+#dashboard>.cards .card:nth-child(5){
+  background:linear-gradient(135deg,#fef2f2,#fee2e2);
+  border-top:4px solid #ef4444;
+}
+#dashboard>.cards .card:nth-child(6){
+  background:linear-gradient(135deg,#f5f3ff,#ede9fe);
+  border-top:4px solid #7c3aed;
+}
+#dashboard>.cards .card:nth-child(7){
+  background:linear-gradient(135deg,#fffbeb,#fef3c7);
+  border-top:4px solid #f59e0b;
+}
+#dashboard>.cards .card:nth-child(8){
+  background:linear-gradient(135deg,#f0f9ff,#e0f2fe);
+  border-top:4px solid #0ea5e9;
+}
+#dashboard>.cards .card:nth-child(9){
+  background:linear-gradient(135deg,#f8fafc,#e2e8f0);
+  border-top:4px solid #64748b;
+}
+#dashboard>.cards .card:nth-child(10){
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  border-top:4px solid #ea580c;
+}
+#dashboard>.cards .card:hover{
+  transform:translateY(-6px) scale(1.01);
+  box-shadow:0 18px 38px rgba(30,41,59,.14);
+}
+#dashboard>.cards .num{
+  font-weight:950;
+}
+#dashboard>.cards .card::after{
+  background:radial-gradient(circle,rgba(255,255,255,.65),transparent 68%);
+}
+.attention-panel{
+  background:linear-gradient(135deg,#fff,#f8fbff);
+}
+.attention-card.urgent{
+  background:linear-gradient(135deg,#fff7f7,#fff);
+}
+.attention-card.warning{
+  background:linear-gradient(135deg,#fffaf0,#fff);
+}
+.attention-card.info{
+  background:linear-gradient(135deg,#f0f9ff,#fff);
+}
+.panel{
+  box-shadow:0 10px 32px rgba(30,41,59,.065);
+}
+.panel-head{
+  background:linear-gradient(100deg,#fff,#f8fbff);
+}
+.primary{
+  background:linear-gradient(105deg,#2563eb,#7c3aed);
+  border:0;
+}
+.primary:hover{
+  background:linear-gradient(105deg,#1d4ed8,#6d28d9);
+}
+.calendar-toolbar{
+  background:
+    radial-gradient(circle at 85% 10%,rgba(59,130,246,.35),transparent 28%),
+    linear-gradient(105deg,#020617,#172554,#312e81);
+}
+.report-card:nth-child(1){background:linear-gradient(135deg,#eff6ff,#dbeafe)}
+.report-card:nth-child(2){background:linear-gradient(135deg,#ecfeff,#cffafe)}
+.report-card:nth-child(3){background:linear-gradient(135deg,#f5f3ff,#ede9fe)}
+.report-card:nth-child(4){background:linear-gradient(135deg,#ecfdf5,#d1fae5)}
+
+
+/* =========================================================
+   IMMIGRANTS GUIDE — MOTION PACK
+   Consistent animation across dashboard items.
+   Respects reduced-motion accessibility preference.
+   ========================================================= */
+@keyframes igFadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes igGlow{
+  0%,100%{box-shadow:0 8px 24px rgba(37,99,235,.08)}
+  50%{box-shadow:0 12px 32px rgba(124,58,237,.16)}
+}
+@keyframes igShine{
+  0%{transform:translateX(-130%) skewX(-18deg)}
+  100%{transform:translateX(260%) skewX(-18deg)}
+}
+@keyframes igPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.025)}
+}
+@keyframes igFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+
+/* Sidebar items */
+.nav button{
+  animation:igFadeUp .45s ease both;
+}
+.nav button:nth-child(1){animation-delay:.03s}
+.nav button:nth-child(2){animation-delay:.06s}
+.nav button:nth-child(3){animation-delay:.09s}
+.nav button:nth-child(4){animation-delay:.12s}
+.nav button:nth-child(5){animation-delay:.15s}
+.nav button:nth-child(6){animation-delay:.18s}
+.nav button:nth-child(7){animation-delay:.21s}
+.nav button:nth-child(8){animation-delay:.24s}
+.nav button:nth-child(9){animation-delay:.27s}
+
+/* Main sections */
+#dashboard>.cards .card,
+.attention-card,
+#dashboard>.panel,
+#cases>.panel,
+#history>.panel,
+#calendar>.panel,
+#reports>.panel,
+#team>.panel,
+#alerts>.panel{
+  animation:igFadeUp .5s ease both;
+}
+
+/* Stagger KPI cards */
+#dashboard>.cards .card:nth-child(1){animation-delay:.04s}
+#dashboard>.cards .card:nth-child(2){animation-delay:.08s}
+#dashboard>.cards .card:nth-child(3){animation-delay:.12s}
+#dashboard>.cards .card:nth-child(4){animation-delay:.16s}
+#dashboard>.cards .card:nth-child(5){animation-delay:.20s}
+#dashboard>.cards .card:nth-child(6){animation-delay:.24s}
+#dashboard>.cards .card:nth-child(7){animation-delay:.28s}
+#dashboard>.cards .card:nth-child(8){animation-delay:.32s}
+#dashboard>.cards .card:nth-child(9){animation-delay:.36s}
+#dashboard>.cards .card:nth-child(10){animation-delay:.40s}
+
+/* Cards breathe subtly */
+#dashboard>.cards .card{
+  animation-name:igFadeUp,igGlow;
+  animation-duration:.5s,4s;
+  animation-timing-function:ease,ease-in-out;
+  animation-iteration-count:1,infinite;
+  animation-delay:var(--ig-delay,0s),1s;
+}
+#dashboard>.cards .card:nth-child(1){--ig-delay:.04s}
+#dashboard>.cards .card:nth-child(2){--ig-delay:.08s}
+#dashboard>.cards .card:nth-child(3){--ig-delay:.12s}
+#dashboard>.cards .card:nth-child(4){--ig-delay:.16s}
+#dashboard>.cards .card:nth-child(5){--ig-delay:.20s}
+#dashboard>.cards .card:nth-child(6){--ig-delay:.24s}
+#dashboard>.cards .card:nth-child(7){--ig-delay:.28s}
+#dashboard>.cards .card:nth-child(8){--ig-delay:.32s}
+#dashboard>.cards .card:nth-child(9){--ig-delay:.36s}
+#dashboard>.cards .card:nth-child(10){--ig-delay:.40s}
+
+/* Buttons get a moving highlight on hover */
+.primary,.secondary,.check-btn,.top .actions>a{
+  position:relative;
+  overflow:hidden;
+}
+.primary::after,.secondary::after,.check-btn::after,.top .actions>a::after{
+  content:"";
+  position:absolute;
+  top:-20%;
+  left:-140%;
+  width:45%;
+  height:140%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);
+  transform:skewX(-18deg);
+  pointer-events:none;
+}
+@media (hover:hover) and (pointer:fine){
+  .primary:hover::after,.secondary:hover::after,.check-btn:hover::after,.top .actions>a:hover::after{
+    animation:igShine .65s ease;
+  }
+}
+
+/* Tables: rows gently animate when visible */
+tbody tr{
+  transition:background .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+tbody tr:hover{
+  transform:translateX(2px);
+}
+
+/* Badges and attention indicators */
+.badge{
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.badge:hover{
+  transform:translateY(-1px) scale(1.03);
+  box-shadow:0 5px 12px rgba(15,23,42,.12);
+}
+.attention-card{
+  animation-duration:.55s;
+}
+.attention-card:hover{
+  animation:igPulse .8s ease;
+}
+
+/* Calendar events */
+.calendar-event{
+  transition:transform .16s ease,filter .16s ease;
+}
+.calendar-event:hover{
+  transform:translateY(-2px) scale(1.02);
+  filter:brightness(1.03);
+}
+
+/* Action links */
+.link,.danger{
+  transition:transform .16s ease,background .16s ease;
+}
+.link:hover,.danger:hover{
+  transform:translateY(-1px);
+}
+
+/* Respect accessibility */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -85,7 +970,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 <button data-view="cases">▣ All Cases</button>
 <button data-view="history">◷ Case History</button>
 <button data-view="calendar">▣ Deadline Calendar</button>
-<button data-view="reports">▤ Reports & Settings</button>
+<button id="reportsNav" data-view="reports" style="display:none">▤ Reports & Settings</button>
 <button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
 <button id="addNav">＋ Add Case</button>
 <button id="downloadTemplateBtn" class="secondary bulk-nav-btn" type="button">📥 Download Excel Template</button>
@@ -430,7 +1315,13 @@ function caseActionButtons(c){
   return '<button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
 }
 function canManageTeam(){return ["owner","admin"].includes(String(currentOrgRole||"").toLowerCase());}
+function canViewReports(){return String(currentOrgRole||"").toLowerCase()==="owner";}
+function applyOwnerReportPermission(){
+  const btn=$("reportsNav");
+  if(btn) btn.style.display=canViewReports()?"":"none";
+}
 function applyRolePermissions(){
+  applyOwnerReportPermission();
   const can=canManageCases();
   const teamCan=canManageTeam();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
