@@ -521,53 +521,118 @@ body{font-family:"DM Sans",Arial,sans-serif!important}
 </style>
 
 
+
 <style id="ig-patriotic-assets-css">
-/* Uploaded patriotic artwork from /assets */
+/* ===== PATRIOTIC SCENE — ONE CLEAN VISUAL ORDER ===== */
 .ig-patriotic-scene{
   position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;
 }
-.ig-patriotic-scene .ig-asset-eagle{
-  position:absolute;right:9%;top:48px;width:min(43vw,655px);height:auto;
-  object-fit:contain;filter:drop-shadow(0 14px 22px rgba(0,0,0,.35));
+
+/* Eagle: crop the supplied screenshot asset so only the eagle scene is visible. */
+.ig-eagle-wrap{
+  position:absolute;right:8%;top:42px;width:min(43vw,655px);height:315px;
+  overflow:hidden;filter:drop-shadow(0 14px 22px rgba(0,0,0,.35));
   animation:igAssetEagleFloat 5s ease-in-out infinite;
 }
-.ig-patriotic-scene .ig-asset-whitehouse{
-  position:absolute;right:-12px;bottom:5px;width:min(25vw,286px);height:auto;
-  opacity:.86;filter:drop-shadow(0 8px 14px rgba(0,0,0,.32));
+.ig-eagle-wrap img{
+  position:absolute;left:0;top:-43px;width:100%;height:auto;max-width:none;
 }
-.ig-patriotic-scene .ig-asset-statue{
-  position:absolute;left:-2px;bottom:2px;width:min(25vw,286px);height:auto;
-  opacity:.9;filter:drop-shadow(0 8px 14px rgba(0,0,0,.34));
+
+/* Capitol image supplied by the user as white-house.png. */
+.ig-capitol-wrap{
+  position:absolute;right:-2px;bottom:0;width:min(25vw,310px);height:275px;
+  overflow:hidden;filter:drop-shadow(0 8px 15px rgba(0,0,0,.3));
+  opacity:.9;
 }
-.ig-patriotic-scene .ig-asset-flag{
-  position:absolute;left:0;right:0;bottom:-4px;width:100%;height:auto;
-  min-height:125px;object-fit:cover;object-position:center bottom;
-  opacity:.98;filter:drop-shadow(0 -8px 20px rgba(239,51,64,.18));
-  z-index:1;
+.ig-capitol-wrap img{
+  position:absolute;right:-2px;bottom:-2px;width:100%;height:auto;max-width:none;
+}
+
+/* Statue crop: shift source left to hide the card fragments baked into the crop. */
+.ig-statue-wrap{
+  position:absolute;left:-4px;bottom:0;width:min(24vw,295px);height:320px;
+  overflow:hidden;filter:drop-shadow(0 8px 15px rgba(0,0,0,.34));
+  opacity:.94;
+}
+.ig-statue-wrap img{
+  position:absolute;left:-62px;bottom:-2px;width:calc(100% + 62px);height:auto;max-width:none;
+}
+
+/* Bottom flag is intentionally last in the visual stack, behind text/cards. */
+.ig-asset-flag{
+  position:absolute;left:0;bottom:-3px;width:100%;height:126px;
+  object-fit:cover;object-position:center bottom;
+  opacity:.96;filter:drop-shadow(0 -8px 20px rgba(239,51,64,.18));
+  z-index:0;
 }
 .ig-patriotic-scene:after{
-  content:"";position:absolute;inset:auto 0 0 0;height:145px;
-  background:linear-gradient(180deg,transparent,rgba(2,16,40,.16));
-  z-index:2;pointer-events:none;
+  content:"";position:absolute;left:0;right:0;bottom:0;height:145px;
+  background:linear-gradient(180deg,transparent 0%,rgba(2,16,40,.12) 100%);
+  pointer-events:none;z-index:1;
 }
-.ref-hero-inner{z-index:6!important}
+
+.ref-hero-inner{position:relative!important;z-index:10!important}
+
+/* Keep the feature row above every artwork. */
+.ref-features{position:relative;z-index:12}
+
+/* Keep the hero's lower flag from changing the document flow. */
+.ref-hero{position:relative;isolation:isolate;overflow:hidden}
+
+/* Smooth eagle motion only. */
 @keyframes igAssetEagleFloat{
   0%,100%{transform:translate3d(0,0,0) rotate(-2deg)}
-  50%{transform:translate3d(-10px,-13px,0) rotate(1deg)}
+  50%{transform:translate3d(-10px,-12px,0) rotate(1deg)}
 }
-@media(max-width:900px){
-  .ig-patriotic-scene .ig-asset-eagle{right:-4%;top:92px;width:55vw}
-  .ig-patriotic-scene .ig-asset-whitehouse{right:-45px;width:30vw}
-  .ig-patriotic-scene .ig-asset-statue{left:-38px;width:30vw}
+
+@media(max-width:1050px){
+  .ig-eagle-wrap{right:-3%;top:58px;width:55vw;height:285px}
+  .ig-capitol-wrap{right:-45px;width:31vw;height:250px}
+  .ig-statue-wrap{left:-45px;width:31vw;height:280px}
 }
-@media(max-width:600px){
-  .ig-patriotic-scene .ig-asset-eagle{right:-20%;top:88px;width:72vw}
-  .ig-patriotic-scene .ig-asset-whitehouse{right:-90px;bottom:15px;width:48vw}
-  .ig-patriotic-scene .ig-asset-statue{left:-70px;bottom:12px;width:48vw}
-  .ig-patriotic-scene .ig-asset-flag{min-height:78px}
+@media(max-width:720px){
+  .ig-eagle-wrap{right:-18%;top:82px;width:76vw;height:220px}
+  .ig-capitol-wrap{right:-95px;width:52vw;height:210px}
+  .ig-statue-wrap{left:-88px;width:52vw;height:235px}
+  .ig-asset-flag{height:82px}
 }
 @media(prefers-reduced-motion:reduce){
-  .ig-patriotic-scene .ig-asset-eagle{animation:none}
+  .ig-eagle-wrap{animation:none}
+}
+</style>
+
+
+<style id="ig-reference-order-fix">
+.ref-hero{
+  min-height:520px!important;
+  padding-top:140px!important;
+  padding-bottom:34px!important;
+}
+.ref-hero-inner{
+  max-width:1450px!important;
+}
+.ref-features{
+  margin-top:4px!important;
+}
+.ref-tools{
+  position:relative!important;
+  z-index:20!important;
+  clear:both!important;
+}
+.ref-grid{
+  position:relative!important;
+  z-index:21!important;
+}
+.ref-trust{
+  position:relative!important;
+  z-index:22!important;
+}
+.ref-resources{
+  position:relative!important;
+  z-index:23!important;
+}
+@media(max-width:720px){
+  .ref-hero{min-height:560px!important;padding-top:105px!important}
 }
 </style>
 
@@ -593,41 +658,21 @@ body{font-family:"DM Sans",Arial,sans-serif!important}
 <main id="home" class="ref-home">
   <section class="ref-hero">
 
+
 <div class="ig-patriotic-scene" aria-hidden="true">
-  <img class="ig-asset-eagle" src="assets/eagle.png" alt="">
-  <img class="ig-asset-statue" src="assets/statue-of-liberty.png" alt="">
-  <img class="ig-asset-whitehouse" src="assets/white-house.png" alt="">
+  <div class="ig-eagle-wrap">
+    <img src="assets/eagle.png" alt="">
+  </div>
+  <div class="ig-statue-wrap">
+    <img src="assets/statue-of-liberty.png" alt="">
+  </div>
+  <div class="ig-capitol-wrap">
+    <img src="assets/white-house.png" alt="">
+  </div>
   <img class="ig-asset-flag" src="assets/bottom-us-flag.png" alt="">
 </div>
-<div class="eagle-body"></div>
-    <div class="eagle-head"><i></i></div><div class="eagle-wing right"></div>
-    <div class="eagle-tail"></div>
-  </div>
-
-  <div class="ig-statue">
-    <div class="statue-torch"></div>
-    <div class="statue-head"></div>
-    <div class="statue-body"></div>
-    <div class="statue-base"></div>
-  </div>
-
-  <div class="ig-whitehouse">
-    <div class="wh-dome"></div>
-    <div class="wh-roof"></div>
-    <div class="wh-main"></div>
-    <div class="wh-columns"></div>
-  </div>
-
-  <div class="ig-bottom-flag">
-    <span></span><span></span><span></span><span></span>
-  </div>
-</div>
-
-    <div class="ref-sky-glow"></div>
+<div class="ref-sky-glow"></div>
     <div class="ref-stars"></div>
-    <div class="ref-flag-wave wave-a"></div>
-    <div class="ref-flag-wave wave-b"></div>
-    <div class="ref-capitol"><span></span></div>
 
     <div class="ref-hero-inner">
       <div class="ref-kicker">WELCOME TO</div>
