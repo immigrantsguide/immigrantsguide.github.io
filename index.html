@@ -16,7 +16,7 @@ a{color:inherit}
 .header{height:82px;background:#fff;border-bottom:1px solid #e5edf6;display:flex;align-items:center;justify-content:space-between;padding:0 3.2%;gap:22px;position:sticky;top:0;z-index:20}
 .brand{display:flex;align-items:center;gap:12px;min-width:260px}.brand-name{font-size:25px;font-weight:850;color:var(--navy);line-height:1}.brand-tag{font-size:12px;color:#5b708c;margin-top:6px}
 .logo-mark{width:70px;height:70px;flex:none;object-fit:cover;border-radius:12px;display:block}.footer-brand .logo-mark{object-fit:cover;border-radius:10px}
-.nav{display:flex;align-items:center;gap:27px;font-size:14px;color:#314765}.nav a{text-decoration:none}.nav a:hover{color:var(--blue)}
+.nav{display:flex;align-items:center;gap:27px;font-size:14px;color:#314765}.nav a{text-decoration:none}.nav a:hover{color:var(--blue)}.nav a.active-resource{color:var(--blue);font-weight:800}
 .dash-btn{background:linear-gradient(135deg,#1769e8,#0755c8);color:#fff;text-decoration:none;padding:13px 18px;border-radius:9px;font-weight:800;box-shadow:0 8px 18px #1769e826;white-space:nowrap}.dash-btn:hover{transform:translateY(-1px)}
 .header-right{display:flex;align-items:center;gap:20px}.flag{width:220px;height:70px;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap}.flag img{width:210px;height:68px;object-fit:contain;display:block}
 .container{width:min(1480px,94%);margin:0 auto}
@@ -48,10 +48,6 @@ a{color:inherit}
 .vk-ai-inline-logo{width:52px;height:52px;object-fit:contain;display:inline-block;vertical-align:-12px;margin-left:8px;border-radius:12px;}
 @media (max-width:600px){.vk-ai-inline-logo{width:42px;height:42px;vertical-align:-9px;margin-left:5px;border-radius:10px;}}
 </style>
-
-<style id="ig-petition-resources-css">
-.petition-resources{margin-top:18px}.petition-resources .side-head{margin-bottom:10px}.petition-note{font-size:11px;line-height:1.5;color:#667b95;margin:0 0 12px}.petition-grid{display:grid;gap:10px}.petition-card{border:1px solid #dce7f3;background:linear-gradient(135deg,#f9fcff,#eef6ff);border-radius:14px;padding:13px}.petition-card h3{margin:0 0 4px;color:#17365d;font-size:14px}.petition-card p{margin:0 0 10px;color:#60758e;font-size:11px;line-height:1.45}.petition-actions{display:flex;gap:7px;flex-wrap:wrap}.petition-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:800}.petition-btn.primary{background:#1769e8;color:#fff}.petition-btn.secondary{background:#fff;color:#1769e8;border:1px solid #b9d0ed}.petition-checklist{margin-top:10px;padding-top:10px;border-top:1px dashed #cbd9e8}.petition-checklist span{display:inline-block;background:#fff;border:1px solid #d8e3ef;border-radius:999px;padding:4px 7px;margin:3px 3px 0 0;font-size:10px;color:#46617f}.petition-resource-link{display:block;margin-top:10px;color:#1769e8;font-size:11px;font-weight:800;text-decoration:none}
-</style>
 </head>
 <body>
 <header class="header">
@@ -59,7 +55,7 @@ a{color:inherit}
     <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
     <div><div class="brand-name">Immigrants Guide</div><div class="brand-tag">Your Partner in U.S. Immigration Journey</div></div>
   </div>
-  <nav class="nav"><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#resources">Resources</a><a href="#contact">Contact</a></nav>
+  <nav class="nav"><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="resources.html" class="active-resource">📚 Resources</a><a href="#contact">Contact</a></nav>
   <div class="header-right"><a class="dash-btn" href="#" id="dashboardBtn">🔒 Go to Dashboard →</a><div class="flag">
       <div class="ask-vijay-actions">
       <div class="ask-vijay-actions">
@@ -137,28 +133,6 @@ a{color:inherit}
           <a class="browse" href="https://www.uscis.gov/forms" target="_blank" rel="noopener">Browse All USCIS Forms →</a>
         </div>
       </div>
-      <div class="side-card petition-resources">
-        <div class="side-head"><h2>📚 Petition Resources</h2><a href="resources.html">View All →</a></div>
-        <p class="petition-note">Sample / educational templates and planning checklists. Customize each resource for the specific petition and facts.</p>
-        <div class="petition-grid">
-          <div class="petition-card">
-            <h3>📄 Sample Client Letter</h3>
-            <p>Sample client/end-client confirmation letter covering project, duties, duration, education and employer relationship.</p>
-            <div class="petition-actions"><a class="petition-btn primary" href="resources/Sample_Client_Letter_Immigrants_Guide.docx" download>↓ Download</a><a class="petition-btn secondary" href="resources/Sample_Client_Letter_Immigrants_Guide.docx" target="_blank" rel="noopener">Open</a></div>
-          </div>
-          <div class="petition-card">
-            <h3>📄 Sample Vendor Letter</h3>
-            <p>Sample vendor/project letter covering client, contractual relationship, project duration, duties and employer control.</p>
-            <div class="petition-actions"><a class="petition-btn primary" href="resources/Sample_Vendor_Letter_Immigrants_Guide.docx" download>↓ Download</a><a class="petition-btn secondary" href="resources/Sample_Vendor_Letter_Immigrants_Guide.docx" target="_blank" rel="noopener">Open</a></div>
-          </div>
-          <div class="petition-card">
-            <h3>☑ Petition Checklists</h3>
-            <p>Planning checklists for common employment-based and dependent immigration filings and response packages.</p>
-            <div class="petition-checklist"><span>H-1B</span><span>H-4</span><span>H-4 EAD</span><span>I-140</span><span>RFE</span><span>NOID/NOIR</span></div>
-            <div class="petition-actions" style="margin-top:9px"><a class="petition-btn primary" href="resources/Petition_Checklist_Immigrants_Guide.docx" download>↓ Download Checklist</a><a class="petition-btn secondary" href="resources.html">View Online</a></div>
-          </div>
-        </div>
-      </div>
     </aside>
   </section>
 
@@ -228,7 +202,7 @@ a{color:inherit}
       <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
       <div><strong>Immigrants Guide</strong><small>Your Partner in U.S. Immigration Journey</small></div>
     </div>
-    <div class="footer-nav"><a href="#home">Home</a> | <a href="#about">About</a> | <a href="#services">Services</a> | <a href="#resources">Resources</a> | <a href="#contact">Contact</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a> | <a href="disclaimer.html">Immigration Disclaimer</a></div>
+    <div class="footer-nav"><a href="#home">Home</a> | <a href="#about">About</a> | <a href="#services">Services</a> | <a href="resources.html">Resources</a> | <a href="#contact">Contact</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a> | <a href="disclaimer.html">Immigration Disclaimer</a></div>
     <div class="footer-contact">✉ Email us at <a href="mailto:immigrantsguide@outlook.com">immigrantsguide@outlook.com</a></div>
   </div>
   <div class="copyright"><span>© 2026 Immigrants Guide. All rights reserved.</span><span>Track · Plan · Stay Informed</span></div>
