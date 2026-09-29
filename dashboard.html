@@ -969,7 +969,7 @@ tbody tr:hover{
 <div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
-<button data-view="history">◷ Case History</button>
+<button id="historyNav" data-view="history">◷ Case History</button>
 <button data-view="calendar">▣ Deadline Calendar</button>
 <button id="reportsNav" data-view="reports" style="display:none">▤ Reports & Settings</button>
 <button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
@@ -1343,6 +1343,7 @@ function caseActionButtons(c){
 }
 function canManageTeam(){return ["owner","admin"].includes(String(currentOrgRole||"").toLowerCase());}
 function canViewReports(){return String(currentOrgRole||"").toLowerCase()==="owner";}
+function canViewHistory(){return ["owner","admin"].includes(String(currentOrgRole||"").toLowerCase());}
 function applyOwnerReportPermission(){
   const btn=$("reportsNav");
   if(btn) btn.style.display=canViewReports()?"":"none";
@@ -1353,6 +1354,7 @@ function applyRolePermissions(){
   const teamCan=canManageTeam();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
   if($("teamNav"))$("teamNav").style.display=teamCan?"":"none";
+  if($("historyNav"))$("historyNav").style.display=canViewHistory()?"":"none";
   ["downloadTemplateBtn","importExcelBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
 }
 
@@ -1672,7 +1674,7 @@ async function removeTeamMember(userId,email){
   }catch(e){alert("Remove failed: "+(e.message||e));}
 }
 function renderSecurity(){
-  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"");
+  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span>';
   if($("securityDb"))$("securityDb").innerHTML='<span class="security-ok">Supabase connection active</span>';
   if($("rolePill"))$("rolePill").textContent=(currentOrgRole||"viewer").toUpperCase();
   applyRolePermissions();
@@ -1883,6 +1885,7 @@ async function checkAllUSCIS(){
 }
 
 async function loadHistory(caseId=null){
+  if(!canViewHistory())return;
   if(!db)return;
   $("historyNotice").textContent="Loading case history...";
   $("historyNotice").className="notice";
@@ -1923,6 +1926,7 @@ function profileValue(value){
   return value===null||value===undefined||String(value)===""?"—":esc(value);
 }
 async function loadProfileHistory(c){
+  if(!canViewHistory())return;
   const box=$("profileHistoryBox");if(!box)return;
   box.innerHTML='<div class="small">Loading history...</div>';
   try{
@@ -1969,11 +1973,11 @@ async function openProfile(c){
       '<div class="profile-item"><div class="profile-label">Last USCIS Check</div><div class="profile-value">'+profileValue(lastChecked(c.last_checked_at))+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">USCIS Modified Date</div><div class="profile-value">'+profileValue(c.uscis_modified_date)+'</div></div>'+
     '</div>'+
-    '<div class="profile-section"><h3>Case Timeline</h3><div id="profileHistoryBox"><div class="small">Loading history...</div></div></div>'+
+    (canViewHistory()?'<div class="profile-section"><h3>Case Timeline</h3><div id="profileHistoryBox"><div class="small">Loading history...</div></div></div>':'')+
     '<div class="profile-section"><h3>Notes</h3><div class="profile-notes">'+profileValue(c.notes)+'</div></div>'+
     '<div class="profile-actions">'+
       '<button class="primary profileEditBtn" data-id="'+esc(c.id)+'" type="button">Edit Case</button>'+
-      '<button class="secondary profileHistoryBtn" data-id="'+esc(c.id)+'" type="button">View History</button>'+
+      (canViewHistory()?'<button class="secondary profileHistoryBtn" data-id="'+esc(c.id)+'" type="button">View History</button>':'')+
     '</div>';
   loadProfileHistory(c);
 }
@@ -2012,6 +2016,7 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
   const v=btn.dataset.view;
+  if(v==="history"&&!canViewHistory())return;
   $("dashboard").style.display=v==="dashboard"?"block":"none";
   $("cases").style.display=v==="cases"?"block":"none";
   $("alerts").style.display=v==="alerts"?"block":"none";
