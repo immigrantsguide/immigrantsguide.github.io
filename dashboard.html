@@ -28,7 +28,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}.side{width:250px}.main{margin-left:250px}}@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 
 .case-number{font-weight:700;white-space:nowrap;}
-.duration-cell{font-weight:700;white-space:nowrap;} .case-group-row td{background:#f8fafc;font-weight:800;color:#334155;border-top:2px solid #e2e8f0;} .uscis-status-link{font-weight:700;color:#2563eb;text-decoration:none;}
+.duration-cell{font-weight:700;white-space:nowrap;}
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid #e2e8f0;background:#f8fafc;}
 .filter-bar select{width:auto;min-width:145px;padding:9px 10px;}
 .filter-bar .muted{font-size:12px;margin-left:auto;}
@@ -61,906 +61,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .clickable-kpi{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
 .clickable-kpi:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(15,23,42,.08);}
 .clickable-kpi:focus{outline:2px solid #2563eb;outline-offset:2px;}
-.kpi-link{font-size:11px;color:#2563eb;font-weight:700;margin-top:6px;}
-.debug-panel{margin-bottom:20px;border:1px solid #bfdbfe;background:#eff6ff;border-radius:14px;overflow:hidden;}
-.debug-panel .panel-head{background:#dbeafe;}
-.debug-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;}
-.debug-item{background:#fff;border:1px solid #dbeafe;border-radius:10px;padding:10px;min-width:0;}
-.debug-label{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;font-weight:800;}
-.debug-value{margin-top:4px;font-size:12px;font-weight:700;word-break:break-word;color:#0f172a;}
-.debug-value.ok{color:#059669}.debug-value.bad{color:#dc2626}.debug-value.warn{color:#d97706}
-@media(max-width:900px){.debug-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.debug-grid{grid-template-columns:1fr;}}
-.debug-panel{display:none !important;}
-
-/* =========================================================
-   Immigrants Guide — Dashboard UI Refresh
-   UI layer only; existing data/auth/business logic preserved.
-   ========================================================= */
-:root{
-  --ig-navy:#07111f;
-  --ig-navy-2:#0d1b2e;
-  --ig-blue:#2563eb;
-  --ig-blue-2:#3b82f6;
-  --ig-sky:#eff6ff;
-  --ig-border:#e5eaf2;
-  --ig-text:#172033;
-  --ig-muted:#64748b;
-  --ig-bg:#f3f6fb;
-  --ig-card:#ffffff;
-  --ig-green:#059669;
-  --ig-orange:#ea580c;
-  --ig-red:#dc2626;
-  --ig-shadow:0 8px 30px rgba(15,23,42,.06);
-}
-body{
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:
-    radial-gradient(circle at 80% -10%,rgba(37,99,235,.08),transparent 30%),
-    var(--ig-bg);
-  color:var(--ig-text);
-}
-.side{
-  width:272px;
-  padding:18px 13px;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(59,130,246,.18),transparent 25%),
-    linear-gradient(180deg,#06101e 0%,#0a1525 55%,#050b14 100%);
-  border-right:1px solid rgba(255,255,255,.06);
-  box-shadow:12px 0 35px rgba(2,6,23,.12);
-}
-.brand-block{
-  justify-content:flex-start;
-  padding:4px 8px 20px;
-}
-.ig-logo{max-width:230px}
-.nav button{
-  position:relative;
-  color:#b9c5d6;
-  padding:12px 13px;
-  border-radius:11px;
-  margin:4px 0;
-  font-weight:600;
-  transition:.18s ease;
-}
-.nav button:hover{
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  transform:translateX(2px);
-}
-.nav button.active{
-  background:linear-gradient(90deg,rgba(37,99,235,.9),rgba(59,130,246,.7));
-  color:#fff;
-  box-shadow:0 6px 18px rgba(37,99,235,.25);
-}
-.main{
-  margin-left:272px;
-  padding:28px 32px 40px;
-  max-width:1700px;
-}
-.top{
-  margin-bottom:25px;
-  padding:4px 0;
-}
-.top h1{
-  font-size:31px;
-  letter-spacing:-.7px;
-  font-weight:800;
-}
-.top .muted{font-size:13px}
-.actions{gap:8px}
-.secondary,.primary,.check-btn{
-  border-radius:10px;
-  transition:.18s ease;
-}
-.secondary:hover{
-  border-color:#94a3b8;
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(15,23,42,.06);
-}
-.primary{
-  background:linear-gradient(135deg,#2563eb,#3b82f6);
-  box-shadow:0 5px 14px rgba(37,99,235,.2);
-}
-.primary:hover{
-  transform:translateY(-1px);
-  box-shadow:0 8px 18px rgba(37,99,235,.28);
-}
-
-/* KPI dashboard */
-#dashboard>.cards{
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:15px;
-  margin-bottom:22px;
-}
-#dashboard>.cards .card{
-  position:relative;
-  min-height:112px;
-  padding:17px 18px;
-  border:1px solid var(--ig-border);
-  border-radius:16px;
-  box-shadow:var(--ig-shadow);
-  overflow:hidden;
-  transition:.2s ease;
-}
-#dashboard>.cards .card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 14px 35px rgba(15,23,42,.09);
-}
-#dashboard>.cards .card::after{
-  content:"";
-  position:absolute;
-  right:-20px;
-  bottom:-25px;
-  width:85px;
-  height:85px;
-  border-radius:50%;
-  background:rgba(37,99,235,.05);
-}
-#dashboard>.cards .num{
-  font-size:29px;
-  line-height:1;
-  letter-spacing:-.5px;
-}
-#dashboard>.cards .card:nth-child(1)::before{content:"▦";}
-#dashboard>.cards .card:nth-child(2)::before{content:"◷";}
-#dashboard>.cards .card:nth-child(3)::before{content:"!";}
-#dashboard>.cards .card:nth-child(4)::before{content:"✓";}
-#dashboard>.cards .card:nth-child(5)::before{content:"×";}
-#dashboard>.cards .card:nth-child(6)::before{content:"$";}
-#dashboard>.cards .card:nth-child(7)::before{content:"⚡";}
-#dashboard>.cards .card:nth-child(8)::before{content:"◌";}
-#dashboard>.cards .card:nth-child(9)::before{content:"♟";}
-#dashboard>.cards .card:nth-child(10)::before{content:"◷";}
-#dashboard>.cards .card::before{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:30px;
-  height:30px;
-  margin-bottom:9px;
-  border-radius:9px;
-  background:var(--ig-sky);
-  color:var(--ig-blue);
-  font-size:14px;
-  font-weight:900;
-}
-
-/* Panels */
-.panel,.card{
-  border-color:var(--ig-border);
-  box-shadow:var(--ig-shadow);
-}
-.panel{
-  border-radius:16px;
-}
-.panel-head{
-  min-height:62px;
-  padding:15px 19px;
-}
-.panel-head h2{
-  font-size:15px;
-  font-weight:800;
-  letter-spacing:-.15px;
-}
-.search{
-  border-radius:10px;
-  background:#fbfcfe;
-}
-.notice{
-  border-radius:0;
-}
-
-/* Attention section */
-.attention-panel{
-  border:1px solid #e8edf5;
-  box-shadow:var(--ig-shadow);
-}
-.attention-head{
-  background:linear-gradient(90deg,#fff,#f8fbff);
-}
-.attention-grid{gap:14px;padding:16px}
-.attention-card{
-  border-radius:13px;
-  box-shadow:0 3px 14px rgba(15,23,42,.04);
-}
-.attention-count{font-size:28px}
-
-/* Tables */
-.table-wrap{scrollbar-width:thin}
-table{min-width:1200px}
-th{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.035em;
-  font-weight:800;
-  color:#64748b;
-  background:#f8fafc;
-}
-td{font-size:12.5px}
-tbody tr:hover td{background:#fbfdff}
-.badge{
-  border:1px solid rgba(37,99,235,.08);
-  font-size:10.5px;
-  letter-spacing:.01em;
-}
-
-/* Employer and deadline cards */
-#dashboard .deadline-panel{
-  margin-top:2px;
-}
-#dashboard .deadline-panel .panel-head,
-#dashboard>.panel:not(.attention-panel) .panel-head{
-  background:linear-gradient(90deg,#fff,#fbfcff);
-}
-
-/* Search/filter controls */
-.filter-bar{
-  background:#f8fafc;
-  padding:13px 18px;
-}
-.filter-bar select{
-  border-radius:9px;
-  background:#fff;
-}
-
-/* Calendar / reports */
-.calendar-day{
-  transition:.12s ease;
-}
-.calendar-day:hover{
-  background:#f8fbff;
-}
-.calendar-event{
-  border:1px solid rgba(37,99,235,.08);
-}
-.report-card,.setting-box,.alert-stat{
-  border-radius:13px;
-  box-shadow:0 3px 14px rgba(15,23,42,.035);
-}
-
-/* Modals */
-.modal{
-  backdrop-filter:blur(4px);
-  background:rgba(15,23,42,.58);
-}
-.modal-box{
-  border:1px solid #e2e8f0;
-  box-shadow:0 24px 70px rgba(2,6,23,.22);
-}
-.close{
-  background:#f1f5f9;
-  color:#475569;
-}
-.close:hover{background:#e2e8f0}
-
-/* Mobile */
-@media(max-width:1200px){
-  .main{padding:25px}
-  #dashboard>.cards{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media(max-width:900px){
-  .main{padding:20px}
-  #dashboard>.cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:700px){
-  .side{
-    position:static;
-    width:auto;
-    border-right:0;
-    box-shadow:none;
-  }
-  .main{padding:14px}
-  .top h1{font-size:25px}
-  #dashboard>.cards{grid-template-columns:1fr 1fr;gap:10px}
-  #dashboard>.cards .card{min-height:105px;padding:14px}
-  #dashboard>.cards .num{font-size:25px}
-}
-@media(max-width:480px){
-  #dashboard>.cards{grid-template-columns:1fr}
-  .actions{width:100%}
-}
-
-
-/* =========================================================
-   IMMIGRANTS GUIDE — SUPERHERO COMMAND CENTER THEME
-   UI-only layer. Existing application logic is untouched.
-   ========================================================= */
-:root{
-  --hero-blue:#1d4ed8;
-  --hero-blue-bright:#3b82f6;
-  --hero-red:#dc2626;
-  --hero-gold:#f59e0b;
-  --hero-cyan:#06b6d4;
-  --hero-dark:#020617;
-  --hero-dark-2:#0b1222;
-}
-
-/* Hero background */
-body{
-  background:
-    radial-gradient(circle at 78% 0%,rgba(37,99,235,.14),transparent 27%),
-    radial-gradient(circle at 15% 35%,rgba(6,182,212,.07),transparent 24%),
-    linear-gradient(135deg,#f7f9fc 0%,#eef3f9 100%);
-}
-
-/* Superhero-style sidebar */
-.side{
-  width:278px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(59,130,246,.22),transparent 28%),
-    linear-gradient(180deg,#020617 0%,#071426 50%,#020617 100%);
-  border-right:1px solid rgba(59,130,246,.18);
-  box-shadow:14px 0 45px rgba(2,6,23,.18);
-}
-.brand-block{
-  position:relative;
-  padding:10px 7px 22px;
-}
-.brand-block:after{
-  content:"";
-  position:absolute;
-  left:14px;
-  right:14px;
-  bottom:8px;
-  height:1px;
-  background:linear-gradient(90deg,transparent,#3b82f6,transparent);
-  box-shadow:0 0 10px rgba(59,130,246,.7);
-}
-
-/* Attractive tab buttons */
-.nav button{
-  position:relative;
-  overflow:hidden;
-  border:1px solid transparent;
-  padding:13px 14px;
-  margin:5px 0;
-  border-radius:12px;
-  color:#aebbd0;
-  font-weight:700;
-  letter-spacing:.1px;
-  transition:all .2s ease;
-}
-.nav button:before{
-  content:"";
-  position:absolute;
-  left:-45px;
-  top:0;
-  width:35px;
-  height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  transform:skewX(-20deg);
-  transition:.45s ease;
-}
-.nav button:hover:before,
-.nav button.active:before{
-  left:110%;
-}
-.nav button:hover{
-  color:#fff;
-  border-color:rgba(59,130,246,.28);
-  background:linear-gradient(90deg,rgba(30,64,175,.38),rgba(37,99,235,.14));
-  box-shadow:0 5px 18px rgba(37,99,235,.13);
-  transform:translateX(3px);
-}
-.nav button.active{
-  color:#fff;
-  border-color:rgba(96,165,250,.55);
-  background:
-    linear-gradient(100deg,#1d4ed8 0%,#2563eb 48%,#1e40af 100%);
-  box-shadow:
-    0 8px 25px rgba(37,99,235,.35),
-    inset 0 1px 0 rgba(255,255,255,.2);
-}
-.nav button.active:after{
-  content:"";
-  position:absolute;
-  right:0;
-  top:8px;
-  bottom:8px;
-  width:3px;
-  border-radius:3px 0 0 3px;
-  background:#93c5fd;
-  box-shadow:0 0 10px #60a5fa;
-}
-
-/* Add/import action tabs */
-#addNav,
-#downloadTemplateBtn,
-#importExcelBtn{
-  margin-top:8px;
-}
-#addNav{
-  background:linear-gradient(100deg,#b91c1c,#ef4444);
-  color:#fff;
-  border-color:rgba(248,113,113,.5);
-  box-shadow:0 7px 20px rgba(220,38,38,.22);
-}
-#addNav:hover{
-  background:linear-gradient(100deg,#dc2626,#f87171);
-  box-shadow:0 9px 25px rgba(220,38,38,.3);
-}
-#downloadTemplateBtn,
-#importExcelBtn{
-  background:rgba(255,255,255,.045);
-  border-color:rgba(148,163,184,.2);
-}
-#importExcelBtn:hover{
-  border-color:rgba(96,165,250,.55);
-}
-
-/* Main heading */
-.top h1{
-  font-size:33px;
-  font-weight:900;
-  letter-spacing:-1px;
-  background:linear-gradient(90deg,#0f172a,#1d4ed8 65%,#0e7490);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-.top{
-  position:relative;
-}
-
-/* USCIS official button */
-.top .actions>a{
-  border:1px solid #93c5fd;
-  color:#1d4ed8;
-  background:linear-gradient(180deg,#fff,#eff6ff);
-  box-shadow:0 5px 16px rgba(37,99,235,.12);
-  font-weight:800;
-}
-.top .actions>a:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 22px rgba(37,99,235,.2);
-}
-
-/* Hero KPI cards */
-#dashboard>.cards .card{
-  min-height:128px;
-  border-radius:18px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 9px 28px rgba(15,23,42,.07);
-  transition:transform .2s ease,box-shadow .2s ease;
-}
-#dashboard>.cards .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 16px 35px rgba(15,23,42,.12);
-}
-#dashboard>.cards .card:nth-child(1){
-  border-top:3px solid #2563eb;
-}
-#dashboard>.cards .card:nth-child(2){
-  border-top:3px solid #06b6d4;
-}
-#dashboard>.cards .card:nth-child(3){
-  border-top:3px solid #f97316;
-}
-#dashboard>.cards .card:nth-child(4){
-  border-top:3px solid #10b981;
-}
-#dashboard>.cards .card:nth-child(5){
-  border-top:3px solid #ef4444;
-}
-#dashboard>.cards .card:nth-child(6){
-  border-top:3px solid #8b5cf6;
-}
-#dashboard>.cards .card:nth-child(7){
-  border-top:3px solid #f59e0b;
-}
-#dashboard>.cards .card:nth-child(8){
-  border-top:3px solid #0ea5e9;
-}
-#dashboard>.cards .card:nth-child(9){
-  border-top:3px solid #64748b;
-}
-#dashboard>.cards .card:nth-child(10){
-  border-top:3px solid #f97316;
-}
-#dashboard>.cards .num{
-  font-size:31px;
-  font-weight:900;
-}
-
-/* Floating superhero glow */
-#dashboard>.cards .card:after{
-  content:"";
-  position:absolute;
-  width:110px;
-  height:110px;
-  right:-40px;
-  bottom:-45px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(59,130,246,.13),transparent 70%);
-}
-
-/* Section headers */
-.panel-head{
-  background:linear-gradient(100deg,#ffffff,#f8fbff);
-}
-.panel-head h2{
-  font-size:16px;
-  font-weight:900;
-}
-
-/* Attention panel */
-.attention-panel{
-  border:1px solid #dbe5f2;
-  box-shadow:0 10px 30px rgba(15,23,42,.07);
-}
-.attention-card{
-  transition:.2s ease;
-}
-.attention-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 9px 25px rgba(15,23,42,.08);
-}
-
-/* Attractive table status pills */
-.badge{
-  padding:7px 10px;
-  border:0;
-  box-shadow:0 2px 7px rgba(15,23,42,.05);
-}
-.badge.approved{
-  background:linear-gradient(135deg,#059669,#10b981);
-  color:#fff;
-}
-.badge.denied{
-  background:linear-gradient(135deg,#dc2626,#ef4444);
-  color:#fff;
-}
-.badge.rfe{
-  background:linear-gradient(135deg,#ea580c,#f97316);
-  color:#fff;
-}
-
-/* Action buttons inside tables */
-.link,.danger{
-  padding:6px 9px;
-  border-radius:8px;
-  text-decoration:none;
-  transition:.15s ease;
-}
-.link:hover{
-  background:#eff6ff;
-}
-.danger:hover{
-  background:#fef2f2;
-}
-
-/* Calendar */
-.calendar-toolbar{
-  background:linear-gradient(100deg,#071426,#0f2a4a);
-  color:#fff;
-}
-.calendar-toolbar .small{color:#cbd5e1}
-.calendar-toolbar .secondary{
-  background:rgba(255,255,255,.1);
-  color:#fff;
-  border-color:rgba(255,255,255,.22);
-}
-.calendar-toolbar .secondary:hover{
-  background:rgba(255,255,255,.18);
-}
-.calendar-title{
-  color:#fff;
-}
-
-/* Modal */
-.modal-box{
-  border-radius:20px;
-  box-shadow:0 30px 90px rgba(2,6,23,.3);
-}
-
-/* Mobile */
-@media(max-width:1200px){
-  .main{margin-left:278px}
-}
-@media(max-width:700px){
-  .side{width:auto}
-  .main{margin-left:0}
-  .top h1{font-size:27px}
-}
-
-
-/* =========================================================
-   IMMIGRANTS GUIDE — COLORFUL SUPERHERO COMMAND CENTER
-   Owner-only Reports & Settings + richer dashboard visuals.
-   ========================================================= */
-:root{
-  --hero-blue:#2563eb;
-  --hero-cyan:#06b6d4;
-  --hero-purple:#7c3aed;
-  --hero-pink:#db2777;
-  --hero-orange:#f97316;
-  --hero-yellow:#f59e0b;
-  --hero-green:#10b981;
-  --hero-red:#ef4444;
-}
-body{
-  background:
-    radial-gradient(circle at 8% 0%,rgba(59,130,246,.10),transparent 22%),
-    radial-gradient(circle at 95% 18%,rgba(168,85,247,.09),transparent 24%),
-    linear-gradient(135deg,#f8fbff,#eef4ff 55%,#f8f5ff);
-}
-.side{
-  background:
-    radial-gradient(circle at 20% 8%,rgba(37,99,235,.30),transparent 23%),
-    radial-gradient(circle at 90% 55%,rgba(124,58,237,.20),transparent 28%),
-    linear-gradient(180deg,#020617,#07172d 52%,#020617);
-}
-.nav button.active{
-  background:linear-gradient(105deg,#2563eb,#7c3aed,#db2777);
-  border-color:rgba(255,255,255,.32);
-  box-shadow:0 9px 27px rgba(99,102,241,.34);
-}
-#addNav{
-  background:linear-gradient(105deg,#ef4444,#f97316,#f59e0b)!important;
-  border-color:rgba(255,255,255,.22)!important;
-  box-shadow:0 9px 25px rgba(249,115,22,.30)!important;
-}
-#downloadTemplateBtn{
-  color:#bfdbfe;
-  border-color:rgba(59,130,246,.35);
-}
-#importExcelBtn{
-  color:#a7f3d0;
-  border-color:rgba(16,185,129,.35);
-}
-#dashboard>.cards .card{
-  border:0;
-  color:#172033;
-  overflow:hidden;
-}
-#dashboard>.cards .card:nth-child(1){
-  background:linear-gradient(135deg,#eff6ff,#dbeafe);
-  border-top:4px solid #2563eb;
-}
-#dashboard>.cards .card:nth-child(2){
-  background:linear-gradient(135deg,#ecfeff,#cffafe);
-  border-top:4px solid #06b6d4;
-}
-#dashboard>.cards .card:nth-child(3){
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  border-top:4px solid #f97316;
-}
-#dashboard>.cards .card:nth-child(4){
-  background:linear-gradient(135deg,#ecfdf5,#d1fae5);
-  border-top:4px solid #10b981;
-}
-#dashboard>.cards .card:nth-child(5){
-  background:linear-gradient(135deg,#fef2f2,#fee2e2);
-  border-top:4px solid #ef4444;
-}
-#dashboard>.cards .card:nth-child(6){
-  background:linear-gradient(135deg,#f5f3ff,#ede9fe);
-  border-top:4px solid #7c3aed;
-}
-#dashboard>.cards .card:nth-child(7){
-  background:linear-gradient(135deg,#fffbeb,#fef3c7);
-  border-top:4px solid #f59e0b;
-}
-#dashboard>.cards .card:nth-child(8){
-  background:linear-gradient(135deg,#f0f9ff,#e0f2fe);
-  border-top:4px solid #0ea5e9;
-}
-#dashboard>.cards .card:nth-child(9){
-  background:linear-gradient(135deg,#f8fafc,#e2e8f0);
-  border-top:4px solid #64748b;
-}
-#dashboard>.cards .card:nth-child(10){
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  border-top:4px solid #ea580c;
-}
-#dashboard>.cards .card:hover{
-  transform:translateY(-6px) scale(1.01);
-  box-shadow:0 18px 38px rgba(30,41,59,.14);
-}
-#dashboard>.cards .num{
-  font-weight:950;
-}
-#dashboard>.cards .card::after{
-  background:radial-gradient(circle,rgba(255,255,255,.65),transparent 68%);
-}
-.attention-panel{
-  background:linear-gradient(135deg,#fff,#f8fbff);
-}
-.attention-card.urgent{
-  background:linear-gradient(135deg,#fff7f7,#fff);
-}
-.attention-card.warning{
-  background:linear-gradient(135deg,#fffaf0,#fff);
-}
-.attention-card.info{
-  background:linear-gradient(135deg,#f0f9ff,#fff);
-}
-.panel{
-  box-shadow:0 10px 32px rgba(30,41,59,.065);
-}
-.panel-head{
-  background:linear-gradient(100deg,#fff,#f8fbff);
-}
-.primary{
-  background:linear-gradient(105deg,#2563eb,#7c3aed);
-  border:0;
-}
-.primary:hover{
-  background:linear-gradient(105deg,#1d4ed8,#6d28d9);
-}
-.calendar-toolbar{
-  background:
-    radial-gradient(circle at 85% 10%,rgba(59,130,246,.35),transparent 28%),
-    linear-gradient(105deg,#020617,#172554,#312e81);
-}
-.report-card:nth-child(1){background:linear-gradient(135deg,#eff6ff,#dbeafe)}
-.report-card:nth-child(2){background:linear-gradient(135deg,#ecfeff,#cffafe)}
-.report-card:nth-child(3){background:linear-gradient(135deg,#f5f3ff,#ede9fe)}
-.report-card:nth-child(4){background:linear-gradient(135deg,#ecfdf5,#d1fae5)}
-
-
-/* =========================================================
-   IMMIGRANTS GUIDE — MOTION PACK
-   Consistent animation across dashboard items.
-   Respects reduced-motion accessibility preference.
-   ========================================================= */
-@keyframes igFadeUp{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes igGlow{
-  0%,100%{box-shadow:0 8px 24px rgba(37,99,235,.08)}
-  50%{box-shadow:0 12px 32px rgba(124,58,237,.16)}
-}
-@keyframes igShine{
-  0%{transform:translateX(-130%) skewX(-18deg)}
-  100%{transform:translateX(260%) skewX(-18deg)}
-}
-@keyframes igPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.025)}
-}
-@keyframes igFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-3px)}
-}
-
-/* Sidebar items */
-.nav button{
-  animation:igFadeUp .45s ease both;
-}
-.nav button:nth-child(1){animation-delay:.03s}
-.nav button:nth-child(2){animation-delay:.06s}
-.nav button:nth-child(3){animation-delay:.09s}
-.nav button:nth-child(4){animation-delay:.12s}
-.nav button:nth-child(5){animation-delay:.15s}
-.nav button:nth-child(6){animation-delay:.18s}
-.nav button:nth-child(7){animation-delay:.21s}
-.nav button:nth-child(8){animation-delay:.24s}
-.nav button:nth-child(9){animation-delay:.27s}
-
-/* Main sections */
-#dashboard>.cards .card,
-.attention-card,
-#dashboard>.panel,
-#cases>.panel,
-#history>.panel,
-#calendar>.panel,
-#reports>.panel,
-#team>.panel,
-#alerts>.panel{
-  animation:igFadeUp .5s ease both;
-}
-
-/* Stagger KPI cards */
-#dashboard>.cards .card:nth-child(1){animation-delay:.04s}
-#dashboard>.cards .card:nth-child(2){animation-delay:.08s}
-#dashboard>.cards .card:nth-child(3){animation-delay:.12s}
-#dashboard>.cards .card:nth-child(4){animation-delay:.16s}
-#dashboard>.cards .card:nth-child(5){animation-delay:.20s}
-#dashboard>.cards .card:nth-child(6){animation-delay:.24s}
-#dashboard>.cards .card:nth-child(7){animation-delay:.28s}
-#dashboard>.cards .card:nth-child(8){animation-delay:.32s}
-#dashboard>.cards .card:nth-child(9){animation-delay:.36s}
-#dashboard>.cards .card:nth-child(10){animation-delay:.40s}
-
-/* Cards breathe subtly */
-#dashboard>.cards .card{
-  animation-name:igFadeUp,igGlow;
-  animation-duration:.5s,4s;
-  animation-timing-function:ease,ease-in-out;
-  animation-iteration-count:1,infinite;
-  animation-delay:var(--ig-delay,0s),1s;
-}
-#dashboard>.cards .card:nth-child(1){--ig-delay:.04s}
-#dashboard>.cards .card:nth-child(2){--ig-delay:.08s}
-#dashboard>.cards .card:nth-child(3){--ig-delay:.12s}
-#dashboard>.cards .card:nth-child(4){--ig-delay:.16s}
-#dashboard>.cards .card:nth-child(5){--ig-delay:.20s}
-#dashboard>.cards .card:nth-child(6){--ig-delay:.24s}
-#dashboard>.cards .card:nth-child(7){--ig-delay:.28s}
-#dashboard>.cards .card:nth-child(8){--ig-delay:.32s}
-#dashboard>.cards .card:nth-child(9){--ig-delay:.36s}
-#dashboard>.cards .card:nth-child(10){--ig-delay:.40s}
-
-/* Buttons get a moving highlight on hover */
-.primary,.secondary,.check-btn,.top .actions>a{
-  position:relative;
-  overflow:hidden;
-}
-.primary::after,.secondary::after,.check-btn::after,.top .actions>a::after{
-  content:"";
-  position:absolute;
-  top:-20%;
-  left:-140%;
-  width:45%;
-  height:140%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);
-  transform:skewX(-18deg);
-  pointer-events:none;
-}
-@media (hover:hover) and (pointer:fine){
-  .primary:hover::after,.secondary:hover::after,.check-btn:hover::after,.top .actions>a:hover::after{
-    animation:igShine .65s ease;
-  }
-}
-
-/* Tables: rows gently animate when visible */
-tbody tr{
-  transition:background .18s ease,transform .18s ease,box-shadow .18s ease;
-}
-tbody tr:hover{
-  transform:translateX(2px);
-}
-
-/* Badges and attention indicators */
-.badge{
-  transition:transform .18s ease,box-shadow .18s ease;
-}
-.badge:hover{
-  transform:translateY(-1px) scale(1.03);
-  box-shadow:0 5px 12px rgba(15,23,42,.12);
-}
-.attention-card{
-  animation-duration:.55s;
-}
-.attention-card:hover{
-  animation:igPulse .8s ease;
-}
-
-/* Calendar events */
-.calendar-event{
-  transition:transform .16s ease,filter .16s ease;
-}
-.calendar-event:hover{
-  transform:translateY(-2px) scale(1.02);
-  filter:brightness(1.03);
-}
-
-/* Action links */
-.link,.danger{
-  transition:transform .16s ease,background .16s ease;
-}
-.link:hover,.danger:hover{
-  transform:translateY(-1px);
-}
-
-/* Respect accessibility */
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    transition-duration:.01ms!important;
-    scroll-behavior:auto!important;
-  }
-}
-
-<style>
-.welcome-banner{margin:0 0 20px;padding:18px 20px;border-radius:16px;background:linear-gradient(135deg,#eff6ff,#f8fafc);border:1px solid #bfdbfe;box-shadow:0 8px 25px rgba(15,23,42,.06)}
-.welcome-banner h2{margin:0;font-size:22px;color:#0f172a}.welcome-banner p{margin:5px 0 0;color:#64748b;font-size:13px}
-</style></style>
+.kpi-link{font-size:11px;color:#2563eb;font-weight:700;margin-top:6px;}</style>
 </head>
 <body>
 <aside class="side">
@@ -973,7 +74,7 @@ tbody tr:hover{
 <button data-view="cases">▣ All Cases</button>
 <button data-view="history">◷ Case History</button>
 <button data-view="calendar">▣ Deadline Calendar</button>
-<button id="reportsNav" data-view="reports" style="display:none">▤ Reports & Settings</button>
+<button data-view="reports">▤ Reports & Settings</button>
 <button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
 <button id="addNav">＋ Add Case</button>
 <button id="downloadTemplateBtn" class="secondary bulk-nav-btn" type="button">📥 Download Excel Template</button>
@@ -988,41 +89,22 @@ tbody tr:hover{
 <div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
 <div class="actions">
 <span id="who" class="muted"></span>
-    <a class="secondary" href="https://egov.uscis.gov/casestatus/landing.do" target="_blank" rel="noopener noreferrer" style="text-decoration:none">USCIS Case Status Online ↗</a>
-
-
-
-
-<button id="changePasswordBtn" class="secondary" type="button">🔐 Change Password</button>
-<button id="logout" class="secondary" type="button" onclick="window.__igEmergencyLogout&&window.__igEmergencyLogout()">Log out</button>
+<button id="checkAllDashBtn" class="secondary" type="button">↻ Check All USCIS</button>
+<button id="monitorNowBtn" class="secondary" type="button">⚙ Monitor Now</button>
+<span id="monitorStatus" class="muted">Auto-monitoring: scheduled</span>
+<button id="refresh" class="secondary" type="button">↻ Refresh</button>
+<button id="logout" class="secondary" type="button">Log out</button>
 </div>
-</div>
-
-<div class="debug-panel" id="debugPanel">
-  <div class="panel-head">
-    <div><h2>🔎 Connection Diagnostics</h2><div class="small">This temporary panel shows exactly what the dashboard is reading. It can be removed after the issue is fixed.</div></div>
-    <button id="debugRetry" class="secondary" type="button">↻ Retry</button>
-  </div>
-  <div class="debug-grid">
-    <div class="debug-item"><div class="debug-label">Signed-in User</div><div id="debugUser" class="debug-value">Checking...</div></div>
-    <div class="debug-item"><div class="debug-label">Organization</div><div id="debugOrg" class="debug-value">Checking...</div></div>
-    <div class="debug-item"><div class="debug-label">Role</div><div id="debugRole" class="debug-value">Checking...</div></div>
-    <div class="debug-item"><div class="debug-label">Organization ID</div><div id="debugOrgId" class="debug-value">Checking...</div></div>
-    <div class="debug-item"><div class="debug-label">Cases Query</div><div id="debugCases" class="debug-value">Waiting...</div></div>
-    <div class="debug-item"><div class="debug-label">Cases Loaded</div><div id="debugCount" class="debug-value">0</div></div>
-    <div class="debug-item"><div class="debug-label">Database Error</div><div id="debugDbError" class="debug-value">None</div></div>
-    <div class="debug-item"><div class="debug-label">Build</div><div id="debugBuild" class="debug-value">2026-09-22-role-fix-02</div></div>
-  </div>
 </div>
 
 <section id="dashboard">
-<div class="welcome-banner" id="welcomeBanner"><h2>Welcome, <span id="welcomeUser">User</span>! 👋</h2><p id="welcomePortal">Your secure immigration case portal</p></div>
 <div class="cards">
 <div class="card">Total Cases<div id="total" class="num">0</div></div>
 <div class="card">Pending<div id="pending" class="num">0</div></div>
 <div class="card">RFE / NOID<div id="rfe" class="num red">0</div></div>
 <div class="card">Approved<div id="approved" class="num green">0</div></div>
 <div class="card">Denied<div id="denied" class="num red">0</div></div>
+<div class="card clickable-kpi" id="h1bExpiryCard" role="button" tabindex="0" title="H-1B cases expiring within 180 days">H-1B Expiring ≤180 Days<div id="h1bExpiryCount" class="num orange">0</div><div class="kpi-link">Tap to view deadlines →</div></div>
 <div class="card">Total Amount<div id="totalAmount" class="num">$0</div></div>
 <div class="card">Premium Cases<div id="premiumCount" class="num">0</div></div>
 <div class="card">Avg. Duration<div id="avgDuration" class="num">0 days</div></div>
@@ -1040,7 +122,7 @@ NOID / Extensions
 <div class="panel-head attention-head"><div><h2>🚨 Attention Required</h2></div></div>
 <div class="attention-grid">
 <div class="attention-card urgent"><div class="attention-title">🔴 RFE / NOID Deadlines</div><div id="attentionRfeCount" class="attention-count">0</div><div id="attentionRfeItems" class="attention-items"><span class="attention-empty">No recorded RFE / NOID deadlines.</span></div></div>
-<div class="attention-card warning"><div class="attention-title">🟠 Extension Planning</div><div id="attentionExtCount" class="attention-count">0</div><div id="attentionExtItems" class="attention-items"><span class="attention-empty">No extension target dates within 90 days.</span></div></div>
+<div class="attention-card warning"><div class="attention-title">🟠 Extension Planning</div><div id="attentionExtCount" class="attention-count">0</div><div id="attentionExtItems" class="attention-items"><span class="attention-empty">No extension target dates or H-1B expirations within the alert window.</span></div></div>
 <div class="attention-card info"><div class="attention-title">🔵 Recent USCIS Activity</div><div id="attentionActivityCount" class="attention-count">0</div><div id="attentionActivityItems" class="attention-items"><span class="attention-empty">No recent USCIS status changes recorded.</span></div></div>
 </div>
 </div>
@@ -1050,7 +132,7 @@ NOID / Extensions
 
 <div class="table-wrap">
 <table style="min-width:1050px">
-<thead><tr><th>Employer</th><th>Total Cases</th><th>Amount Spent</th><th>Approved</th><th>Active</th><th>RFE / NOID</th><th>RFE Due ≤30d</th><th>Extensions Due ≤90d</th><th>Case Managers</th></tr></thead>
+<thead><tr><th>Employer</th><th>Total Cases</th><th>Amount Spent</th><th>Approved</th><th>Pending</th><th>Denied</th><th>RFE / NOID</th><th>RFE Due ≤30d</th><th>Extensions Pending</th><th>H-1B Expiring ≤180d</th><th>Case Managers</th></tr></thead>
 <tbody id="employerStatsBody"></tbody>
 </table>
 </div>
@@ -1068,10 +150,10 @@ NOID / Extensions
 <div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
 <div id="notice" class="notice" style="display:none"></div>
 <div id="batchNotice" class="notice" style="display:none"></div>
-<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
+<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>H-1B End</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
-<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search receipt, beneficiary, employer..."><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
+<section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search receipt, beneficiary, employer..."><button id="checkAllBtn" class="secondary" type="button">↻ Check All USCIS</button><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
 <div class="filter-bar">
   <select id="filterStatus"><option value="">All Statuses</option><option value="pending">Pending</option><option value="rfe">RFE / NOID</option><option value="approved">Approved</option><option value="denied">Denied</option></select>
   <select id="filterForm"><option value="">All Forms</option></select>
@@ -1079,10 +161,11 @@ NOID / Extensions
   <select id="filterEmployer"><option value="">All Employers</option></select>
   <select id="filterManager"><option value="">All Case Managers</option></select>
   <select id="filterPremium"><option value="">Premium: All</option><option value="true">Premium: Yes</option><option value="false">Premium: No</option></select>
+  <select id="filterMonitoring"><option value="">Monitoring: All</option><option value="true">Monitoring: Enabled</option><option value="false">Monitoring: Off</option></select>
   <button id="clearFilters" class="secondary" type="button">Clear Filters</button>
   <span id="filterSummary" class="muted">Showing all cases</span>
 </div>
-<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Filed</th><th>Priority</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
+<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>H-1B Start</th><th>H-1B End</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Monitoring</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
 
 <section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><div class="actions"><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."><select id="historyType" style="width:auto"><option value="">All Events</option><option value="USCIS">USCIS Only</option><option value="Case">Internal Case Only</option></select></div></div>
 <div class="notice" id="historyNotice">Loading history...</div>
@@ -1109,7 +192,7 @@ NOID / Extensions
 <div class="report-card"><div class="report-label">Managers</div><div id="reportManagerCount" class="report-value">0</div></div>
 </div>
 <div class="panel-head"><h2>Employer Report</h2></div>
-<div class="report-table-wrap"><div class="table-wrap"><table><thead><tr><th>Employer</th><th>Cases</th><th>Amount</th><th>Approved</th><th>Active</th><th>RFE/NOID</th><th>Premium</th><th>Avg Duration</th></tr></thead><tbody id="reportEmployerBody"></tbody></table></div></div>
+<div class="report-table-wrap"><div class="table-wrap"><table><thead><tr><th>Employer</th><th>Cases</th><th>Amount</th><th>Approved</th><th>Pending</th><th>Denied</th><th>RFE/NOID</th><th>Extensions Pending</th><th>H-1B ≤180d</th><th>Premium</th><th>Avg Duration</th></tr></thead><tbody id="reportEmployerBody"></tbody></table></div></div>
 <div class="panel-head"><h2>Case Manager Workload</h2></div>
 <div class="report-table-wrap"><div class="table-wrap"><table><thead><tr><th>Case Manager</th><th>Total</th><th>Active</th><th>RFE/NOID</th><th>Approved</th><th>Denied</th><th>Amount</th><th>Avg Duration</th></tr></thead><tbody id="reportManagerBody"></tbody></table></div></div>
 </div>
@@ -1125,18 +208,12 @@ NOID / Extensions
 </div>
 
 <div class="panel" style="margin-top:20px">
-<div class="panel-head"><h2>Email Notifications</h2><span id="emailState" class="role-pill">Preferences saved locally</span></div>
+<div class="panel-head"><h2>📧 Email Notifications</h2><span class="role-pill">Gmail Connected</span></div>
 <div class="settings-grid">
-<div class="setting-box"><h3>Notification Email</h3><input id="notifyEmail" type="email" placeholder="your@email.com"><p>Destination preference for future server-side email alerts.</p></div>
-<div class="setting-box"><h3>Alert Preferences</h3>
-<label><input id="emailRfe" type="checkbox"> RFE / NOID deadline alerts</label>
-<label><input id="emailExt" type="checkbox"> Extension planning alerts</label>
-<label><input id="emailStatus" type="checkbox"> USCIS status changes</label>
-<label><input id="emailMonitor" type="checkbox"> Monitoring failures</label>
-<button id="saveEmailPrefs" class="primary" type="button">Save Notification Preferences</button>
+<div class="setting-box"><h3>Notification Email</h3><input type="email" value="immigrantsguide@outlook.com" readonly aria-readonly="true" style="background:#f8fafc"><p>All configured USCIS monitoring and case alerts are sent to this address.</p></div>
+<div class="setting-box"><h3>Automatic Alerts</h3><label>✓ USCIS status changes</label><label>✓ RFE / NOID events</label><label>✓ Approvals and denials</label><label>✓ H-1B expiration within 180 days</label><label>✓ Configured deadline reminders</label></div>
 </div>
-</div>
-<div class="notice">Preferences are stored locally in this browser. Actual automated email delivery requires a server-side mail provider/Edge Function.</div>
+<div class="notice">Email delivery is handled server-side through the connected Gmail account. The dashboard does not store notification preferences in browser local storage.</div>
 </div>
 </section>
 
@@ -1154,9 +231,34 @@ NOID / Extensions
 </div>
 </section>
 
+<div id="passwordModal" class="modal" aria-hidden="true">
+  <div class="modal-box" style="width:min(560px,100%);">
+    <div class="modal-head">
+      <div>
+        <h2 style="margin:0 0 5px">Change Password</h2>
+        <div class="small">Set a private password for the selected portal account.</div>
+      </div>
+      <button id="passwordClose" class="close" type="button" aria-label="Close">×</button>
+    </div>
+    <div class="notice" id="passwordUserNotice" style="margin-top:16px"></div>
+    <input id="passwordUserId" type="hidden">
+    <label>New Password
+      <input id="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
+    </label>
+    <label>Confirm Password
+      <input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter the password">
+    </label>
+    <div id="passwordMsg" class="msg" style="display:none"></div>
+    <div class="form-actions">
+      <button id="passwordCancel" class="secondary" type="button">Cancel</button>
+      <button id="savePassword" class="primary" type="button">Save Password</button>
+    </div>
+  </div>
+</div>
+
 <section id="alerts" style="display:none">
 <div class="panel">
-<div class="panel-head"><h2>Alerts & Monitoring Health</h2></div>
+<div class="panel-head"><h2>Alerts & Monitoring Health</h2><button id="runMonitorFromAlerts" class="secondary" type="button">⚙ Run Monitor</button></div>
 <div class="alert-summary">
 <div class="alert-stat">RFE / NOID Cases<b id="alertRfeCount">0</b></div>
 <div class="alert-stat">Deadlines ≤ 30 Days<b id="alertDeadlineCount">0</b></div>
@@ -1191,11 +293,11 @@ NOID / Extensions
 <div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
 <div><label>Premium Processing</label><select id="premium"><option value="false">No</option><option value="true">Yes</option></select></div>
 <div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="0"></div>
-<div><label>Previous Validity End Date</label><input id="previousValidityEnd" type="date"><div class="small">For extensions, the new validity start is automatically set to the next day.</div></div>
-<div><label>Validity Start Date</label><input id="validityStart" type="date"></div>
-<div><label>Validity End Date</label><input id="validityEnd" type="date"></div>
 <div><label>RFE / NOID Deadline</label><input id="rfeDeadline" type="date"></div>
 <div><label>Extension Deadline / Target Date</label><input id="extensionTarget" type="date"><div class="small">Enter the date your team wants to target for filing the extension.</div></div>
+<div><label>H-1B Validity Start Date</label><input id="h1bStart" type="date"></div>
+<div><label>H-1B Validity End Date</label><input id="h1bEnd" type="date"><div class="small">Extension alert appears when the end date is within 180 days.</div></div>
+<div><label>Automatic Monitoring</label><select id="monitoring"><option value="true">Enabled</option><option value="false">Off</option></select></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -1228,28 +330,11 @@ NOID / Extensions
 (function(){
 "use strict";
 
-// Emergency logout is intentionally independent of Supabase initialization.
-// This guarantees the button works even if another startup step fails.
-window.__igEmergencyLogout=function(){
-  try{
-    if(window.supabase && db){
-      db.auth.signOut({scope:"local"}).catch(function(){});
-    }
-  }catch(_){}
-  try{
-    Object.keys(localStorage).forEach(function(k){
-      if(k.indexOf("sb-euzifpjzeuqdznkelxdq")===0 || k.indexOf("supabase.auth.token")>=0) localStorage.removeItem(k);
-    });
-  }catch(_){}
-  try{sessionStorage.clear();}catch(_){}
-  window.location.replace("index.html?logout=1&v="+Date.now());
-};
-
 const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
-let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, currentUser=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null, teamMembers=[];
+let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null, teamMembers=[];
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1259,6 +344,10 @@ const isApproved=x=>/approved/i.test(statusText(x));
 const isDenied=x=>/denied/i.test(statusText(x));
 const isRfe=x=>/rfe|noid/i.test(statusText(x));
 const isPending=x=>!isApproved(x)&&!isDenied(x);
+function h1bExpiryDays(c){if(!c?.h1b_validity_end_date)return null;return daysUntil(c.h1b_validity_end_date);}
+function isH1bExpiryWithin180Days(c){const n=h1bExpiryDays(c);return n!==null&&n>=0&&n<=180;}
+function h1bExpiryLabel(c){const n=h1bExpiryDays(c);if(n===null)return "—";if(n<0)return "Expired "+Math.abs(n)+" day"+(Math.abs(n)===1?"":"s")+" ago";if(n===0)return "Expires today";return n+" day"+(n===1?"":"s")+" remaining";}
+function extensionPending(c){return !!c?.extension_target_date||isH1bExpiryWithin180Days(c);}
 
 function daysUntil(value){
   if(!value)return null;
@@ -1276,95 +365,44 @@ function deadlineLabel(value){
   return n+" day"+(n===1?"":"s")+" remaining";
 }
 function deadlineTypeLabel(type){
-  return type==="RFE"?'<span class="badge rfe">RFE / NOID</span>':'<span class="badge">Extension</span>';
-}
-
-
-function updateWelcome(user){
-  const raw=(user?.user_metadata?.full_name||user?.user_metadata?.name||((user?.email||"").split("@")[0])||"User").trim();
-  const display=raw.replace(/[._-]+/g," ").replace(/\b\w/g,m=>m.toUpperCase());
-  if($("welcomeUser"))$("welcomeUser").textContent=display;
-  if($("welcomePortal"))$("welcomePortal").textContent=(currentOrgName||"Immigrants Guide")+" • "+(String(currentOrgRole||"viewer").charAt(0).toUpperCase()+String(currentOrgRole||"viewer").slice(1));
-}
-
-function openPasswordModal(){
-  if($("passwordModal"))$("passwordModal").style.display="grid";
-  if($("newPassword"))$("newPassword").value="";
-  if($("confirmPassword"))$("confirmPassword").value="";
-  if($("passwordMsg"))$("passwordMsg").innerHTML="";
-}
-function closePasswordModal(){if($("passwordModal"))$("passwordModal").style.display="none";}
-async function saveNewPassword(){
-  const p=$("newPassword")?.value||"", c=$("confirmPassword")?.value||"";
-  const msg=$("passwordMsg");
-  if(p.length<8){msg.innerHTML='<div class="msg error">Password must be at least 8 characters.</div>';return;}
-  if(p!==c){msg.innerHTML='<div class="msg error">Passwords do not match.</div>';return;}
-  const btn=$("savePassword"); btn.disabled=true; btn.textContent="Saving...";
-  try{
-    const r=await db.auth.updateUser({password:p});
-    if(r.error)throw r.error;
-    msg.innerHTML='<div class="msg success">Password updated successfully. You can use this password next time you log in.</div>';
-    setTimeout(closePasswordModal,1200);
-  }catch(e){msg.innerHTML='<div class="msg error">Password update failed: '+esc(e.message||e)+'</div>';}
-  finally{btn.disabled=false;btn.textContent="Save Password";}
+  return type==="RFE"?'<span class="badge rfe">RFE / NOID</span>':type==="H-1B Expiry"?'<span class="badge denied">H-1B Expiry</span>':'<span class="badge">Extension</span>';
 }
 
 async function loadOrganizationContext(){
   const userResult=await db.auth.getUser();
-  if(userResult.error)throw userResult.error;
   const user=userResult?.data?.user;
   if(!user)throw new Error("Your login session could not be verified. Please sign in again.");
-  currentUser=user;
-  updateWelcome(user);
-  if($("debugUser"))$("debugUser").textContent=user.email||user.id||"Authenticated";
-
   const r=await db.from("organization_members")
     .select("organization_id,role")
     .eq("user_id",user.id)
-    .order("organization_id",{ascending:true})
-    .limit(1);
+    .order("organization_id",{ascending:true});
   if(r.error)throw r.error;
   if(!r.data?.length)throw new Error("Your account is not assigned to an Immigrants Guide organization yet.");
-
-  currentOrgId=r.data[0].organization_id;
-  currentOrgRole=String(r.data[0].role||"viewer").toLowerCase();
-
-  // Load the organization name too so the diagnostics panel can prove which tenant is active.
+  // Use the first accessible organization for this dashboard. If a user is
+  // a member of multiple organizations, the first one remains the default.
+  const membership=r.data[0];
+  currentOrgId=membership.organization_id;
+  currentOrgRole=membership.role||"viewer";
   try{
     const org=await db.from("organizations").select("id,name").eq("id",currentOrgId).maybeSingle();
-    if(org.error)throw org.error;
-    currentOrgName=org.data?.name||"Immigrants Guide";
-    updateWelcome(user);
-  }catch(_){
-    currentOrgName="Immigrants Guide";
-  }
-
-  if($("debugOrg"))$("debugOrg").textContent=currentOrgName||"Immigrants Guide";
-  if($("debugRole"))$("debugRole").textContent=currentOrgRole.toUpperCase();
-  if($("debugOrgId"))$("debugOrgId").textContent=currentOrgId||"Missing";
-  if($("debugRole"))$("debugRole").className="debug-value ok";
-  if($("debugOrgId"))$("debugOrgId").className="debug-value ok";
+    if(!org.error) currentOrgName=org.data?.name||null;
+  }catch(_){}
 }
-
 function canManageCases(){return ["owner","admin","manager"].includes(String(currentOrgRole||"").toLowerCase());}
 function canModifyCases(){return canManageCases();}
 function caseActionButtons(c){
-  if(!canManageCases()) return "—";
-  return '<button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
+  const view='<button class="link profileBtn" data-id="'+esc(c.id)+'" type="button">View</button>';
+  if(!canManageCases()) return view+' <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button>';
+  return view+' <button class="check-btn checkOneBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
 }
 function canManageTeam(){return ["owner","admin"].includes(String(currentOrgRole||"").toLowerCase());}
-function canViewReports(){return String(currentOrgRole||"").toLowerCase()==="owner";}
-function applyOwnerReportPermission(){
-  const btn=$("reportsNav");
-  if(btn) btn.style.display=canViewReports()?"":"none";
-}
 function applyRolePermissions(){
-  applyOwnerReportPermission();
   const can=canManageCases();
   const teamCan=canManageTeam();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
   if($("teamNav"))$("teamNav").style.display=teamCan?"":"none";
   ["downloadTemplateBtn","importExcelBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
+  ["checkAllBtn","checkAllDashBtn","monitorNowBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
 }
 
 function setNotice(text,error=false){
@@ -1398,35 +436,22 @@ function durationDays(c){
   return Number.isFinite(d)&&d>=0?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
-function validityText(value){return value?date(value):"—";}
-function displayDuration(c){return isApproved(c)?"N/A":durationText(c);}
-function caseGroup(c){if(isApproved(c))return "Approved";if(isRfe(c))return "RFE / NOID";if(isDenied(c))return "Denied";return "In Process";}
-function groupRank(c){return {"Approved":1,"In Process":2,"RFE / NOID":3,"Denied":4}[caseGroup(c)]||9;}
-function sortGroupedCases(list){return [...list].sort((a,b)=>groupRank(a)-groupRank(b)||new Date(b.created_at||b.filing_date||0)-new Date(a.created_at||a.filing_date||0));}
-function groupedRowsHTML(list, rowBuilder, colspan){
-  const sorted=sortGroupedCases(list); let last=""; let out="";
-  sorted.forEach(c=>{const g=caseGroup(c); if(g!==last){out+='<tr class="case-group-row"><td colspan="'+colspan+'">'+(g==="Approved"?'🟢 ':g==="In Process"?'🔵 ':g==="RFE / NOID"?'🟠 ':'🔴 ')+esc(g)+'</td></tr>'; last=g;} out+=rowBuilder(c);});
-  return out;
-}
-function syncExtensionValidity(){
-  const prev=$("previousValidityEnd")?.value||""; const start=$("validityStart");
-  const type=String($("caseType")?.value||"").toLowerCase();
-  if(prev && type.includes("extension")){const d=new Date(prev+"T00:00:00"); if(!Number.isNaN(d.getTime())){d.setDate(d.getDate()+1); start.value=d.toISOString().slice(0,10);}}
-}
-
 
 function attentionDeadlineItem(x){
   const n=daysUntil(x.date);
   const cls=n<0?"overdue":n<=7?"due-soon":"";
-  return '<div class="attention-item"><span><span class="attention-receipt">'+esc(x.c.receipt_number)+'</span><br>'+esc(x.c.beneficiary_name||"")+'</span><span class="'+cls+'">'+esc(deadlineLabel(x.date))+'</span></div>';
+  return '<div class="attention-item"><span><span class="attention-receipt">'+esc(x.c.receipt_number)+'</span><br>'+esc(x.c.beneficiary_name||"")+'</span><span class="'+cls+'">'+esc((x.label?x.label+': ':'')+deadlineLabel(x.date))+'</span></div>';
 }
 function drawAttention(){
   const rfeItems=rows.filter(c=>c.rfe_deadline_date).map(c=>({date:c.rfe_deadline_date,c}))
     .filter(x=>{const n=daysUntil(x.date);return n!==null&&n<=30;})
     .sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
-  const extItems=rows.filter(c=>c.extension_target_date).map(c=>({date:c.extension_target_date,c}))
-    .filter(x=>{const n=daysUntil(x.date);return n!==null&&n<=90;})
-    .sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
+  const extItems=[];
+  rows.forEach(c=>{
+    if(c.extension_target_date){const n=daysUntil(c.extension_target_date);if(n!==null&&n<=90)extItems.push({date:c.extension_target_date,c,label:"Extension target"});}
+    if(isH1bExpiryWithin180Days(c))extItems.push({date:c.h1b_validity_end_date,c,label:"H-1B expiry"});
+  });
+  extItems.sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
 
   $("attentionRfeCount").textContent=rfeItems.length;
   $("attentionRfeItems").innerHTML=rfeItems.length?rfeItems.slice(0,5).map(attentionDeadlineItem).join(""):'<span class="attention-empty">No RFE / NOID deadlines due within 30 days.</span>';
@@ -1444,16 +469,15 @@ function drawEmployerStats(){
   rows.forEach(c=>{
     const name=String(c.employer||"Unassigned").trim()||"Unassigned";
     if(q&&!name.toLowerCase().includes(q))return;
-    if(!map.has(name))map.set(name,{count:0,amount:0,approved:0,active:0,rfe:0,rfeDue:0,extDue:0,managers:new Set()});
-    const m=map.get(name);
-    m.count++; m.amount+=Number(c.amount)||0;
-    if(isApproved(c))m.approved++; else if(isPending(c))m.active++;
-    if(isRfe(c))m.rfe++; const rfeDays=daysUntil(c.rfe_deadline_date); if(rfeDays!==null&&rfeDays<=30)m.rfeDue++;
-    const e=daysUntil(c.extension_target_date); if(nValidDeadline(e))m.extDue++;
+    if(!map.has(name))map.set(name,{count:0,amount:0,approved:0,pending:0,denied:0,rfe:0,rfeDue:0,extPending:0,h1b180:0,managers:new Set()});
+    const m=map.get(name);m.count++;m.amount+=Number(c.amount)||0;
+    if(isApproved(c))m.approved++;if(isPending(c))m.pending++;if(isDenied(c))m.denied++;if(isRfe(c))m.rfe++;
+    const rd=daysUntil(c.rfe_deadline_date);if(rd!==null&&rd>=0&&rd<=30)m.rfeDue++;
+    if(extensionPending(c))m.extPending++;if(isH1bExpiryWithin180Days(c))m.h1b180++;
     if(String(c.case_manager||"").trim())m.managers.add(String(c.case_manager).trim());
   });
   const list=[...map.entries()].sort((a,b)=>b[1].count-a[1].count||a[0].localeCompare(b[0]));
-  $("employerStatsBody").innerHTML=list.length?list.map(([name,m])=>'<tr><td><b>'+esc(name)+'</b></td><td>'+m.count+'</td><td>'+money(m.amount)+'</td><td>'+m.approved+'</td><td>'+m.active+'</td><td>'+m.rfe+'</td><td>'+m.rfeDue+'</td><td>'+m.extDue+'</td><td>'+esc([...m.managers].join(", ")||"Unassigned")+'</td></tr>').join(""):'<tr><td colspan="9" class="empty">No employer data yet.</td></tr>';
+  $("employerStatsBody").innerHTML=list.length?list.map(([name,m])=>'<tr><td><b>'+esc(name)+'</b></td><td>'+m.count+'</td><td>'+money(m.amount)+'</td><td>'+m.approved+'</td><td>'+m.pending+'</td><td>'+m.denied+'</td><td>'+m.rfe+'</td><td>'+m.rfeDue+'</td><td>'+m.extPending+'</td><td>'+m.h1b180+'</td><td>'+esc([...m.managers].join(", ")||"Unassigned")+'</td></tr>').join(""):'<tr><td colspan="11" class="empty">No employer data yet.</td></tr>';
 }
 function nValidDeadline(n){return n!==null&&n<=90;}
 
@@ -1462,6 +486,7 @@ function drawDeadlines(){
   rows.forEach(c=>{
     if(c.rfe_deadline_date)items.push({type:"RFE",date:c.rfe_deadline_date,c});
     if(c.extension_target_date)items.push({type:"Extension",date:c.extension_target_date,c});
+    if(isH1bExpiryWithin180Days(c))items.push({type:"H-1B Expiry",date:c.h1b_validity_end_date,c});
   });
   items.sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
   $("deadlineBody").innerHTML=items.length?items.map(x=>'<tr><td>'+deadlineTypeLabel(x.type)+'</td><td><b>'+esc(x.c.receipt_number)+'</b></td><td>'+esc(x.c.beneficiary_name)+'</td><td>'+esc(x.c.employer||"—")+'</td><td><b>'+esc(date(x.date))+'</b></td><td>'+deadlineLabel(x.date)+'</td><td>'+badge(x.c.current_status||x.c.uscis_status_text)+'</td><td>'+esc(x.c.case_manager||"—")+'</td><td><button class="link editBtn" data-id="'+x.c.id+'" type="button">Edit</button></td></tr>').join(""):'<tr><td colspan="9" class="empty">No RFE / NOID or extension deadlines recorded.</td></tr>';
@@ -1472,7 +497,33 @@ function monitoringLabel(x){
   return enabled?'<span class="badge approved">Enabled</span>':'<span class="badge">Off</span>';
 }
 
-
+async function monitorNow(){
+  const btn=$("monitorNowBtn");
+  if(btn){btn.disabled=true;btn.textContent="Monitoring...";}
+  if($("monitorStatus"))$("monitorStatus").textContent="Checking eligible cases...";
+  try{
+    const r=await db.functions.invoke("monitor-cases",{body:{source:"dashboard",force:true}});
+    if(r.error){
+      let msg=r.error.message||"Monitoring failed.";
+      try{
+        const body=await r.error.context?.json?.();
+        if(body?.error)msg=body.error;
+      }catch(_){}
+      throw new Error(msg);
+    }
+    const d=r.data||{};
+    recentMonitorResult=d;
+    try{localStorage.setItem("ig_last_monitor_result",JSON.stringify(d));}catch(_){}
+    if($("monitorStatus"))$("monitorStatus").textContent=
+      "Monitor complete: "+(d.checked||0)+" checked, "+(d.changed||0)+" changed, "+(d.failed||0)+" failed.";
+    await load();
+  }catch(e){
+    if($("monitorStatus"))$("monitorStatus").textContent="Monitor error: "+(e.message||e);
+    console.error("Monitor error:",e);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent="⚙ Monitor Now";}
+  }
+}
 
 function isPremium(c){
   return c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1";
@@ -1502,6 +553,7 @@ function filteredCases(){
   const employer=$("filterEmployer")?.value||"";
   const manager=$("filterManager")?.value||"";
   const premium=$("filterPremium")?.value||"";
+  const monitoring=$("filterMonitoring")?.value||"";
   if(status==="pending")a=a.filter(c=>isPending(c));
   if(status==="rfe")a=a.filter(c=>isRfe(c));
   if(status==="approved")a=a.filter(c=>isApproved(c));
@@ -1511,6 +563,7 @@ function filteredCases(){
   if(employer)a=a.filter(c=>String(c.employer||"")===employer);
   if(manager)a=a.filter(c=>String(c.case_manager||"")===manager);
   if(premium)a=a.filter(c=>String(isPremium(c))===premium);
+  if(monitoring)a=a.filter(c=>String(isMonitoring(c))===monitoring);
   return a;
 }
 function updateFilterSummary(count){
@@ -1528,6 +581,7 @@ function deadlineItems(){
   rows.forEach(c=>{
     if(c.rfe_deadline_date)items.push({type:"RFE",date:c.rfe_deadline_date,c});
     if(c.extension_target_date)items.push({type:"Extension",date:c.extension_target_date,c});
+    if(isH1bExpiryWithin180Days(c))items.push({type:"H-1B Expiry",date:c.h1b_validity_end_date,c});
   });
   return items;
 }
@@ -1544,7 +598,7 @@ function drawCalendar(){
     const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
     const today=new Date(),isToday=d.toDateString()===today.toDateString();
     const events=all.filter(x=>String(x.date).slice(0,10)===iso);
-    out+='<div class="calendar-day '+(!inMonth?"muted-day ":"")+(isToday?"today":"")+'><div class="calendar-num">'+actualDay+'</div>'+events.map(x=>'<div class="calendar-event '+(x.type==="RFE"?"rfe":"ext")+' profileCalendarEvent" data-id="'+esc(x.c.id)+'">'+esc(x.type+": "+x.c.receipt_number)+'</div>').join("")+'</div>';
+    out+='<div class="calendar-day '+(!inMonth?"muted-day ":"")+(isToday?"today":"")+'><div class="calendar-num">'+actualDay+'</div>'+events.map(x=>'<div class="calendar-event '+(x.type==="RFE"?"rfe":x.type==="H-1B Expiry"?"rfe":"ext")+' profileCalendarEvent" data-id="'+esc(x.c.id)+'">'+esc(x.type+": "+x.c.receipt_number)+'</div>').join("")+'</div>';
   }
   grid.innerHTML=out;
   const sorted=all.sort((a,b)=>daysUntil(a.date)-daysUntil(b.date));
@@ -1565,9 +619,10 @@ function employerReport(){
   const map=new Map();
   rows.forEach(c=>{
     const name=String(c.employer||"Unassigned").trim()||"Unassigned";
-    if(!map.has(name))map.set(name,{total:0,amount:0,approved:0,active:0,rfe:0,premium:0,durations:[]});
+    if(!map.has(name))map.set(name,{total:0,amount:0,approved:0,pending:0,denied:0,rfe:0,extPending:0,h1b180:0,premium:0,durations:[]});
     const m=map.get(name);m.total++;m.amount+=Number(c.amount)||0;
-    if(isApproved(c))m.approved++;else if(isPending(c))m.active++;if(isRfe(c))m.rfe++;if(isPremium(c))m.premium++;
+    if(isApproved(c))m.approved++;if(isPending(c))m.pending++;if(isDenied(c))m.denied++;if(isRfe(c))m.rfe++;
+    if(extensionPending(c))m.extPending++;if(isH1bExpiryWithin180Days(c))m.h1b180++;if(isPremium(c))m.premium++;
     const d=durationDays(c);if(d!==null)m.durations.push(d);
   });
   return [...map.entries()].map(([name,m])=>({name,...m,avg:m.durations.length?Math.round(m.durations.reduce((a,b)=>a+b,0)/m.durations.length):null})).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name));
@@ -1580,7 +635,7 @@ function drawReports(){
   $("reportEmployerCount").textContent=employerReport().length;
   $("reportManagerCount").textContent=managerReport().length;
   const er=employerReport(),mr=managerReport();
-  $("reportEmployerBody").innerHTML=er.length?er.map(x=>'<tr><td><b>'+esc(x.name)+'</b></td><td>'+x.total+'</td><td>'+money(x.amount)+'</td><td>'+x.approved+'</td><td>'+x.active+'</td><td>'+x.rfe+'</td><td>'+x.premium+'</td><td>'+(x.avg===null?"—":x.avg+" days")+'</td></tr>').join(""):'<tr><td colspan="8" class="empty">No employer data.</td></tr>';
+  $("reportEmployerBody").innerHTML=er.length?er.map(x=>'<tr><td><b>'+esc(x.name)+'</b></td><td>'+x.total+'</td><td>'+money(x.amount)+'</td><td>'+x.approved+'</td><td>'+x.pending+'</td><td>'+x.denied+'</td><td>'+x.rfe+'</td><td>'+x.extPending+'</td><td>'+x.h1b180+'</td><td>'+x.premium+'</td><td>'+(x.avg===null?"—":x.avg+" days")+'</td></tr>').join(""):'<tr><td colspan="11" class="empty">No employer data.</td></tr>';
   $("reportManagerBody").innerHTML=mr.length?mr.map(x=>'<tr><td><b>'+esc(x.name)+'</b></td><td>'+x.total+'</td><td>'+x.active+'</td><td>'+x.rfe+'</td><td>'+x.approved+'</td><td>'+x.denied+'</td><td>'+money(x.amount)+'</td><td>'+(x.avg===null?"—":x.avg+" days")+'</td></tr>').join(""):'<tr><td colspan="8" class="empty">No case-manager data.</td></tr>';
 }
 function csvEscape(v){return '"'+String(v??"").replace(/"/g,'""')+'"';}
@@ -1589,16 +644,7 @@ function downloadCSV(filename,headers,data){
   const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
-function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Case Type","Status","Amount","Premium","Duration","Validity Start","Validity End","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.case_type,c.current_status,c.amount,isPremium(c)?"Yes":"No",isApproved(c)?"N/A":durationDays(c),c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):""),c.validity_end_date,c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date]));}
-function exportEmployerCSV(){downloadCSV("employer-report.csv",["Employer","Cases","Amount","Approved","Active","RFE/NOID","Premium","Average Duration"],employerReport().map(x=>[x.name,x.total,x.amount,x.approved,x.active,x.rfe,x.premium,x.avg===null?"":x.avg]));}
-function exportManagerCSV(){downloadCSV("case-manager-report.csv",["Case Manager","Total","Active","RFE/NOID","Approved","Denied","Amount","Average Duration"],managerReport().map(x=>[x.name,x.total,x.active,x.rfe,x.approved,x.denied,x.amount,x.avg===null?"":x.avg]));}
-function loadEmailPrefs(){
-  try{const p=JSON.parse(localStorage.getItem("ig_email_preferences")||"{}");$("notifyEmail").value=p.email||"";$("emailRfe").checked=p.rfe!==false;$("emailExt").checked=p.ext!==false;$("emailStatus").checked=p.status!==false;$("emailMonitor").checked=p.monitor!==false;}catch(_){}
-}
-function saveEmailPrefs(){
-  const p={email:$("notifyEmail").value.trim(),rfe:$("emailRfe").checked,ext:$("emailExt").checked,status:$("emailStatus").checked,monitor:$("emailMonitor").checked};
-  localStorage.setItem("ig_email_preferences",JSON.stringify(p));$("emailState").textContent="Saved "+new Date().toLocaleTimeString();
-}
+function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Case Type","Status","USCIS Status","Amount","Premium","Duration Days","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target","H-1B Validity Start","H-1B Validity End","H-1B Days Remaining","Monitoring"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.case_type,c.current_status,c.uscis_status_text,c.amount,isPremium(c)?"Yes":"No",durationDays(c),c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date,c.h1b_validity_start_date,c.h1b_validity_end_date,h1bExpiryDays(c),isMonitoring(c)?"Enabled":"Off"]));}
 function drawAlertHealth(){
   const rfe=rows.filter(isRfe).length;
   const dl=rows.filter(c=>{const n=daysUntil(c.rfe_deadline_date);return n!==null&&n<=30;}).length;
@@ -1635,8 +681,10 @@ function renderTeamMembers(){
     const canChange=!self && role!=="owner" && (String(currentOrgRole).toLowerCase()==="owner" || (String(currentOrgRole).toLowerCase()==="admin" && ["manager","viewer"].includes(role)));
     const options=(role==="owner"?["owner"]:roleOptions).map(x=>'<option value="'+x+'"'+(x===role?' selected':'')+'>'+x.charAt(0).toUpperCase()+x.slice(1)+'</option>').join("");
     const roleControl=canChange?'<select class="team-role-select teamRoleSelect" data-user-id="'+esc(m.user_id)+'">'+options+'</select>':'<span class="role-pill">'+esc(role.toUpperCase())+'</span>';
-    const removeControl=(!self&&role!=="owner"&&(String(currentOrgRole).toLowerCase()==="owner"||(String(currentOrgRole).toLowerCase()==="admin"&&["manager","viewer"].includes(role))))?'<button class="danger removeTeamBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button">Remove</button>':'—';
-    return '<tr><td class="team-member-email">'+esc(email)+(self?' <span class="small">(You)</span>':'')+'</td><td>'+roleControl+'</td><td>'+lastChecked(m.joined_at)+'</td><td>'+removeControl+'</td></tr>';
+    const canManageTarget=!self&&role!=="owner"&&(String(currentOrgRole).toLowerCase()==="owner"||(String(currentOrgRole).toLowerCase()==="admin"&&["manager","viewer"].includes(role)));
+    const removeControl=canManageTarget?'<button class="danger removeTeamBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button">Remove</button>':'—';
+    const passwordControl=canManageTarget?'<button class="secondary changePasswordBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button" style="margin-left:8px">🔐 Change Password</button>':'';
+    return '<tr><td class="team-member-email">'+esc(email)+(self?' <span class="small">(You)</span>':'')+'</td><td>'+roleControl+'</td><td>'+lastChecked(m.joined_at)+'</td><td>'+removeControl+passwordControl+'</td></tr>';
   }).join("");
 }
 async function addTeamMember(){
@@ -1682,8 +730,65 @@ async function removeTeamMember(userId,email){
     $("teamNotice").className="notice";
   }catch(e){alert("Remove failed: "+(e.message||e));}
 }
+function openPasswordModal(userId,email){
+  if(!canManageTeam()){alert("Only organization owners and admins can change team member passwords.");return;}
+  $("passwordUserId").value=userId||"";
+  $("passwordUserNotice").textContent="Changing password for "+(email||"this portal user")+". The new password is not stored in the database.";
+  $("passwordMsg").style.display="none";
+  $("passwordMsg").textContent="";
+  $("newPassword").value="";
+  $("confirmPassword").value="";
+  $("savePassword").disabled=false;
+  $("savePassword").textContent="Save Password";
+  $("passwordModal").style.display="grid";
+  $("passwordModal").setAttribute("aria-hidden","false");
+  setTimeout(()=>$("newPassword").focus(),50);
+}
+function closePasswordModal(){
+  $("passwordModal").style.display="none";
+  $("passwordModal").setAttribute("aria-hidden","true");
+}
+async function saveTeamMemberPassword(){
+  if(!canManageTeam()){return;}
+  const userId=$("passwordUserId").value;
+  const newPassword=$("newPassword").value;
+  const confirmPassword=$("confirmPassword").value;
+  const msg=$("passwordMsg");
+  const btn=$("savePassword");
+  msg.style.display="none";
+  if(!userId){msg.textContent="No team member was selected.";msg.className="msg error";msg.style.display="block";return;}
+  if(newPassword.length<8){msg.textContent="Password must be at least 8 characters.";msg.className="msg error";msg.style.display="block";return;}
+  if(newPassword!==confirmPassword){msg.textContent="Passwords do not match.";msg.className="msg error";msg.style.display="block";return;}
+  btn.disabled=true;
+  btn.textContent="Saving...";
+  try{
+    const sessionResult=await db.auth.getSession();
+    const session=sessionResult?.data?.session;
+    if(!session)throw new Error("Your login session has expired. Please sign in again.");
+    const r=await db.functions.invoke("change-user-password",{
+      body:{user_id:userId,new_password:newPassword}
+    });
+    if(r.error)throw r.error;
+    if(!r.data?.success)throw new Error(r.data?.error||"Unable to change the password.");
+    msg.textContent="Password changed successfully. The user can now sign in with the new password.";
+    msg.className="msg success";
+    msg.style.display="block";
+    $("newPassword").value="";
+    $("confirmPassword").value="";
+    setTimeout(closePasswordModal,1200);
+  }catch(e){
+    console.error("Change team member password failed:",e);
+    msg.textContent="Password change failed: "+(e?.message||e);
+    msg.className="msg error";
+    msg.style.display="block";
+  }finally{
+    btn.disabled=false;
+    btn.textContent="Save Password";
+  }
+}
+
 function renderSecurity(){
-  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"");
+  if($("securityAuth"))$("securityAuth").innerHTML='<span class="security-ok">Authenticated</span><br>'+esc($("who").textContent||"")+(currentOrgName?'<br>Organization: '+esc(currentOrgName):'');
   if($("securityDb"))$("securityDb").innerHTML='<span class="security-ok">Supabase connection active</span>';
   if($("rolePill"))$("rolePill").textContent=(currentOrgRole||"viewer").toUpperCase();
   applyRolePermissions();
@@ -1704,6 +809,7 @@ function draw(){
   $("rfe").textContent=rows.filter(c=>isRfe(c)||c.rfe_deadline_date).length;
   $("approved").textContent=approvedCases;
   $("denied").textContent=deniedCases;
+  $("h1bExpiryCount").textContent=rows.filter(isH1bExpiryWithin180Days).length;
   $("totalAmount").textContent=money(rows.reduce((sum,x)=>sum+(Number(x.amount)||0),0));
   $("premiumCount").textContent=rows.filter(x=>x.premium_processing===true||x.premium_processing==="true"||x.premium_processing===1||x.premium_processing==="1").length;
   const durations=rows.map(durationDays).filter(x=>x!==null);
@@ -1712,7 +818,7 @@ function draw(){
   $("managerCount").textContent=managers.size;
   const noidExtensionCases=new Set();
   rows.forEach(c=>{
-    if(isRfe(c)||c.extension_target_date)noidExtensionCases.add(String(c.id));
+    if(isRfe(c)||c.extension_target_date||isH1bExpiryWithin180Days(c))noidExtensionCases.add(String(c.id));
   });
   $("noidExtCount").textContent=noidExtensionCases.size;
   
@@ -1725,13 +831,11 @@ function draw(){
   renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  const dashRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
-  $("dashBody").innerHTML=a.length?groupedRowsHTML(a,dashRow,14):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.h1b_validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
 
   const b=filteredCases();
   updateFilterSummary(b.length);
-  const caseRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
-  $("caseBody").innerHTML=b.length?groupedRowsHTML(b,caseRow,15):'<tr><td colspan="15" class="empty">No cases found.</td></tr>';
+  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.h1b_validity_start_date)+'</td><td>'+date(c.h1b_validity_end_date)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="18" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
   $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -1740,27 +844,26 @@ function draw(){
 async function load(){
   if(!db)return;
   setNotice("Loading cases from Supabase...");
-  if($("debugCases")){$("debugCases").textContent="Querying cases...";$("debugCases").className="debug-value warn";}
-  if($("debugDbError")){$("debugDbError").textContent="None";$("debugDbError").className="debug-value ok";}
   try{
     if(!currentOrgId)await loadOrganizationContext();
-
-    // RLS remains the security boundary. Global owners can read across portals;
-    // managers/viewers remain explicitly scoped to their active organization.
-    const isGlobalOwner=String(currentOrgRole||"").toLowerCase()==="owner";
-    let rq=db.from("cases").select("*").order("created_at",{ascending:false});
-    if(!isGlobalOwner)rq=rq.eq("organization_id",currentOrgId);
-    const r=await rq;
-
+    // Load only cases the signed-in user is allowed to see.
+    // The cases RLS policy already enforces organization membership, so this
+    // avoids showing 0 cases when the local organization context is stale.
+    let r=await db.from("cases").select("*").eq("organization_id",currentOrgId).order("created_at",{ascending:false});
     if(r.error)throw r.error;
     rows=r.data||[];
 
-    if($("debugCases")){
-      $("debugCases").textContent="Success — organization filter returned "+rows.length+" row(s)";
-      $("debugCases").className="debug-value ok";
+    // Safety fallback: if the org membership context resolves but returns no
+    // rows, let Supabase RLS return the rows this user can actually access.
+    // We still keep currentOrgId for all write operations and never bypass RLS.
+    if(!rows.length){
+      const fallback=await db.from("cases").select("*").order("created_at",{ascending:false});
+      if(!fallback.error && Array.isArray(fallback.data) && fallback.data.length){
+        rows=fallback.data;
+        const orgIds=[...new Set(rows.map(x=>x.organization_id).filter(Boolean))];
+        if(orgIds.length===1) currentOrgId=orgIds[0];
+      }
     }
-    if($("debugCount"))$("debugCount").textContent=String(rows.length);
-
     try{recentMonitorResult=JSON.parse(localStorage.getItem("ig_last_monitor_result")||"null");}catch(_){recentMonitorResult=null;}
     populateFilterOptions();
     try{
@@ -1768,12 +871,17 @@ async function load(){
       recentUscisHistory=uh.error?[]:(uh.data||[]);
     }catch(_){recentUscisHistory=[];}
     draw();
-    if($("notice"))$("notice").style.display="none";
+    if($("notice")){
+      if(rows.length){
+        $("notice").style.display="none";
+      }else{
+        $("notice").className="notice";
+        $("notice").textContent="No cases are currently visible for this organization. If you expect cases here, click Refresh once.";
+        $("notice").style.display="block";
+      }
+    }
   }catch(e){
-    const msg=e?.message||String(e);
-    if($("debugCases")){$("debugCases").textContent="FAILED";$("debugCases").className="debug-value bad";}
-    if($("debugDbError")){$("debugDbError").textContent=msg;$("debugDbError").className="debug-value bad";}
-    setNotice("Database error: "+msg,true);
+    setNotice("Database error: "+(e.message||e),true);
     draw();
   }
 }
@@ -1830,7 +938,7 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
       form_type:cs.formType||c.form_type||null
     };
 
-    const up=await db.from("cases").update(payload).eq("id",c.id).eq("organization_id",c.organization_id);
+    const up=await db.from("cases").update(payload).eq("id",c.id).eq("organization_id",currentOrgId);
     if(up.error)throw up.error;
 
     const previousStatus=c.uscis_status_text||null;
@@ -1838,7 +946,7 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
     if(previousStatus!==statusText || previousModified!==modified){
       const h=await db.from("uscis_status_history").insert({
         case_id:c.id,
-        organization_id:c.organization_id,
+        organization_id:currentOrgId,
         receipt_number:c.receipt_number,
         beneficiary_name:c.beneficiary_name||null,
         previous_uscis_status:previousStatus,
@@ -1906,7 +1014,7 @@ async function loadHistory(caseId=null){
     let uh=[];
     const selectedCase=caseId?rows.find(x=>String(x.id)===String(caseId)):null;
     try{
-      let urq=db.from("uscis_status_history").select("*").eq("organization_id",selectedCase?.organization_id||currentOrgId);
+      let urq=db.from("uscis_status_history").select("*").eq("organization_id",currentOrgId);
       if(selectedCase)urq=urq.eq("receipt_number",selectedCase.receipt_number);
       urq=urq.order("created_at",{ascending:false}).limit(500);
       const ur=await urq;
@@ -1955,11 +1063,13 @@ async function openProfile(c){
   $("profileSubtitle").textContent=(c.receipt_number||"")+(c.form_type?" • "+c.form_type:"");
 
   const status=c.current_status||"—";
+  const uscis=c.uscis_status_text||"Not checked yet";
   const statusClass=isApproved(c)?"approved":isDenied(c)?"denied":isRfe(c)?"rfe":"";
 
   $("profileContent").innerHTML=
     '<div class="profile-actions">'+
       '<span class="profile-status '+statusClass+'">Internal Status: '+profileValue(status)+'</span>'+
+      '<span class="profile-status">USCIS: '+profileValue(uscis)+'</span>'+
     '</div>'+
     '<div class="profile-grid">'+
       '<div class="profile-item"><div class="profile-label">Receipt Number</div><div class="profile-value">'+profileValue(c.receipt_number)+'</div></div>'+
@@ -1977,13 +1087,18 @@ async function openProfile(c){
       '<div class="profile-item"><div class="profile-label">Monitoring</div><div class="profile-value">'+(isMonitoring(c)?"Enabled":"Off")+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">RFE / NOID Deadline</div><div class="profile-value">'+date(c.rfe_deadline_date)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Extension Target</div><div class="profile-value">'+date(c.extension_target_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">H-1B Validity Start</div><div class="profile-value">'+date(c.h1b_validity_start_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">H-1B Validity End</div><div class="profile-value">'+date(c.h1b_validity_end_date)+'</div></div>'+
+      '<div class="profile-item"><div class="profile-label">H-1B Expiration Alert</div><div class="profile-value">'+h1bExpiryLabel(c)+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">Last USCIS Check</div><div class="profile-value">'+profileValue(lastChecked(c.last_checked_at))+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">USCIS Modified Date</div><div class="profile-value">'+profileValue(c.uscis_modified_date)+'</div></div>'+
     '</div>'+
+    '<div class="profile-section"><h3>USCIS Status Description</h3><div class="profile-notes">'+profileValue(c.uscis_status_desc)+'</div></div>'+
     '<div class="profile-section"><h3>Case Timeline</h3><div id="profileHistoryBox"><div class="small">Loading history...</div></div></div>'+
     '<div class="profile-section"><h3>Notes</h3><div class="profile-notes">'+profileValue(c.notes)+'</div></div>'+
     '<div class="profile-actions">'+
       '<button class="primary profileEditBtn" data-id="'+esc(c.id)+'" type="button">Edit Case</button>'+
+      '<button class="secondary profileCheckBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button>'+
       '<button class="secondary profileHistoryBtn" data-id="'+esc(c.id)+'" type="button">View History</button>'+
     '</div>';
   loadProfileHistory(c);
@@ -2008,12 +1123,11 @@ function openModal(c){
   $("amount").value=c?.amount??"";
   $("premium").value=(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false";
   $("duration").value=c?.time_duration_days??"";
-  $("previousValidityEnd").value=c?.previous_validity_end_date||"";
-  $("validityStart").value=c?.validity_start_date||"";
-  $("validityEnd").value=c?.validity_end_date||"";
   $("rfeDeadline").value=c?.rfe_deadline_date||"";
   $("extensionTarget").value=c?.extension_target_date||"";
-  if($("monitoring"))$("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
+  $("h1bStart").value=c?.h1b_validity_start_date||"";
+  $("h1bEnd").value=c?.h1b_validity_end_date||"";
+  $("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
   $("notes").value=c?.notes||"";
   $("formMsg").innerHTML="";
 }
@@ -2033,34 +1147,24 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":v==="team"?"Team Management":"Alerts & Monitoring";
   if(v==="history")loadHistory();
   if(v==="calendar")drawCalendar();
-  if(v==="reports"){drawReports();loadEmailPrefs();renderSecurity();}
+  if(v==="reports"){drawReports();renderSecurity();}
   if(v==="team"){if(!canManageTeam()){alert("Only organization owners and admins can manage team members.");return;} loadTeamMembers().catch(e=>{$("teamNotice").textContent="Team loading failed: "+(e.message||e);$("teamNotice").className="notice error";});}
   if(v==="alerts")renderAlerts();
 }));
 
 $("mobileNavToggle").addEventListener("click",()=>document.querySelector(".nav").classList.toggle("mobile-open"));
+$("h1bExpiryCard")?.addEventListener("click",()=>openNoidExtensions());
+$("h1bExpiryCard")?.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openNoidExtensions();}});
 $("addBtn").addEventListener("click",()=>openModal(null));
-$("caseType").addEventListener("change",syncExtensionValidity);
-$("previousValidityEnd").addEventListener("change",syncExtensionValidity);
 $("addNav").addEventListener("click",()=>openModal(null));
 $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
 $("profileClose").addEventListener("click",closeProfile);
 $("profileModal").addEventListener("click",e=>{if(e.target===$("profileModal"))closeProfile();});
-$("debugRetry").addEventListener("click",async()=>{
-  try{
-    $("debugCases").textContent="Retrying...";
-    $("debugCases").className="debug-value warn";
-    await loadOrganizationContext();
-    applyRolePermissions();
-    renderSecurity();
-    await load();
-  }catch(e){
-    $("debugDbError").textContent=e?.message||String(e);
-    $("debugDbError").className="debug-value bad";
-    setNotice("Retry failed: "+(e.message||e),true);
-  }
-});
+$("refresh").addEventListener("click",load);
+$("checkAllDashBtn").addEventListener("click",checkAllUSCIS);
+$("monitorNowBtn").addEventListener("click",monitorNow);
+$("checkAllBtn").addEventListener("click",checkAllUSCIS);
 $("dashSearch").addEventListener("input",draw);
 $("caseSearch").addEventListener("input",draw);
 $("historySearch").addEventListener("input",()=>loadHistory());
@@ -2073,13 +1177,18 @@ $("todayMonth").addEventListener("click",()=>{calendarCursor=new Date(new Date()
 $("exportCases").addEventListener("click",exportCasesCSV);
 $("exportEmployer").addEventListener("click",exportEmployerCSV);
 $("exportManager").addEventListener("click",exportManagerCSV);
-$("saveEmailPrefs").addEventListener("click",saveEmailPrefs);
 $("addTeamMember").addEventListener("click",addTeamMember);
+$("passwordClose").addEventListener("click",closePasswordModal);
+$("passwordCancel").addEventListener("click",closePasswordModal);
+$("savePassword").addEventListener("click",saveTeamMemberPassword);
+$("passwordModal").addEventListener("click",e=>{if(e.target===$("passwordModal"))closePasswordModal();});
+$("confirmPassword").addEventListener("keydown",e=>{if(e.key==="Enter")saveTeamMemberPassword();});
+$("runMonitorFromAlerts").addEventListener("click",monitorNow);
 $("employerSearch").addEventListener("input",draw);
-["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium"].forEach(id=>$(id).addEventListener("change",draw));
+["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
 $("clearFilters").addEventListener("click",()=>{
   $("caseSearch").value="";
-  ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium"].forEach(id=>$(id).value="");
+  ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).value="");
   draw();
 });
 
@@ -2178,7 +1287,7 @@ document.addEventListener("click",async e=>{
     const c=rows.find(x=>String(x.id)===String(del.dataset.id));
     if(!c)return;
     if(confirm("Delete case "+c.receipt_number+"?")){
-      const r=await db.from("cases").delete().eq("id",c.id).eq("organization_id",c.organization_id);
+      const r=await db.from("cases").delete().eq("id",c.id).eq("organization_id",currentOrgId);
       if(r.error)alert("Delete failed: "+r.error.message);
       else await load();
     }
@@ -2190,86 +1299,26 @@ document.addEventListener("change",e=>{
   if(roleSelect){changeTeamRole(roleSelect.dataset.userId,roleSelect.value);}
 });
 document.addEventListener("click",e=>{
+  const password=e.target.closest(".changePasswordBtn");
+  if(password){openPasswordModal(password.dataset.userId,password.dataset.email);return;}
   const remove=e.target.closest(".removeTeamBtn");
   if(remove)removeTeamMember(remove.dataset.userId,remove.dataset.email);
 });
 
-async function init(){
-  const showStartup=function(message){
-    console.error("Dashboard startup:",message);
-    try{
-      if($("debugDbError")){
-        $("debugDbError").textContent=message;
-        $("debugDbError").className="debug-value bad";
-      }
-      if($("notice")){
-        $("notice").textContent="Dashboard startup error: "+message;
-        $("notice").className="notice error";
-        $("notice").style.display="block";
-      }
-    }catch(_){}
-  };
-
+$("logout").addEventListener("click",async()=>{
+  if(signingOut)return;
+  signingOut=true;
+  const btn=$("logout");
+  btn.disabled=true;
+  btn.textContent="Logging out...";
   try{
-    if(!window.supabase){
-      showStartup("Supabase library did not load. Please hard refresh the page.");
-      return;
-    }
-
-    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
-      auth:{
-        persistSession:true,
-        autoRefreshToken:true,
-        detectSessionInUrl:true,
-        storageKey:"sb-euzifpjzeuqdznkelxdq-auth-token"
-      }
-    });
-
-    const result=await db.auth.getSession();
-    if(result?.error)throw result.error;
-    const session=result?.data?.session;
-
-    if(!session){
-      showStartup("No active Supabase session was found. Please sign in again from the homepage.");
-      return;
-    }
-
-    initialized=true;
-    const email=session.user?.email||"";
-    if($("who"))$("who").textContent=email||"Authenticated user";
-    if($("debugUser"))$("debugUser").textContent=email||session.user?.id||"Authenticated";
-    if($("debugBuild"))$("debugBuild").textContent="2026-09-22-role-fix-03";
-
-    // Organization and role MUST be resolved before rendering any role-based UI.
-    await loadOrganizationContext();
-    if($("debugOrg"))$("debugOrg").textContent=currentOrgName||"Immigrants Guide";
-    if($("debugRole"))$("debugRole").textContent=String(currentOrgRole||"viewer").toUpperCase();
-    if($("debugOrgId"))$("debugOrgId").textContent=currentOrgId||"—";
-
-    applyRolePermissions();
-    renderSecurity();
-    loadEmailPrefs();
-    if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
-    await load();
-
-    db.auth.onAuthStateChange(function(event){
-      if(event==="SIGNED_OUT"&&!signingOut){
-        window.location.replace("index.html?logout=1");
-      }
-    });
+    if(db)await db.auth.signOut({scope:"local"});
   }catch(e){
-    showStartup(e?.message||String(e));
+    console.error("Logout error:",e);
+  }finally{
+    window.location.replace("index.html?logout=1");
   }
-}
-
-init();
-
-
-if($("changePasswordBtn"))$("changePasswordBtn").addEventListener("click",openPasswordModal);
-if($("closePasswordModal"))$("closePasswordModal").addEventListener("click",closePasswordModal);
-if($("cancelPassword"))$("cancelPassword").addEventListener("click",closePasswordModal);
-if($("savePassword"))$("savePassword").addEventListener("click",saveNewPassword);
-if($("passwordModal"))$("passwordModal").addEventListener("click",e=>{if(e.target.id==="passwordModal")closePasswordModal();});
+});
 
 $("caseForm").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -2289,14 +1338,17 @@ $("caseForm").addEventListener("submit",async e=>{
     amount:$("amount").value===""?null:Number($("amount").value),
     premium_processing:$("premium").value==="true",
     time_duration_days:$("duration").value===""?null:Number($("duration").value),
-    previous_validity_end_date:$("previousValidityEnd").value||null,
-    validity_start_date:$("validityStart").value||null,
-    validity_end_date:$("validityEnd").value||null,
     rfe_deadline_date:$("rfeDeadline").value||null,
     extension_target_date:$("extensionTarget").value||null,
-    monitoring_enabled:true,
+    h1b_validity_start_date:$("h1bStart").value||null,
+    h1b_validity_end_date:$("h1bEnd").value||null,
+    monitoring_enabled:$("monitoring").value==="true",
     notes:$("notes").value.trim()||null
   };
+  if(payload.h1b_validity_start_date && payload.h1b_validity_end_date && payload.h1b_validity_end_date < payload.h1b_validity_start_date){
+    $("formMsg").innerHTML='<div class="msg error">H-1B validity end date cannot be before the start date.</div>';
+    return;
+  }
   try{
     if(!canManageCases()){throw new Error("Viewer access is read-only. You cannot add, edit, or delete cases.");}
     if(!currentOrgId)await loadOrganizationContext();
@@ -2311,106 +1363,54 @@ $("caseForm").addEventListener("submit",async e=>{
 });
 
 window.addEventListener("error",e=>{
-  console.error("Website error:",e.error||e.message);
-  if($("debugDbError")){$("debugDbError").textContent=e.message||"JavaScript error";$("debugDbError").className="debug-value bad";}
   if($("notice"))setNotice("Website error: "+e.message,true);
-});
-window.addEventListener("unhandledrejection",e=>{
-  const msg=e?.reason?.message||String(e?.reason||"Unhandled promise rejection");
-  console.error("Unhandled promise rejection:",e.reason);
-  if($("debugDbError")){$("debugDbError").textContent=msg;$("debugDbError").className="debug-value bad";}
-  if($("notice"))setNotice("Website error: "+msg,true);
 });
 
 /* Only react to an actual Supabase sign-out.
    We deliberately do not redirect on generic auth events,
    which prevents the login/dashboard redirect loop. */
 async function init(){
-  const showStartup=function(message){
-    console.error("Dashboard startup:",message);
-    try{
-      if($("debugDbError")){
-        $("debugDbError").textContent=message;
-        $("debugDbError").className="debug-value bad";
-      }
-      if($("notice")){
-        $("notice").textContent="Dashboard startup error: "+message;
-        $("notice").className="notice error";
-        $("notice").style.display="block";
-      }
-    }catch(_){}
-  };
-
   try{
-    if(!window.supabase){
-      showStartup("Supabase library did not load. Please hard refresh the page.");
-      return;
-    }
+    if(!window.supabase)throw new Error("Supabase library did not load. Refresh the page.");
 
     db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
       auth:{
         persistSession:true,
         autoRefreshToken:true,
-        detectSessionInUrl:true,
-        storageKey:"sb-euzifpjzeuqdznkelxdq-auth-token"
+        detectSessionInUrl:true
       }
     });
 
     const result=await db.auth.getSession();
-    if(result?.error)throw result.error;
     const session=result?.data?.session;
 
     if(!session){
-      showStartup("No active Supabase session was found. Please sign in again from the homepage.");
+      window.location.replace("index.html");
       return;
     }
 
     initialized=true;
-    const email=session.user?.email||"";
-    if($("who"))$("who").textContent=email||"Authenticated user";
-    if($("debugUser"))$("debugUser").textContent=email||session.user?.id||"Authenticated";
-    if($("debugBuild"))$("debugBuild").textContent="2026-09-22-role-fix-03";
+    $("who").textContent=session.user?.email||"";
 
-    // Organization and role MUST be resolved before rendering any role-based UI.
+    // Resolve the user's organization/role BEFORE applying role-based UI.
+    // Previously renderSecurity() ran while currentOrgRole was still null,
+    // which made every user look like a viewer and hid Add Case/Edit controls.
     await loadOrganizationContext();
-    if($("debugOrg"))$("debugOrg").textContent=currentOrgName||"Immigrants Guide";
-    if($("debugRole"))$("debugRole").textContent=String(currentOrgRole||"viewer").toUpperCase();
-    if($("debugOrgId"))$("debugOrgId").textContent=currentOrgId||"—";
-
-    applyRolePermissions();
     renderSecurity();
-    loadEmailPrefs();
     if($("monitorStatus"))$("monitorStatus").textContent="Auto-monitoring: scheduled";
     await load();
 
-    db.auth.onAuthStateChange(function(event){
+    db.auth.onAuthStateChange((event)=>{
       if(event==="SIGNED_OUT"&&!signingOut){
         window.location.replace("index.html?logout=1");
       }
     });
+
   }catch(e){
-    showStartup(e?.message||String(e));
+    console.error("Dashboard startup error:",e);
+    setNotice("Startup error: "+(e.message||e),true);
   }
 }
-
-window.addEventListener("error",function(e){
-  try{
-    const msg=e?.error?.message||e?.message||"Unknown JavaScript error";
-    if($("debugDbError")){
-      $("debugDbError").textContent="JavaScript error: "+msg;
-      $("debugDbError").className="debug-value bad";
-    }
-  }catch(_){}
-});
-window.addEventListener("unhandledrejection",function(e){
-  try{
-    const msg=e?.reason?.message||String(e?.reason||"Unhandled promise rejection");
-    if($("debugDbError")){
-      $("debugDbError").textContent="Promise error: "+msg;
-      $("debugDbError").className="debug-value bad";
-    }
-  }catch(_){}
-});
 
 init();
 
@@ -2436,50 +1436,20 @@ function normalizeExcelRow(r){
   const statusDate=excelDateToISO(g("status_date","status_updated"));
   const rfeDeadline=excelDateToISO(g("rfe_noid_deadline","rfe_deadline","rfe_deadline_date"));
   const extensionTarget=excelDateToISO(g("extension_target_date","extension_target","extension_deadline"));
-  const previousValidityEnd=excelDateToISO(g("previous_validity_end_date","previous_validity_end","prior_validity_end","previous_end_date"));
-  let validityStart=excelDateToISO(g("validity_start_date","validity_start","start_date"));
-  const validityEnd=excelDateToISO(g("validity_end_date","validity_end","end_date"));
-  const caseType=String(g("case_type","case_type_name","h1b_case_type")||"").trim();
-  if(!validityStart && previousValidityEnd && /extension/i.test(caseType)){const d=new Date(previousValidityEnd+"T00:00:00");if(!Number.isNaN(d.getTime())){d.setDate(d.getDate()+1);validityStart=d.toISOString().slice(0,10);}}
-  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),case_type:caseType,filing_date:filing||null,priority_date:priority||null,current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:statusDate||null,case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),previous_validity_end_date:previousValidityEnd||null,validity_start_date:validityStart||null,validity_end_date:validityEnd||null,rfe_deadline_date:rfeDeadline||null,extension_target_date:extensionTarget||null,notes:String(g("notes","note")||"").trim()};
+  const h1bStart=excelDateToISO(g("h1b_validity_start_date","h1b_start_date","h1b_start","h_1_b_validity_start_date"));
+  const h1bEnd=excelDateToISO(g("h1b_validity_end_date","h1b_end_date","h1b_end","h_1_b_validity_end_date"));
+  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),case_type:String(g("case_type","case_type_name","h1b_case_type")||"").trim(),filing_date:filing||null,priority_date:priority||null,current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:statusDate||null,case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),rfe_deadline_date:rfeDeadline||null,extension_target_date:extensionTarget||null,h1b_validity_start_date:h1bStart||null,h1b_validity_end_date:h1bEnd||null,monitoring_enabled:excelBool(g("automatic_monitoring","monitoring_enabled","monitoring"),true),notes:String(g("notes","note")||"").trim()};
 }
 let pendingExcelRows=[];
 function openExcelModal(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}$("excelFileInput").value="";pendingExcelRows=[];$("excelMsg").textContent="Choose an Excel file to begin.";$("excelMsg").className="notice";$("excelSummary").textContent="";$("excelPreview").innerHTML="";$("confirmExcelImport").disabled=true;$("excelModal").style.display="grid";}
 function closeExcelModal(){$("excelModal").style.display="none";}
-function renderExcelPreview(items){
-  const good=items.filter(x=>x.ok);
-  $("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;
-  $("excelPreview").innerHTML=`<table style="min-width:1200px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Filing Date</th><th>Priority</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.case_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${esc(x.data.priority_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.premium_processing?"Yes":"No"}</td><td>${isApproved(x.data)?"N/A":(x.data.time_duration_days==null?"—":esc(x.data.time_duration_days+" days"))}</td><td>${esc(x.data.validity_start_date||"—")}</td><td>${esc(x.data.validity_end_date||"—")}</td><td>${esc(x.data.case_manager||"—")}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;
-  pendingExcelRows=good.map(x=>x.data);
-  $("confirmExcelImport").disabled=!pendingExcelRows.length;
-}
-async function handleExcelFile(file){if(!file)return;if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}try{if(typeof XLSX==="undefined")throw new Error("Excel support could not load. Please refresh the page.");const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]];if(!ws)throw new Error("The workbook has no worksheet.");const raw=XLSX.utils.sheet_to_json(ws,{defval:""});if(!raw.length)throw new Error("The first worksheet is empty.");const existing=new Set(rows.map(c=>String(c.receipt_number||"").trim().toUpperCase())),seen=new Set();const items=raw.map((r,i)=>{const d=normalizeExcelRow(r);let error="";if(!/^[A-Z]{3}\d{10}$/.test(d.receipt_number))error="Invalid receipt";else if(!d.beneficiary_name)error="Beneficiary required";else if(seen.has(d.receipt_number))error="Duplicate in file";else if(existing.has(d.receipt_number))error="Already exists";else if(d.amount!==null&&(!Number.isFinite(d.amount)||d.amount<0))error="Invalid amount";else if(d.time_duration_days!==null&&(!Number.isFinite(d.time_duration_days)||d.time_duration_days<0))error="Invalid duration";if(!error)seen.add(d.receipt_number);return {row:i+2,data:d,ok:!error,error};});renderExcelPreview(items);$("excelMsg").textContent="Review the preview. Existing receipt numbers will not be imported.";$("excelMsg").className="notice";}catch(e){pendingExcelRows=[];$("confirmExcelImport").disabled=true;$("excelMsg").textContent=e.message||String(e);$("excelMsg").className="notice error";}}
+function renderExcelPreview(items){const good=items.filter(x=>x.ok);$("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;$("excelPreview").innerHTML=`<table style="min-width:1100px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Filing Date</th><th>H-1B End</th><th>Amount</th><th>Monitoring</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.case_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${esc(x.data.h1b_validity_end_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.monitoring_enabled?"Yes":"No"}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;pendingExcelRows=good.map(x=>x.data);$("confirmExcelImport").disabled=!pendingExcelRows.length;}
+async function handleExcelFile(file){if(!file)return;if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}try{if(typeof XLSX==="undefined")throw new Error("Excel support could not load. Please refresh the page.");const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]];if(!ws)throw new Error("The workbook has no worksheet.");const raw=XLSX.utils.sheet_to_json(ws,{defval:""});if(!raw.length)throw new Error("The first worksheet is empty.");const existing=new Set(rows.map(c=>String(c.receipt_number||"").trim().toUpperCase())),seen=new Set();const items=raw.map((r,i)=>{const d=normalizeExcelRow(r);let error="";if(!/^[A-Z]{3}\d{10}$/.test(d.receipt_number))error="Invalid receipt";else if(!d.beneficiary_name)error="Beneficiary required";else if(seen.has(d.receipt_number))error="Duplicate in file";else if(existing.has(d.receipt_number))error="Already exists";else if(d.amount!==null&&(!Number.isFinite(d.amount)||d.amount<0))error="Invalid amount";else if(d.time_duration_days!==null&&(!Number.isFinite(d.time_duration_days)||d.time_duration_days<0))error="Invalid duration";else if(d.h1b_validity_start_date&&d.h1b_validity_end_date&&d.h1b_validity_end_date<d.h1b_validity_start_date)error="H-1B end date is before start date";if(!error)seen.add(d.receipt_number);return {row:i+2,data:d,ok:!error,error};});renderExcelPreview(items);$("excelMsg").textContent="Review the preview. Existing receipt numbers will not be imported.";$("excelMsg").className="notice";}catch(e){pendingExcelRows=[];$("confirmExcelImport").disabled=true;$("excelMsg").textContent=e.message||String(e);$("excelMsg").className="notice error";}}
 async function confirmExcelImport(){if(!canManageCases()||!pendingExcelRows.length)return;const btn=$("confirmExcelImport");btn.disabled=true;btn.textContent="Importing...";try{if(!currentOrgId)await loadOrganizationContext();const payload=pendingExcelRows.map(x=>({...x,organization_id:currentOrgId}));for(let i=0;i<payload.length;i+=100){const r=await db.from("cases").insert(payload.slice(i,i+100));if(r.error)throw r.error;}$("excelMsg").textContent=`Successfully imported ${payload.length} case(s).`;$("excelMsg").className="notice";pendingExcelRows=[];await load();setTimeout(closeExcelModal,700);}catch(e){$("excelMsg").textContent="Import failed: "+(e.message||e);$("excelMsg").className="notice error";}finally{btn.textContent="✓ Import Valid Cases";btn.disabled=!pendingExcelRows.length;}}
-function downloadExcelTemplate(){
-  if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}
-  if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}
-  const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Case Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","Previous Validity End Date","Validity Start Date","Validity End Date","RFE / NOID Deadline","Extension Target Date","Notes"];
-  const e=["IOE1234567890","John Smith","ABC LLC","I-129","H1B CAP","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","","","","2027-01-15","H-1B case"];
-  const ws=XLSX.utils.aoa_to_sheet([h,e]);
-  ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,22,14,14,28,14,20,12,20,22,24,20,20,22,22,35][i]}));
-  const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended."],["For extensions, Previous Validity End Date is optional; if supplied and Validity Start Date is blank, the system calculates Validity Start as the next day."]]);
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");
-}
+function downloadExcelTemplate(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Case Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","RFE / NOID Deadline","Extension Target Date","H-1B Validity Start Date","H-1B Validity End Date","Automatic Monitoring","Notes"],e=["IOE1234567890","John Smith","ABC LLC","I-129","H1B CAP","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","","2026-10-01","2027-09-30","Yes","H-1B case"];const ws=XLSX.utils.aoa_to_sheet([h,e]);ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,22,14,14,28,14,20,12,20,20,20,22,22,22,20,35][i]}));const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended. H-1B Validity Start/End are optional. Premium Processing and Automatic Monitoring: Yes/No."]]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");}
 $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("importExcelBtn").addEventListener("click",openExcelModal);$("chooseExcelBtn").addEventListener("click",()=>{if(canManageCases())$("excelFileInput").click();});$("excelFileInput").addEventListener("change",e=>handleExcelFile(e.target.files?.[0]));$("excelClose").addEventListener("click",closeExcelModal);$("excelCancel").addEventListener("click",closeExcelModal);$("confirmExcelImport").addEventListener("click",confirmExcelImport);$("excelModal").addEventListener("click",e=>{if(e.target===$("excelModal"))closeExcelModal();});
 
 })();
 </script>
-
-<div class="modal" id="passwordModal">
-  <div class="modal-box" style="max-width:520px">
-    <div class="modal-head"><div><h2 style="margin:0">Change Password</h2><div class="small">Set a private password for your portal account.</div></div><button class="close" type="button" id="closePasswordModal">×</button></div>
-    <label for="newPassword">New Password</label>
-    <input id="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
-    <label for="confirmPassword">Confirm Password</label>
-    <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Re-enter your password">
-    <div id="passwordMsg"></div>
-    <div class="form-actions"><button class="secondary" type="button" id="cancelPassword">Cancel</button><button class="primary" type="button" id="savePassword">Save Password</button></div>
-  </div>
-</div>
 </body>
 </html>
