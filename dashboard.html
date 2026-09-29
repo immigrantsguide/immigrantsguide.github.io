@@ -61,7 +61,13 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .clickable-kpi{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
 .clickable-kpi:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(15,23,42,.08);}
 .clickable-kpi:focus{outline:2px solid #2563eb;outline-offset:2px;}
-.kpi-link{font-size:11px;color:#2563eb;font-weight:700;margin-top:6px;}</style>
+.kpi-link{font-size:11px;color:#2563eb;font-weight:700;margin-top:6px;}
+.password-modal-box{width:min(520px,100%);}
+.password-help{font-size:12px;color:#64748b;margin-top:4px;line-height:1.45}
+.password-error{background:#fef2f2;color:#991b1b;padding:10px;border-radius:9px;margin-top:12px;font-size:13px}
+.password-success{background:#f0fdf4;color:#166534;padding:10px;border-radius:9px;margin-top:12px;font-size:13px}
+.team-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+</style>
 </head>
 <body>
 <aside class="side">
@@ -231,31 +237,6 @@ NOID / Extensions
 </div>
 </section>
 
-<div id="passwordModal" class="modal" aria-hidden="true">
-  <div class="modal-box" style="width:min(560px,100%);">
-    <div class="modal-head">
-      <div>
-        <h2 style="margin:0 0 5px">Change Password</h2>
-        <div class="small">Set a private password for the selected portal account.</div>
-      </div>
-      <button id="passwordClose" class="close" type="button" aria-label="Close">×</button>
-    </div>
-    <div class="notice" id="passwordUserNotice" style="margin-top:16px"></div>
-    <input id="passwordUserId" type="hidden">
-    <label>New Password
-      <input id="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
-    </label>
-    <label>Confirm Password
-      <input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter the password">
-    </label>
-    <div id="passwordMsg" class="msg" style="display:none"></div>
-    <div class="form-actions">
-      <button id="passwordCancel" class="secondary" type="button">Cancel</button>
-      <button id="savePassword" class="primary" type="button">Save Password</button>
-    </div>
-  </div>
-</div>
-
 <section id="alerts" style="display:none">
 <div class="panel">
 <div class="panel-head"><h2>Alerts & Monitoring Health</h2><button id="runMonitorFromAlerts" class="secondary" type="button">⚙ Run Monitor</button></div>
@@ -271,6 +252,31 @@ NOID / Extensions
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Deadline</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div>
 </section>
 </main>
+
+<div id="passwordModal" class="modal">
+  <div class="modal-box password-modal-box">
+    <div class="modal-head">
+      <div>
+        <h2>Change Password</h2>
+        <div id="passwordUserLabel" class="muted">Set a private password for this portal account.</div>
+      </div>
+      <button id="passwordClose" class="close" type="button">×</button>
+    </div>
+    <form id="passwordForm">
+      <input id="passwordUserId" type="hidden">
+      <label>New Password</label>
+      <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
+      <div class="password-help">Use at least 8 characters.</div>
+      <label>Confirm Password</label>
+      <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+      <div id="passwordMsg" style="display:none"></div>
+      <div class="form-actions">
+        <button id="passwordCancel" class="secondary" type="button">Cancel</button>
+        <button id="savePassword" class="primary" type="submit">Save Password</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <div id="modal" class="modal"><div class="modal-box">
 <div class="modal-head"><h2 id="modalTitle">Add Case</h2><button id="close" class="close" type="button">×</button></div>
@@ -681,10 +687,11 @@ function renderTeamMembers(){
     const canChange=!self && role!=="owner" && (String(currentOrgRole).toLowerCase()==="owner" || (String(currentOrgRole).toLowerCase()==="admin" && ["manager","viewer"].includes(role)));
     const options=(role==="owner"?["owner"]:roleOptions).map(x=>'<option value="'+x+'"'+(x===role?' selected':'')+'>'+x.charAt(0).toUpperCase()+x.slice(1)+'</option>').join("");
     const roleControl=canChange?'<select class="team-role-select teamRoleSelect" data-user-id="'+esc(m.user_id)+'">'+options+'</select>':'<span class="role-pill">'+esc(role.toUpperCase())+'</span>';
-    const canManageTarget=!self&&role!=="owner"&&(String(currentOrgRole).toLowerCase()==="owner"||(String(currentOrgRole).toLowerCase()==="admin"&&["manager","viewer"].includes(role)));
-    const removeControl=canManageTarget?'<button class="danger removeTeamBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button">Remove</button>':'—';
-    const passwordControl=canManageTarget?'<button class="secondary changePasswordBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button" style="margin-left:8px">🔐 Change Password</button>':'';
-    return '<tr><td class="team-member-email">'+esc(email)+(self?' <span class="small">(You)</span>':'')+'</td><td>'+roleControl+'</td><td>'+lastChecked(m.joined_at)+'</td><td>'+removeControl+passwordControl+'</td></tr>';
+    const canPassword=!self&&role!=="owner"&&(String(currentOrgRole).toLowerCase()==="owner"||(String(currentOrgRole).toLowerCase()==="admin"&&["manager","viewer"].includes(role)));
+    const passwordControl=canPassword?'<button class="secondary changePasswordBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button">🔐 Change Password</button>':'';
+    const removeControl=canPassword?'<button class="danger removeTeamBtn" data-user-id="'+esc(m.user_id)+'" data-email="'+esc(email)+'" type="button">Remove</button>':'—';
+    const actions='<div class="team-actions">'+passwordControl+removeControl+'</div>';
+    return '<tr><td class="team-member-email">'+esc(email)+(self?' <span class="small">(You)</span>':'')+'</td><td>'+roleControl+'</td><td>'+lastChecked(m.joined_at)+'</td><td>'+actions+'</td></tr>';
   }).join("");
 }
 async function addTeamMember(){
@@ -731,56 +738,60 @@ async function removeTeamMember(userId,email){
   }catch(e){alert("Remove failed: "+(e.message||e));}
 }
 function openPasswordModal(userId,email){
-  if(!canManageTeam()){alert("Only organization owners and admins can change team member passwords.");return;}
-  $("passwordUserId").value=userId||"";
-  $("passwordUserNotice").textContent="Changing password for "+(email||"this portal user")+". The new password is not stored in the database.";
-  $("passwordMsg").style.display="none";
-  $("passwordMsg").textContent="";
+  if(!canManageTeam())return;
+  if(!userId)return;
+  $("passwordUserId").value=userId;
+  $("passwordUserLabel").textContent="Set a private password for "+email+".";
   $("newPassword").value="";
   $("confirmPassword").value="";
-  $("savePassword").disabled=false;
-  $("savePassword").textContent="Save Password";
+  $("passwordMsg").style.display="none";
+  $("passwordMsg").className="";
+  $("passwordMsg").textContent="";
   $("passwordModal").style.display="grid";
-  $("passwordModal").setAttribute("aria-hidden","false");
   setTimeout(()=>$("newPassword").focus(),50);
 }
 function closePasswordModal(){
   $("passwordModal").style.display="none";
-  $("passwordModal").setAttribute("aria-hidden","true");
+}
+function showPasswordMessage(message,ok){
+  const el=$("passwordMsg");
+  el.textContent=message;
+  el.className=ok?"password-success":"password-error";
+  el.style.display="block";
 }
 async function saveTeamMemberPassword(){
-  if(!canManageTeam()){return;}
+  if(!canManageTeam())return;
   const userId=$("passwordUserId").value;
   const newPassword=$("newPassword").value;
   const confirmPassword=$("confirmPassword").value;
-  const msg=$("passwordMsg");
+  if(!userId){showPasswordMessage("No team member was selected.",false);return;}
+  if(newPassword.length<8){showPasswordMessage("Password must be at least 8 characters.",false);return;}
+  if(newPassword!==confirmPassword){showPasswordMessage("Passwords do not match.",false);return;}
+
   const btn=$("savePassword");
-  msg.style.display="none";
-  if(!userId){msg.textContent="No team member was selected.";msg.className="msg error";msg.style.display="block";return;}
-  if(newPassword.length<8){msg.textContent="Password must be at least 8 characters.";msg.className="msg error";msg.style.display="block";return;}
-  if(newPassword!==confirmPassword){msg.textContent="Passwords do not match.";msg.className="msg error";msg.style.display="block";return;}
   btn.disabled=true;
   btn.textContent="Saving...";
   try{
-    const sessionResult=await db.auth.getSession();
-    const session=sessionResult?.data?.session;
-    if(!session)throw new Error("Your login session has expired. Please sign in again.");
-    const r=await db.functions.invoke("change-user-password",{
+    if(!db)throw new Error("Supabase is not ready. Please refresh and try again.");
+    const {data,error}=await db.functions.invoke("change-user-password",{
       body:{user_id:userId,new_password:newPassword}
     });
-    if(r.error)throw r.error;
-    if(!r.data?.success)throw new Error(r.data?.error||"Unable to change the password.");
-    msg.textContent="Password changed successfully. The user can now sign in with the new password.";
-    msg.className="msg success";
-    msg.style.display="block";
-    $("newPassword").value="";
-    $("confirmPassword").value="";
-    setTimeout(closePasswordModal,1200);
+    if(error){
+      let msg=error.message||"Password update failed.";
+      try{
+        if(error.context){
+          const body=await error.context.json();
+          if(body?.error)msg=body.error;
+        }
+      }catch(_){}
+      throw new Error(msg);
+    }
+    if(!data?.success)throw new Error(data?.error||"Password update failed.");
+    showPasswordMessage("Password updated successfully.",true);
+    setTimeout(closePasswordModal,900);
   }catch(e){
-    console.error("Change team member password failed:",e);
-    msg.textContent="Password change failed: "+(e?.message||e);
-    msg.className="msg error";
-    msg.style.display="block";
+    console.error("Password update failed:",e);
+    showPasswordMessage(e.message||"Unable to change password.",false);
   }finally{
     btn.disabled=false;
     btn.textContent="Save Password";
@@ -1178,11 +1189,6 @@ $("exportCases").addEventListener("click",exportCasesCSV);
 $("exportEmployer").addEventListener("click",exportEmployerCSV);
 $("exportManager").addEventListener("click",exportManagerCSV);
 $("addTeamMember").addEventListener("click",addTeamMember);
-$("passwordClose").addEventListener("click",closePasswordModal);
-$("passwordCancel").addEventListener("click",closePasswordModal);
-$("savePassword").addEventListener("click",saveTeamMemberPassword);
-$("passwordModal").addEventListener("click",e=>{if(e.target===$("passwordModal"))closePasswordModal();});
-$("confirmPassword").addEventListener("keydown",e=>{if(e.key==="Enter")saveTeamMemberPassword();});
 $("runMonitorFromAlerts").addEventListener("click",monitorNow);
 $("employerSearch").addEventListener("input",draw);
 ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
@@ -1300,10 +1306,15 @@ document.addEventListener("change",e=>{
 });
 document.addEventListener("click",e=>{
   const password=e.target.closest(".changePasswordBtn");
-  if(password){openPasswordModal(password.dataset.userId,password.dataset.email);return;}
+  if(password)openPasswordModal(password.dataset.userId,password.dataset.email);
   const remove=e.target.closest(".removeTeamBtn");
   if(remove)removeTeamMember(remove.dataset.userId,remove.dataset.email);
 });
+
+$("passwordClose").addEventListener("click",closePasswordModal);
+$("passwordCancel").addEventListener("click",closePasswordModal);
+$("passwordModal").addEventListener("click",e=>{if(e.target===$("passwordModal"))closePasswordModal();});
+$("passwordForm").addEventListener("submit",e=>{e.preventDefault();saveTeamMemberPassword();});
 
 $("logout").addEventListener("click",async()=>{
   if(signingOut)return;
