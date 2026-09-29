@@ -28,7 +28,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}.side{width:250px}.main{margin-left:250px}}@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.side{position:static;width:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{margin-left:0;padding:15px}.top{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
 
 .case-number{font-weight:700;white-space:nowrap;}
-.duration-cell{font-weight:700;white-space:nowrap;} .case-group-row td{background:#f8fafc;font-weight:800;color:#334155;border-top:2px solid #e2e8f0;} .uscis-status-link{font-weight:700;color:#2563eb;text-decoration:none;}
+.duration-cell{font-weight:700;white-space:nowrap;}
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid #e2e8f0;background:#f8fafc;}
 .filter-bar select{width:auto;min-width:145px;padding:9px 10px;}
 .filter-bar .muted{font-size:12px;margin-left:auto;}
@@ -72,891 +72,6 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:900px){.debug-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:600px){.debug-grid{grid-template-columns:1fr;}}
 .debug-panel{display:none !important;}
-
-/* =========================================================
-   Immigrants Guide — Dashboard UI Refresh
-   UI layer only; existing data/auth/business logic preserved.
-   ========================================================= */
-:root{
-  --ig-navy:#07111f;
-  --ig-navy-2:#0d1b2e;
-  --ig-blue:#2563eb;
-  --ig-blue-2:#3b82f6;
-  --ig-sky:#eff6ff;
-  --ig-border:#e5eaf2;
-  --ig-text:#172033;
-  --ig-muted:#64748b;
-  --ig-bg:#f3f6fb;
-  --ig-card:#ffffff;
-  --ig-green:#059669;
-  --ig-orange:#ea580c;
-  --ig-red:#dc2626;
-  --ig-shadow:0 8px 30px rgba(15,23,42,.06);
-}
-body{
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:
-    radial-gradient(circle at 80% -10%,rgba(37,99,235,.08),transparent 30%),
-    var(--ig-bg);
-  color:var(--ig-text);
-}
-.side{
-  width:272px;
-  padding:18px 13px;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(59,130,246,.18),transparent 25%),
-    linear-gradient(180deg,#06101e 0%,#0a1525 55%,#050b14 100%);
-  border-right:1px solid rgba(255,255,255,.06);
-  box-shadow:12px 0 35px rgba(2,6,23,.12);
-}
-.brand-block{
-  justify-content:flex-start;
-  padding:4px 8px 20px;
-}
-.ig-logo{max-width:230px}
-.nav button{
-  position:relative;
-  color:#b9c5d6;
-  padding:12px 13px;
-  border-radius:11px;
-  margin:4px 0;
-  font-weight:600;
-  transition:.18s ease;
-}
-.nav button:hover{
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  transform:translateX(2px);
-}
-.nav button.active{
-  background:linear-gradient(90deg,rgba(37,99,235,.9),rgba(59,130,246,.7));
-  color:#fff;
-  box-shadow:0 6px 18px rgba(37,99,235,.25);
-}
-.main{
-  margin-left:272px;
-  padding:28px 32px 40px;
-  max-width:1700px;
-}
-.top{
-  margin-bottom:25px;
-  padding:4px 0;
-}
-.top h1{
-  font-size:31px;
-  letter-spacing:-.7px;
-  font-weight:800;
-}
-.top .muted{font-size:13px}
-.actions{gap:8px}
-.secondary,.primary,.check-btn{
-  border-radius:10px;
-  transition:.18s ease;
-}
-.secondary:hover{
-  border-color:#94a3b8;
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(15,23,42,.06);
-}
-.primary{
-  background:linear-gradient(135deg,#2563eb,#3b82f6);
-  box-shadow:0 5px 14px rgba(37,99,235,.2);
-}
-.primary:hover{
-  transform:translateY(-1px);
-  box-shadow:0 8px 18px rgba(37,99,235,.28);
-}
-
-/* KPI dashboard */
-#dashboard>.cards{
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:15px;
-  margin-bottom:22px;
-}
-#dashboard>.cards .card{
-  position:relative;
-  min-height:112px;
-  padding:17px 18px;
-  border:1px solid var(--ig-border);
-  border-radius:16px;
-  box-shadow:var(--ig-shadow);
-  overflow:hidden;
-  transition:.2s ease;
-}
-#dashboard>.cards .card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 14px 35px rgba(15,23,42,.09);
-}
-#dashboard>.cards .card::after{
-  content:"";
-  position:absolute;
-  right:-20px;
-  bottom:-25px;
-  width:85px;
-  height:85px;
-  border-radius:50%;
-  background:rgba(37,99,235,.05);
-}
-#dashboard>.cards .num{
-  font-size:29px;
-  line-height:1;
-  letter-spacing:-.5px;
-}
-#dashboard>.cards .card:nth-child(1)::before{content:"▦";}
-#dashboard>.cards .card:nth-child(2)::before{content:"◷";}
-#dashboard>.cards .card:nth-child(3)::before{content:"!";}
-#dashboard>.cards .card:nth-child(4)::before{content:"✓";}
-#dashboard>.cards .card:nth-child(5)::before{content:"×";}
-#dashboard>.cards .card:nth-child(6)::before{content:"$";}
-#dashboard>.cards .card:nth-child(7)::before{content:"⚡";}
-#dashboard>.cards .card:nth-child(8)::before{content:"◌";}
-#dashboard>.cards .card:nth-child(9)::before{content:"♟";}
-#dashboard>.cards .card:nth-child(10)::before{content:"◷";}
-#dashboard>.cards .card::before{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:30px;
-  height:30px;
-  margin-bottom:9px;
-  border-radius:9px;
-  background:var(--ig-sky);
-  color:var(--ig-blue);
-  font-size:14px;
-  font-weight:900;
-}
-
-/* Panels */
-.panel,.card{
-  border-color:var(--ig-border);
-  box-shadow:var(--ig-shadow);
-}
-.panel{
-  border-radius:16px;
-}
-.panel-head{
-  min-height:62px;
-  padding:15px 19px;
-}
-.panel-head h2{
-  font-size:15px;
-  font-weight:800;
-  letter-spacing:-.15px;
-}
-.search{
-  border-radius:10px;
-  background:#fbfcfe;
-}
-.notice{
-  border-radius:0;
-}
-
-/* Attention section */
-.attention-panel{
-  border:1px solid #e8edf5;
-  box-shadow:var(--ig-shadow);
-}
-.attention-head{
-  background:linear-gradient(90deg,#fff,#f8fbff);
-}
-.attention-grid{gap:14px;padding:16px}
-.attention-card{
-  border-radius:13px;
-  box-shadow:0 3px 14px rgba(15,23,42,.04);
-}
-.attention-count{font-size:28px}
-
-/* Tables */
-.table-wrap{scrollbar-width:thin}
-table{min-width:1200px}
-th{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.035em;
-  font-weight:800;
-  color:#64748b;
-  background:#f8fafc;
-}
-td{font-size:12.5px}
-tbody tr:hover td{background:#fbfdff}
-.badge{
-  border:1px solid rgba(37,99,235,.08);
-  font-size:10.5px;
-  letter-spacing:.01em;
-}
-
-/* Employer and deadline cards */
-#dashboard .deadline-panel{
-  margin-top:2px;
-}
-#dashboard .deadline-panel .panel-head,
-#dashboard>.panel:not(.attention-panel) .panel-head{
-  background:linear-gradient(90deg,#fff,#fbfcff);
-}
-
-/* Search/filter controls */
-.filter-bar{
-  background:#f8fafc;
-  padding:13px 18px;
-}
-.filter-bar select{
-  border-radius:9px;
-  background:#fff;
-}
-
-/* Calendar / reports */
-.calendar-day{
-  transition:.12s ease;
-}
-.calendar-day:hover{
-  background:#f8fbff;
-}
-.calendar-event{
-  border:1px solid rgba(37,99,235,.08);
-}
-.report-card,.setting-box,.alert-stat{
-  border-radius:13px;
-  box-shadow:0 3px 14px rgba(15,23,42,.035);
-}
-
-/* Modals */
-.modal{
-  backdrop-filter:blur(4px);
-  background:rgba(15,23,42,.58);
-}
-.modal-box{
-  border:1px solid #e2e8f0;
-  box-shadow:0 24px 70px rgba(2,6,23,.22);
-}
-.close{
-  background:#f1f5f9;
-  color:#475569;
-}
-.close:hover{background:#e2e8f0}
-
-/* Mobile */
-@media(max-width:1200px){
-  .main{padding:25px}
-  #dashboard>.cards{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media(max-width:900px){
-  .main{padding:20px}
-  #dashboard>.cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:700px){
-  .side{
-    position:static;
-    width:auto;
-    border-right:0;
-    box-shadow:none;
-  }
-  .main{padding:14px}
-  .top h1{font-size:25px}
-  #dashboard>.cards{grid-template-columns:1fr 1fr;gap:10px}
-  #dashboard>.cards .card{min-height:105px;padding:14px}
-  #dashboard>.cards .num{font-size:25px}
-}
-@media(max-width:480px){
-  #dashboard>.cards{grid-template-columns:1fr}
-  .actions{width:100%}
-}
-
-
-/* =========================================================
-   IMMIGRANTS GUIDE — SUPERHERO COMMAND CENTER THEME
-   UI-only layer. Existing application logic is untouched.
-   ========================================================= */
-:root{
-  --hero-blue:#1d4ed8;
-  --hero-blue-bright:#3b82f6;
-  --hero-red:#dc2626;
-  --hero-gold:#f59e0b;
-  --hero-cyan:#06b6d4;
-  --hero-dark:#020617;
-  --hero-dark-2:#0b1222;
-}
-
-/* Hero background */
-body{
-  background:
-    radial-gradient(circle at 78% 0%,rgba(37,99,235,.14),transparent 27%),
-    radial-gradient(circle at 15% 35%,rgba(6,182,212,.07),transparent 24%),
-    linear-gradient(135deg,#f7f9fc 0%,#eef3f9 100%);
-}
-
-/* Superhero-style sidebar */
-.side{
-  width:278px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(59,130,246,.22),transparent 28%),
-    linear-gradient(180deg,#020617 0%,#071426 50%,#020617 100%);
-  border-right:1px solid rgba(59,130,246,.18);
-  box-shadow:14px 0 45px rgba(2,6,23,.18);
-}
-.brand-block{
-  position:relative;
-  padding:10px 7px 22px;
-}
-.brand-block:after{
-  content:"";
-  position:absolute;
-  left:14px;
-  right:14px;
-  bottom:8px;
-  height:1px;
-  background:linear-gradient(90deg,transparent,#3b82f6,transparent);
-  box-shadow:0 0 10px rgba(59,130,246,.7);
-}
-
-/* Attractive tab buttons */
-.nav button{
-  position:relative;
-  overflow:hidden;
-  border:1px solid transparent;
-  padding:13px 14px;
-  margin:5px 0;
-  border-radius:12px;
-  color:#aebbd0;
-  font-weight:700;
-  letter-spacing:.1px;
-  transition:all .2s ease;
-}
-.nav button:before{
-  content:"";
-  position:absolute;
-  left:-45px;
-  top:0;
-  width:35px;
-  height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  transform:skewX(-20deg);
-  transition:.45s ease;
-}
-.nav button:hover:before,
-.nav button.active:before{
-  left:110%;
-}
-.nav button:hover{
-  color:#fff;
-  border-color:rgba(59,130,246,.28);
-  background:linear-gradient(90deg,rgba(30,64,175,.38),rgba(37,99,235,.14));
-  box-shadow:0 5px 18px rgba(37,99,235,.13);
-  transform:translateX(3px);
-}
-.nav button.active{
-  color:#fff;
-  border-color:rgba(96,165,250,.55);
-  background:
-    linear-gradient(100deg,#1d4ed8 0%,#2563eb 48%,#1e40af 100%);
-  box-shadow:
-    0 8px 25px rgba(37,99,235,.35),
-    inset 0 1px 0 rgba(255,255,255,.2);
-}
-.nav button.active:after{
-  content:"";
-  position:absolute;
-  right:0;
-  top:8px;
-  bottom:8px;
-  width:3px;
-  border-radius:3px 0 0 3px;
-  background:#93c5fd;
-  box-shadow:0 0 10px #60a5fa;
-}
-
-/* Add/import action tabs */
-#addNav,
-#downloadTemplateBtn,
-#importExcelBtn{
-  margin-top:8px;
-}
-#addNav{
-  background:linear-gradient(100deg,#b91c1c,#ef4444);
-  color:#fff;
-  border-color:rgba(248,113,113,.5);
-  box-shadow:0 7px 20px rgba(220,38,38,.22);
-}
-#addNav:hover{
-  background:linear-gradient(100deg,#dc2626,#f87171);
-  box-shadow:0 9px 25px rgba(220,38,38,.3);
-}
-#downloadTemplateBtn,
-#importExcelBtn{
-  background:rgba(255,255,255,.045);
-  border-color:rgba(148,163,184,.2);
-}
-#importExcelBtn:hover{
-  border-color:rgba(96,165,250,.55);
-}
-
-/* Main heading */
-.top h1{
-  font-size:33px;
-  font-weight:900;
-  letter-spacing:-1px;
-  background:linear-gradient(90deg,#0f172a,#1d4ed8 65%,#0e7490);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-.top{
-  position:relative;
-}
-
-/* USCIS official button */
-.top .actions>a{
-  border:1px solid #93c5fd;
-  color:#1d4ed8;
-  background:linear-gradient(180deg,#fff,#eff6ff);
-  box-shadow:0 5px 16px rgba(37,99,235,.12);
-  font-weight:800;
-}
-.top .actions>a:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 22px rgba(37,99,235,.2);
-}
-
-/* Hero KPI cards */
-#dashboard>.cards .card{
-  min-height:128px;
-  border-radius:18px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 9px 28px rgba(15,23,42,.07);
-  transition:transform .2s ease,box-shadow .2s ease;
-}
-#dashboard>.cards .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 16px 35px rgba(15,23,42,.12);
-}
-#dashboard>.cards .card:nth-child(1){
-  border-top:3px solid #2563eb;
-}
-#dashboard>.cards .card:nth-child(2){
-  border-top:3px solid #06b6d4;
-}
-#dashboard>.cards .card:nth-child(3){
-  border-top:3px solid #f97316;
-}
-#dashboard>.cards .card:nth-child(4){
-  border-top:3px solid #10b981;
-}
-#dashboard>.cards .card:nth-child(5){
-  border-top:3px solid #ef4444;
-}
-#dashboard>.cards .card:nth-child(6){
-  border-top:3px solid #8b5cf6;
-}
-#dashboard>.cards .card:nth-child(7){
-  border-top:3px solid #f59e0b;
-}
-#dashboard>.cards .card:nth-child(8){
-  border-top:3px solid #0ea5e9;
-}
-#dashboard>.cards .card:nth-child(9){
-  border-top:3px solid #64748b;
-}
-#dashboard>.cards .card:nth-child(10){
-  border-top:3px solid #f97316;
-}
-#dashboard>.cards .num{
-  font-size:31px;
-  font-weight:900;
-}
-
-/* Floating superhero glow */
-#dashboard>.cards .card:after{
-  content:"";
-  position:absolute;
-  width:110px;
-  height:110px;
-  right:-40px;
-  bottom:-45px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(59,130,246,.13),transparent 70%);
-}
-
-/* Section headers */
-.panel-head{
-  background:linear-gradient(100deg,#ffffff,#f8fbff);
-}
-.panel-head h2{
-  font-size:16px;
-  font-weight:900;
-}
-
-/* Attention panel */
-.attention-panel{
-  border:1px solid #dbe5f2;
-  box-shadow:0 10px 30px rgba(15,23,42,.07);
-}
-.attention-card{
-  transition:.2s ease;
-}
-.attention-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 9px 25px rgba(15,23,42,.08);
-}
-
-/* Attractive table status pills */
-.badge{
-  padding:7px 10px;
-  border:0;
-  box-shadow:0 2px 7px rgba(15,23,42,.05);
-}
-.badge.approved{
-  background:linear-gradient(135deg,#059669,#10b981);
-  color:#fff;
-}
-.badge.denied{
-  background:linear-gradient(135deg,#dc2626,#ef4444);
-  color:#fff;
-}
-.badge.rfe{
-  background:linear-gradient(135deg,#ea580c,#f97316);
-  color:#fff;
-}
-
-/* Action buttons inside tables */
-.link,.danger{
-  padding:6px 9px;
-  border-radius:8px;
-  text-decoration:none;
-  transition:.15s ease;
-}
-.link:hover{
-  background:#eff6ff;
-}
-.danger:hover{
-  background:#fef2f2;
-}
-
-/* Calendar */
-.calendar-toolbar{
-  background:linear-gradient(100deg,#071426,#0f2a4a);
-  color:#fff;
-}
-.calendar-toolbar .small{color:#cbd5e1}
-.calendar-toolbar .secondary{
-  background:rgba(255,255,255,.1);
-  color:#fff;
-  border-color:rgba(255,255,255,.22);
-}
-.calendar-toolbar .secondary:hover{
-  background:rgba(255,255,255,.18);
-}
-.calendar-title{
-  color:#fff;
-}
-
-/* Modal */
-.modal-box{
-  border-radius:20px;
-  box-shadow:0 30px 90px rgba(2,6,23,.3);
-}
-
-/* Mobile */
-@media(max-width:1200px){
-  .main{margin-left:278px}
-}
-@media(max-width:700px){
-  .side{width:auto}
-  .main{margin-left:0}
-  .top h1{font-size:27px}
-}
-
-
-/* =========================================================
-   IMMIGRANTS GUIDE — COLORFUL SUPERHERO COMMAND CENTER
-   Owner-only Reports & Settings + richer dashboard visuals.
-   ========================================================= */
-:root{
-  --hero-blue:#2563eb;
-  --hero-cyan:#06b6d4;
-  --hero-purple:#7c3aed;
-  --hero-pink:#db2777;
-  --hero-orange:#f97316;
-  --hero-yellow:#f59e0b;
-  --hero-green:#10b981;
-  --hero-red:#ef4444;
-}
-body{
-  background:
-    radial-gradient(circle at 8% 0%,rgba(59,130,246,.10),transparent 22%),
-    radial-gradient(circle at 95% 18%,rgba(168,85,247,.09),transparent 24%),
-    linear-gradient(135deg,#f8fbff,#eef4ff 55%,#f8f5ff);
-}
-.side{
-  background:
-    radial-gradient(circle at 20% 8%,rgba(37,99,235,.30),transparent 23%),
-    radial-gradient(circle at 90% 55%,rgba(124,58,237,.20),transparent 28%),
-    linear-gradient(180deg,#020617,#07172d 52%,#020617);
-}
-.nav button.active{
-  background:linear-gradient(105deg,#2563eb,#7c3aed,#db2777);
-  border-color:rgba(255,255,255,.32);
-  box-shadow:0 9px 27px rgba(99,102,241,.34);
-}
-#addNav{
-  background:linear-gradient(105deg,#ef4444,#f97316,#f59e0b)!important;
-  border-color:rgba(255,255,255,.22)!important;
-  box-shadow:0 9px 25px rgba(249,115,22,.30)!important;
-}
-#downloadTemplateBtn{
-  color:#bfdbfe;
-  border-color:rgba(59,130,246,.35);
-}
-#importExcelBtn{
-  color:#a7f3d0;
-  border-color:rgba(16,185,129,.35);
-}
-#dashboard>.cards .card{
-  border:0;
-  color:#172033;
-  overflow:hidden;
-}
-#dashboard>.cards .card:nth-child(1){
-  background:linear-gradient(135deg,#eff6ff,#dbeafe);
-  border-top:4px solid #2563eb;
-}
-#dashboard>.cards .card:nth-child(2){
-  background:linear-gradient(135deg,#ecfeff,#cffafe);
-  border-top:4px solid #06b6d4;
-}
-#dashboard>.cards .card:nth-child(3){
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  border-top:4px solid #f97316;
-}
-#dashboard>.cards .card:nth-child(4){
-  background:linear-gradient(135deg,#ecfdf5,#d1fae5);
-  border-top:4px solid #10b981;
-}
-#dashboard>.cards .card:nth-child(5){
-  background:linear-gradient(135deg,#fef2f2,#fee2e2);
-  border-top:4px solid #ef4444;
-}
-#dashboard>.cards .card:nth-child(6){
-  background:linear-gradient(135deg,#f5f3ff,#ede9fe);
-  border-top:4px solid #7c3aed;
-}
-#dashboard>.cards .card:nth-child(7){
-  background:linear-gradient(135deg,#fffbeb,#fef3c7);
-  border-top:4px solid #f59e0b;
-}
-#dashboard>.cards .card:nth-child(8){
-  background:linear-gradient(135deg,#f0f9ff,#e0f2fe);
-  border-top:4px solid #0ea5e9;
-}
-#dashboard>.cards .card:nth-child(9){
-  background:linear-gradient(135deg,#f8fafc,#e2e8f0);
-  border-top:4px solid #64748b;
-}
-#dashboard>.cards .card:nth-child(10){
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  border-top:4px solid #ea580c;
-}
-#dashboard>.cards .card:hover{
-  transform:translateY(-6px) scale(1.01);
-  box-shadow:0 18px 38px rgba(30,41,59,.14);
-}
-#dashboard>.cards .num{
-  font-weight:950;
-}
-#dashboard>.cards .card::after{
-  background:radial-gradient(circle,rgba(255,255,255,.65),transparent 68%);
-}
-.attention-panel{
-  background:linear-gradient(135deg,#fff,#f8fbff);
-}
-.attention-card.urgent{
-  background:linear-gradient(135deg,#fff7f7,#fff);
-}
-.attention-card.warning{
-  background:linear-gradient(135deg,#fffaf0,#fff);
-}
-.attention-card.info{
-  background:linear-gradient(135deg,#f0f9ff,#fff);
-}
-.panel{
-  box-shadow:0 10px 32px rgba(30,41,59,.065);
-}
-.panel-head{
-  background:linear-gradient(100deg,#fff,#f8fbff);
-}
-.primary{
-  background:linear-gradient(105deg,#2563eb,#7c3aed);
-  border:0;
-}
-.primary:hover{
-  background:linear-gradient(105deg,#1d4ed8,#6d28d9);
-}
-.calendar-toolbar{
-  background:
-    radial-gradient(circle at 85% 10%,rgba(59,130,246,.35),transparent 28%),
-    linear-gradient(105deg,#020617,#172554,#312e81);
-}
-.report-card:nth-child(1){background:linear-gradient(135deg,#eff6ff,#dbeafe)}
-.report-card:nth-child(2){background:linear-gradient(135deg,#ecfeff,#cffafe)}
-.report-card:nth-child(3){background:linear-gradient(135deg,#f5f3ff,#ede9fe)}
-.report-card:nth-child(4){background:linear-gradient(135deg,#ecfdf5,#d1fae5)}
-
-
-/* =========================================================
-   IMMIGRANTS GUIDE — MOTION PACK
-   Consistent animation across dashboard items.
-   Respects reduced-motion accessibility preference.
-   ========================================================= */
-@keyframes igFadeUp{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes igGlow{
-  0%,100%{box-shadow:0 8px 24px rgba(37,99,235,.08)}
-  50%{box-shadow:0 12px 32px rgba(124,58,237,.16)}
-}
-@keyframes igShine{
-  0%{transform:translateX(-130%) skewX(-18deg)}
-  100%{transform:translateX(260%) skewX(-18deg)}
-}
-@keyframes igPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.025)}
-}
-@keyframes igFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-3px)}
-}
-
-/* Sidebar items */
-.nav button{
-  animation:igFadeUp .45s ease both;
-}
-.nav button:nth-child(1){animation-delay:.03s}
-.nav button:nth-child(2){animation-delay:.06s}
-.nav button:nth-child(3){animation-delay:.09s}
-.nav button:nth-child(4){animation-delay:.12s}
-.nav button:nth-child(5){animation-delay:.15s}
-.nav button:nth-child(6){animation-delay:.18s}
-.nav button:nth-child(7){animation-delay:.21s}
-.nav button:nth-child(8){animation-delay:.24s}
-.nav button:nth-child(9){animation-delay:.27s}
-
-/* Main sections */
-#dashboard>.cards .card,
-.attention-card,
-#dashboard>.panel,
-#cases>.panel,
-#history>.panel,
-#calendar>.panel,
-#reports>.panel,
-#team>.panel,
-#alerts>.panel{
-  animation:igFadeUp .5s ease both;
-}
-
-/* Stagger KPI cards */
-#dashboard>.cards .card:nth-child(1){animation-delay:.04s}
-#dashboard>.cards .card:nth-child(2){animation-delay:.08s}
-#dashboard>.cards .card:nth-child(3){animation-delay:.12s}
-#dashboard>.cards .card:nth-child(4){animation-delay:.16s}
-#dashboard>.cards .card:nth-child(5){animation-delay:.20s}
-#dashboard>.cards .card:nth-child(6){animation-delay:.24s}
-#dashboard>.cards .card:nth-child(7){animation-delay:.28s}
-#dashboard>.cards .card:nth-child(8){animation-delay:.32s}
-#dashboard>.cards .card:nth-child(9){animation-delay:.36s}
-#dashboard>.cards .card:nth-child(10){animation-delay:.40s}
-
-/* Cards breathe subtly */
-#dashboard>.cards .card{
-  animation-name:igFadeUp,igGlow;
-  animation-duration:.5s,4s;
-  animation-timing-function:ease,ease-in-out;
-  animation-iteration-count:1,infinite;
-  animation-delay:var(--ig-delay,0s),1s;
-}
-#dashboard>.cards .card:nth-child(1){--ig-delay:.04s}
-#dashboard>.cards .card:nth-child(2){--ig-delay:.08s}
-#dashboard>.cards .card:nth-child(3){--ig-delay:.12s}
-#dashboard>.cards .card:nth-child(4){--ig-delay:.16s}
-#dashboard>.cards .card:nth-child(5){--ig-delay:.20s}
-#dashboard>.cards .card:nth-child(6){--ig-delay:.24s}
-#dashboard>.cards .card:nth-child(7){--ig-delay:.28s}
-#dashboard>.cards .card:nth-child(8){--ig-delay:.32s}
-#dashboard>.cards .card:nth-child(9){--ig-delay:.36s}
-#dashboard>.cards .card:nth-child(10){--ig-delay:.40s}
-
-/* Buttons get a moving highlight on hover */
-.primary,.secondary,.check-btn,.top .actions>a{
-  position:relative;
-  overflow:hidden;
-}
-.primary::after,.secondary::after,.check-btn::after,.top .actions>a::after{
-  content:"";
-  position:absolute;
-  top:-20%;
-  left:-140%;
-  width:45%;
-  height:140%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);
-  transform:skewX(-18deg);
-  pointer-events:none;
-}
-@media (hover:hover) and (pointer:fine){
-  .primary:hover::after,.secondary:hover::after,.check-btn:hover::after,.top .actions>a:hover::after{
-    animation:igShine .65s ease;
-  }
-}
-
-/* Tables: rows gently animate when visible */
-tbody tr{
-  transition:background .18s ease,transform .18s ease,box-shadow .18s ease;
-}
-tbody tr:hover{
-  transform:translateX(2px);
-}
-
-/* Badges and attention indicators */
-.badge{
-  transition:transform .18s ease,box-shadow .18s ease;
-}
-.badge:hover{
-  transform:translateY(-1px) scale(1.03);
-  box-shadow:0 5px 12px rgba(15,23,42,.12);
-}
-.attention-card{
-  animation-duration:.55s;
-}
-.attention-card:hover{
-  animation:igPulse .8s ease;
-}
-
-/* Calendar events */
-.calendar-event{
-  transition:transform .16s ease,filter .16s ease;
-}
-.calendar-event:hover{
-  transform:translateY(-2px) scale(1.02);
-  filter:brightness(1.03);
-}
-
-/* Action links */
-.link,.danger{
-  transition:transform .16s ease,background .16s ease;
-}
-.link:hover,.danger:hover{
-  transform:translateY(-1px);
-}
-
-/* Respect accessibility */
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    transition-duration:.01ms!important;
-    scroll-behavior:auto!important;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -970,7 +85,7 @@ tbody tr:hover{
 <button data-view="cases">▣ All Cases</button>
 <button data-view="history">◷ Case History</button>
 <button data-view="calendar">▣ Deadline Calendar</button>
-<button id="reportsNav" data-view="reports" style="display:none">▤ Reports & Settings</button>
+<button data-view="reports">▤ Reports & Settings</button>
 <button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
 <button id="addNav">＋ Add Case</button>
 <button id="downloadTemplateBtn" class="secondary bulk-nav-btn" type="button">📥 Download Excel Template</button>
@@ -985,11 +100,6 @@ tbody tr:hover{
 <div><h1 id="title">USCIS Case Tracker</h1><p class="muted">Manage and monitor immigration cases in one place.</p></div>
 <div class="actions">
 <span id="who" class="muted"></span>
-    <a class="secondary" href="https://egov.uscis.gov/casestatus/landing.do" target="_blank" rel="noopener noreferrer" style="text-decoration:none">USCIS Case Status Online ↗</a>
-
-
-
-
 <button id="logout" class="secondary" type="button" onclick="window.__igEmergencyLogout&&window.__igEmergencyLogout()">Log out</button>
 </div>
 </div>
@@ -1063,7 +173,7 @@ NOID / Extensions
 <div class="panel"><div class="panel-head"><h2>Recent Cases</h2><input id="dashSearch" class="search" placeholder="Search receipt, beneficiary, employer..."></div>
 <div id="notice" class="notice" style="display:none"></div>
 <div id="batchNotice" class="notice" style="display:none"></div>
-<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
+<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Case Manager</th><th>Filed</th><th>Actions</th></tr></thead><tbody id="dashBody"></tbody></table></div></div>
 </section>
 
 <section id="cases" style="display:none"><div class="panel"><div class="panel-head"><h2>All Cases</h2><div class="actions"><input id="caseSearch" class="search" placeholder="Search receipt, beneficiary, employer..."><button id="addBtn" class="primary" type="button">＋ Add Case</button></div></div>
@@ -1074,10 +184,11 @@ NOID / Extensions
   <select id="filterEmployer"><option value="">All Employers</option></select>
   <select id="filterManager"><option value="">All Case Managers</option></select>
   <select id="filterPremium"><option value="">Premium: All</option><option value="true">Premium: Yes</option><option value="false">Premium: No</option></select>
+  <select id="filterMonitoring"><option value="">Monitoring: All</option><option value="true">Monitoring: Enabled</option><option value="false">Monitoring: Off</option></select>
   <button id="clearFilters" class="secondary" type="button">Clear Filters</button>
   <span id="filterSummary" class="muted">Showing all cases</span>
 </div>
-<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Filed</th><th>Priority</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
+<div class="table-wrap"><table><thead><tr><th>Case # / Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>USCIS Status</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Filed</th><th>Priority</th><th>Case Manager</th><th>Last Checked</th><th>Monitoring</th><th>Actions</th></tr></thead><tbody id="caseBody"></tbody></table></div></div></section>
 
 <section id="history" style="display:none"><div class="panel"><div class="panel-head"><h2>Case History</h2><div class="actions"><input id="historySearch" class="search" placeholder="Search receipt, beneficiary, status..."><select id="historyType" style="width:auto"><option value="">All Events</option><option value="USCIS">USCIS Only</option><option value="Case">Internal Case Only</option></select></div></div>
 <div class="notice" id="historyNotice">Loading history...</div>
@@ -1186,11 +297,9 @@ NOID / Extensions
 <div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
 <div><label>Premium Processing</label><select id="premium"><option value="false">No</option><option value="true">Yes</option></select></div>
 <div><label>Time Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="0"></div>
-<div><label>Previous Validity End Date</label><input id="previousValidityEnd" type="date"><div class="small">For extensions, the new validity start is automatically set to the next day.</div></div>
-<div><label>Validity Start Date</label><input id="validityStart" type="date"></div>
-<div><label>Validity End Date</label><input id="validityEnd" type="date"></div>
 <div><label>RFE / NOID Deadline</label><input id="rfeDeadline" type="date"></div>
 <div><label>Extension Deadline / Target Date</label><input id="extensionTarget" type="date"><div class="small">Enter the date your team wants to target for filing the extension.</div></div>
+<div><label>Automatic Monitoring</label><select id="monitoring"><option value="true">Enabled</option><option value="false">Off</option></select></div>
 <div class="full"><label>Notes</label><textarea id="notes"></textarea></div>
 </div><div id="formMsg"></div><div class="form-actions"><button type="button" id="cancel" class="secondary">Cancel</button><button type="submit" class="primary">Save Case</button></div></form>
 </div></div>
@@ -1311,17 +420,12 @@ async function loadOrganizationContext(){
 function canManageCases(){return ["owner","admin","manager"].includes(String(currentOrgRole||"").toLowerCase());}
 function canModifyCases(){return canManageCases();}
 function caseActionButtons(c){
-  if(!canManageCases()) return "—";
-  return '<button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
+  const view='<button class="link profileBtn" data-id="'+esc(c.id)+'" type="button">View</button>';
+  if(!canManageCases()) return view+' <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button>';
+  return view+' <button class="check-btn checkOneBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button> <button class="link editBtn" data-id="'+esc(c.id)+'" type="button">Edit</button> <button class="link historyBtn" data-id="'+esc(c.id)+'" type="button">History</button> <button class="danger deleteBtn" data-id="'+esc(c.id)+'" type="button">Delete</button>';
 }
 function canManageTeam(){return ["owner","admin"].includes(String(currentOrgRole||"").toLowerCase());}
-function canViewReports(){return String(currentOrgRole||"").toLowerCase()==="owner";}
-function applyOwnerReportPermission(){
-  const btn=$("reportsNav");
-  if(btn) btn.style.display=canViewReports()?"":"none";
-}
 function applyRolePermissions(){
-  applyOwnerReportPermission();
   const can=canManageCases();
   const teamCan=canManageTeam();
   ["addNav","addBtn"].forEach(id=>{if($(id))$(id).style.display=can?"":"none";});
@@ -1360,22 +464,6 @@ function durationDays(c){
   return Number.isFinite(d)&&d>=0?d:null;
 }
 function durationText(c){const d=durationDays(c);return d===null?"—":d+" day"+(d===1?"":"s");}
-function validityText(value){return value?date(value):"—";}
-function displayDuration(c){return isApproved(c)?"N/A":durationText(c);}
-function caseGroup(c){if(isApproved(c))return "Approved";if(isRfe(c))return "RFE / NOID";if(isDenied(c))return "Denied";return "In Process";}
-function groupRank(c){return {"Approved":1,"In Process":2,"RFE / NOID":3,"Denied":4}[caseGroup(c)]||9;}
-function sortGroupedCases(list){return [...list].sort((a,b)=>groupRank(a)-groupRank(b)||new Date(b.created_at||b.filing_date||0)-new Date(a.created_at||a.filing_date||0));}
-function groupedRowsHTML(list, rowBuilder, colspan){
-  const sorted=sortGroupedCases(list); let last=""; let out="";
-  sorted.forEach(c=>{const g=caseGroup(c); if(g!==last){out+='<tr class="case-group-row"><td colspan="'+colspan+'">'+(g==="Approved"?'🟢 ':g==="In Process"?'🔵 ':g==="RFE / NOID"?'🟠 ':'🔴 ')+esc(g)+'</td></tr>'; last=g;} out+=rowBuilder(c);});
-  return out;
-}
-function syncExtensionValidity(){
-  const prev=$("previousValidityEnd")?.value||""; const start=$("validityStart");
-  const type=String($("caseType")?.value||"").toLowerCase();
-  if(prev && type.includes("extension")){const d=new Date(prev+"T00:00:00"); if(!Number.isNaN(d.getTime())){d.setDate(d.getDate()+1); start.value=d.toISOString().slice(0,10);}}
-}
-
 
 function attentionDeadlineItem(x){
   const n=daysUntil(x.date);
@@ -1434,7 +522,32 @@ function monitoringLabel(x){
   return enabled?'<span class="badge approved">Enabled</span>':'<span class="badge">Off</span>';
 }
 
-
+async function monitorNow(){
+  if(btn){btn.disabled=true;btn.textContent="Monitoring...";}
+  if($("monitorStatus"))$("monitorStatus").textContent="Checking eligible cases...";
+  try{
+    const r=await db.functions.invoke("monitor-cases",{body:{source:"dashboard",force:true}});
+    if(r.error){
+      let msg=r.error.message||"Monitoring failed.";
+      try{
+        const body=await r.error.context?.json?.();
+        if(body?.error)msg=body.error;
+      }catch(_){}
+      throw new Error(msg);
+    }
+    const d=r.data||{};
+    recentMonitorResult=d;
+    try{localStorage.setItem("ig_last_monitor_result",JSON.stringify(d));}catch(_){}
+    if($("monitorStatus"))$("monitorStatus").textContent=
+      "Monitor complete: "+(d.checked||0)+" checked, "+(d.changed||0)+" changed, "+(d.failed||0)+" failed.";
+    await load();
+  }catch(e){
+    if($("monitorStatus"))$("monitorStatus").textContent="Monitor error: "+(e.message||e);
+    console.error("Monitor error:",e);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent="⚙ Monitor Now";}
+  }
+}
 
 function isPremium(c){
   return c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1";
@@ -1464,6 +577,7 @@ function filteredCases(){
   const employer=$("filterEmployer")?.value||"";
   const manager=$("filterManager")?.value||"";
   const premium=$("filterPremium")?.value||"";
+  const monitoring=$("filterMonitoring")?.value||"";
   if(status==="pending")a=a.filter(c=>isPending(c));
   if(status==="rfe")a=a.filter(c=>isRfe(c));
   if(status==="approved")a=a.filter(c=>isApproved(c));
@@ -1473,6 +587,7 @@ function filteredCases(){
   if(employer)a=a.filter(c=>String(c.employer||"")===employer);
   if(manager)a=a.filter(c=>String(c.case_manager||"")===manager);
   if(premium)a=a.filter(c=>String(isPremium(c))===premium);
+  if(monitoring)a=a.filter(c=>String(isMonitoring(c))===monitoring);
   return a;
 }
 function updateFilterSummary(count){
@@ -1551,7 +666,7 @@ function downloadCSV(filename,headers,data){
   const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
-function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Case Type","Status","Amount","Premium","Duration","Validity Start","Validity End","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.case_type,c.current_status,c.amount,isPremium(c)?"Yes":"No",isApproved(c)?"N/A":durationDays(c),c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):""),c.validity_end_date,c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date]));}
+function exportCasesCSV(){downloadCSV("uscis-cases.csv",["Receipt","Beneficiary","Employer","Form","Case Type","Status","USCIS Status","Amount","Premium","Duration Days","Case Manager","Filing Date","Priority Date","RFE/NOID Deadline","Extension Target","Monitoring"],rows.map(c=>[c.receipt_number,c.beneficiary_name,c.employer,c.form_type,c.case_type,c.current_status,c.uscis_status_text,c.amount,isPremium(c)?"Yes":"No",durationDays(c),c.case_manager,c.filing_date,c.priority_date,c.rfe_deadline_date,c.extension_target_date,isMonitoring(c)?"Enabled":"Off"]));}
 function exportEmployerCSV(){downloadCSV("employer-report.csv",["Employer","Cases","Amount","Approved","Active","RFE/NOID","Premium","Average Duration"],employerReport().map(x=>[x.name,x.total,x.amount,x.approved,x.active,x.rfe,x.premium,x.avg===null?"":x.avg]));}
 function exportManagerCSV(){downloadCSV("case-manager-report.csv",["Case Manager","Total","Active","RFE/NOID","Approved","Denied","Amount","Average Duration"],managerReport().map(x=>[x.name,x.total,x.active,x.rfe,x.approved,x.denied,x.amount,x.avg===null?"":x.avg]));}
 function loadEmailPrefs(){
@@ -1687,13 +802,11 @@ function draw(){
   renderSecurity();
 
   const a=filt(rows,$("dashSearch").value);
-  const dashRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
-  $("dashBody").innerHTML=a.length?groupedRowsHTML(a,dashRow,14):'<tr><td colspan="14" class="empty">No cases found.</td></tr>';
+  $("dashBody").innerHTML=a.length?a.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="last-check">Checked: '+esc(lastChecked(c.last_checked_at))+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="13" class="empty">No cases found.</td></tr>';
 
   const b=filteredCases();
   updateFilterSummary(b.length);
-  const caseRow=c=>'<tr><td class="case-number"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class="duration-cell">'+displayDuration(c)+'</td><td>'+validityText(c.validity_start_date||((c.previous_validity_end_date&&/extension/i.test(String(c.case_type||"")))?nextDay(c.previous_validity_end_date):null))+'</td><td>'+validityText(c.validity_end_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+caseActionButtons(c)+'</td></tr>';
-  $("caseBody").innerHTML=b.length?groupedRowsHTML(b,caseRow,15):'<tr><td colspan="15" class="empty">No cases found.</td></tr>';
+  $("caseBody").innerHTML=b.length?b.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+esc(c.employer)+'</td><td>'+esc(c.form_type)+'</td><td>'+esc(c.case_type||"—")+'</td><td>'+badge(c.current_status)+'</td><td class="uscis-cell">'+(c.uscis_status_text?'<b>'+esc(c.uscis_status_text)+'</b><div class="uscis-desc">'+esc(c.uscis_modified_date||"")+'</div>':'—')+'</td><td>'+money(c.amount)+'</td><td>'+premiumLabel(c.premium_processing)+'</td><td class=\"duration-cell\">'+durationText(c)+'</td><td>'+date(c.filing_date)+'</td><td>'+date(c.priority_date)+'</td><td>'+esc(c.case_manager||"—")+'</td><td>'+esc(lastChecked(c.last_checked_at))+'</td><td>'+monitoringLabel(c)+'</td><td>'+caseActionButtons(c)+'</td></tr>').join(""):'<tr><td colspan="15" class="empty">No cases found.</td></tr>';
 
   const z=rows.filter(isRfe);
   $("alertBody").innerHTML=z.length?z.map(c=>'<tr><td class=\"case-number\"><b>'+esc(c.receipt_number)+'</b></td><td>'+esc(c.beneficiary_name)+'</td><td>'+badge(c.current_status)+'</td><td>'+date(c.status_date)+'</td><td>'+esc(c.notes)+'</td><td><button class="link editBtn" data-id="'+c.id+'" type="button">Open</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">No RFE / NOID alerts.</td></tr>';
@@ -1825,7 +938,6 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
 }
 
 async function checkAllUSCIS(){
-  const buttons=[$("checkAllBtn"),$("checkAllDashBtn")].filter(Boolean);
   if(!rows.length){alert("There are no cases to check.");return;}
   if(!confirm("Check USCIS for all "+rows.length+" case(s)?"))return;
   buttons.forEach(b=>{b.disabled=true;b.textContent="Checking USCIS...";});
@@ -1917,11 +1029,13 @@ async function openProfile(c){
   $("profileSubtitle").textContent=(c.receipt_number||"")+(c.form_type?" • "+c.form_type:"");
 
   const status=c.current_status||"—";
+  const uscis=c.uscis_status_text||"Not checked yet";
   const statusClass=isApproved(c)?"approved":isDenied(c)?"denied":isRfe(c)?"rfe":"";
 
   $("profileContent").innerHTML=
     '<div class="profile-actions">'+
       '<span class="profile-status '+statusClass+'">Internal Status: '+profileValue(status)+'</span>'+
+      '<span class="profile-status">USCIS: '+profileValue(uscis)+'</span>'+
     '</div>'+
     '<div class="profile-grid">'+
       '<div class="profile-item"><div class="profile-label">Receipt Number</div><div class="profile-value">'+profileValue(c.receipt_number)+'</div></div>'+
@@ -1942,10 +1056,12 @@ async function openProfile(c){
       '<div class="profile-item"><div class="profile-label">Last USCIS Check</div><div class="profile-value">'+profileValue(lastChecked(c.last_checked_at))+'</div></div>'+
       '<div class="profile-item"><div class="profile-label">USCIS Modified Date</div><div class="profile-value">'+profileValue(c.uscis_modified_date)+'</div></div>'+
     '</div>'+
+    '<div class="profile-section"><h3>USCIS Status Description</h3><div class="profile-notes">'+profileValue(c.uscis_status_desc)+'</div></div>'+
     '<div class="profile-section"><h3>Case Timeline</h3><div id="profileHistoryBox"><div class="small">Loading history...</div></div></div>'+
     '<div class="profile-section"><h3>Notes</h3><div class="profile-notes">'+profileValue(c.notes)+'</div></div>'+
     '<div class="profile-actions">'+
       '<button class="primary profileEditBtn" data-id="'+esc(c.id)+'" type="button">Edit Case</button>'+
+      '<button class="secondary profileCheckBtn" data-id="'+esc(c.id)+'" type="button">Check USCIS</button>'+
       '<button class="secondary profileHistoryBtn" data-id="'+esc(c.id)+'" type="button">View History</button>'+
     '</div>';
   loadProfileHistory(c);
@@ -1970,12 +1086,9 @@ function openModal(c){
   $("amount").value=c?.amount??"";
   $("premium").value=(c?.premium_processing===true||c?.premium_processing==="true"||c?.premium_processing===1||c?.premium_processing==="1")?"true":"false";
   $("duration").value=c?.time_duration_days??"";
-  $("previousValidityEnd").value=c?.previous_validity_end_date||"";
-  $("validityStart").value=c?.validity_start_date||"";
-  $("validityEnd").value=c?.validity_end_date||"";
   $("rfeDeadline").value=c?.rfe_deadline_date||"";
   $("extensionTarget").value=c?.extension_target_date||"";
-  if($("monitoring"))$("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
+  $("monitoring").value=(c?.monitoring_enabled===false||c?.monitoring_enabled==="false")?"false":"true";
   $("notes").value=c?.notes||"";
   $("formMsg").innerHTML="";
 }
@@ -2002,8 +1115,6 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
 
 $("mobileNavToggle").addEventListener("click",()=>document.querySelector(".nav").classList.toggle("mobile-open"));
 $("addBtn").addEventListener("click",()=>openModal(null));
-$("caseType").addEventListener("change",syncExtensionValidity);
-$("previousValidityEnd").addEventListener("change",syncExtensionValidity);
 $("addNav").addEventListener("click",()=>openModal(null));
 $("close").addEventListener("click",closeModal);
 $("cancel").addEventListener("click",closeModal);
@@ -2038,10 +1149,10 @@ $("exportManager").addEventListener("click",exportManagerCSV);
 $("saveEmailPrefs").addEventListener("click",saveEmailPrefs);
 $("addTeamMember").addEventListener("click",addTeamMember);
 $("employerSearch").addEventListener("input",draw);
-["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium"].forEach(id=>$(id).addEventListener("change",draw));
+["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).addEventListener("change",draw));
 $("clearFilters").addEventListener("click",()=>{
   $("caseSearch").value="";
-  ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium"].forEach(id=>$(id).value="");
+  ["filterStatus","filterForm","filterCaseType","filterEmployer","filterManager","filterPremium","filterMonitoring"].forEach(id=>$(id).value="");
   draw();
 });
 
@@ -2244,12 +1355,9 @@ $("caseForm").addEventListener("submit",async e=>{
     amount:$("amount").value===""?null:Number($("amount").value),
     premium_processing:$("premium").value==="true",
     time_duration_days:$("duration").value===""?null:Number($("duration").value),
-    previous_validity_end_date:$("previousValidityEnd").value||null,
-    validity_start_date:$("validityStart").value||null,
-    validity_end_date:$("validityEnd").value||null,
     rfe_deadline_date:$("rfeDeadline").value||null,
     extension_target_date:$("extensionTarget").value||null,
-    monitoring_enabled:true,
+    monitoring_enabled:$("monitoring").value==="true",
     notes:$("notes").value.trim()||null
   };
   try{
@@ -2391,35 +1499,15 @@ function normalizeExcelRow(r){
   const statusDate=excelDateToISO(g("status_date","status_updated"));
   const rfeDeadline=excelDateToISO(g("rfe_noid_deadline","rfe_deadline","rfe_deadline_date"));
   const extensionTarget=excelDateToISO(g("extension_target_date","extension_target","extension_deadline"));
-  const previousValidityEnd=excelDateToISO(g("previous_validity_end_date","previous_validity_end","prior_validity_end","previous_end_date"));
-  let validityStart=excelDateToISO(g("validity_start_date","validity_start","start_date"));
-  const validityEnd=excelDateToISO(g("validity_end_date","validity_end","end_date"));
-  const caseType=String(g("case_type","case_type_name","h1b_case_type")||"").trim();
-  if(!validityStart && previousValidityEnd && /extension/i.test(caseType)){const d=new Date(previousValidityEnd+"T00:00:00");if(!Number.isNaN(d.getTime())){d.setDate(d.getDate()+1);validityStart=d.toISOString().slice(0,10);}}
-  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),case_type:caseType,filing_date:filing||null,priority_date:priority||null,current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:statusDate||null,case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),previous_validity_end_date:previousValidityEnd||null,validity_start_date:validityStart||null,validity_end_date:validityEnd||null,rfe_deadline_date:rfeDeadline||null,extension_target_date:extensionTarget||null,notes:String(g("notes","note")||"").trim()};
+  return {receipt_number:String(g("receipt_number","receipt","case_number")||"").trim().toUpperCase(),beneficiary_name:String(g("beneficiary_name","beneficiary","name")||"").trim(),employer:String(g("employer","company")||"").trim(),form_type:String(g("form_type","form","form_name")||"").trim(),case_type:String(g("case_type","case_type_name","h1b_case_type")||"").trim(),filing_date:filing||null,priority_date:priority||null,current_status:String(g("current_status","status","case_status")||"Case Was Received").trim(),status_date:statusDate||null,case_manager:String(g("case_manager","manager")||"").trim(),amount:ar===""?null:Number(String(ar).replace(/[$,]/g,"")),premium_processing:excelBool(g("premium_processing","premium"),false),time_duration_days:dr===""?null:Number(String(dr).replace(/[,]/g,"")),rfe_deadline_date:rfeDeadline||null,extension_target_date:extensionTarget||null,monitoring_enabled:excelBool(g("automatic_monitoring","monitoring_enabled","monitoring"),true),notes:String(g("notes","note")||"").trim()};
 }
 let pendingExcelRows=[];
 function openExcelModal(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}$("excelFileInput").value="";pendingExcelRows=[];$("excelMsg").textContent="Choose an Excel file to begin.";$("excelMsg").className="notice";$("excelSummary").textContent="";$("excelPreview").innerHTML="";$("confirmExcelImport").disabled=true;$("excelModal").style.display="grid";}
 function closeExcelModal(){$("excelModal").style.display="none";}
-function renderExcelPreview(items){
-  const good=items.filter(x=>x.ok);
-  $("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;
-  $("excelPreview").innerHTML=`<table style="min-width:1200px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Filing Date</th><th>Priority</th><th>Amount</th><th>Premium</th><th>Duration</th><th>Validity Start</th><th>Validity End</th><th>Case Manager</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.case_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${esc(x.data.priority_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.premium_processing?"Yes":"No"}</td><td>${isApproved(x.data)?"N/A":(x.data.time_duration_days==null?"—":esc(x.data.time_duration_days+" days"))}</td><td>${esc(x.data.validity_start_date||"—")}</td><td>${esc(x.data.validity_end_date||"—")}</td><td>${esc(x.data.case_manager||"—")}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;
-  pendingExcelRows=good.map(x=>x.data);
-  $("confirmExcelImport").disabled=!pendingExcelRows.length;
-}
+function renderExcelPreview(items){const good=items.filter(x=>x.ok);$("excelSummary").textContent=`${items.length} row(s) found • ${good.length} ready to import • ${items.length-good.length} need attention`;$("excelPreview").innerHTML=`<table style="min-width:1100px"><thead><tr><th>Row</th><th>Receipt</th><th>Beneficiary</th><th>Employer</th><th>Form</th><th>Case Type</th><th>Status</th><th>Filing Date</th><th>Amount</th><th>Monitoring</th><th>Result</th></tr></thead><tbody>${items.map(x=>`<tr><td>${x.row}</td><td><b>${esc(x.data.receipt_number||"—")}</b></td><td>${esc(x.data.beneficiary_name||"—")}</td><td>${esc(x.data.employer||"—")}</td><td>${esc(x.data.form_type||"—")}</td><td>${esc(x.data.case_type||"—")}</td><td>${esc(x.data.current_status||"—")}</td><td>${esc(x.data.filing_date||"—")}</td><td>${x.data.amount==null?"—":esc(x.data.amount)}</td><td>${x.data.monitoring_enabled?"Yes":"No"}</td><td>${x.ok?'<span class="badge approved">Ready</span>':'<span class="badge denied">'+esc(x.error)+'</span>'}</td></tr>`).join("")}</tbody></table>`;pendingExcelRows=good.map(x=>x.data);$("confirmExcelImport").disabled=!pendingExcelRows.length;}
 async function handleExcelFile(file){if(!file)return;if(!canManageCases()){setNotice("Viewer access is read-only. You cannot import cases.",true);return;}try{if(typeof XLSX==="undefined")throw new Error("Excel support could not load. Please refresh the page.");const wb=XLSX.read(await file.arrayBuffer(),{type:"array",cellDates:true}),ws=wb.Sheets[wb.SheetNames[0]];if(!ws)throw new Error("The workbook has no worksheet.");const raw=XLSX.utils.sheet_to_json(ws,{defval:""});if(!raw.length)throw new Error("The first worksheet is empty.");const existing=new Set(rows.map(c=>String(c.receipt_number||"").trim().toUpperCase())),seen=new Set();const items=raw.map((r,i)=>{const d=normalizeExcelRow(r);let error="";if(!/^[A-Z]{3}\d{10}$/.test(d.receipt_number))error="Invalid receipt";else if(!d.beneficiary_name)error="Beneficiary required";else if(seen.has(d.receipt_number))error="Duplicate in file";else if(existing.has(d.receipt_number))error="Already exists";else if(d.amount!==null&&(!Number.isFinite(d.amount)||d.amount<0))error="Invalid amount";else if(d.time_duration_days!==null&&(!Number.isFinite(d.time_duration_days)||d.time_duration_days<0))error="Invalid duration";if(!error)seen.add(d.receipt_number);return {row:i+2,data:d,ok:!error,error};});renderExcelPreview(items);$("excelMsg").textContent="Review the preview. Existing receipt numbers will not be imported.";$("excelMsg").className="notice";}catch(e){pendingExcelRows=[];$("confirmExcelImport").disabled=true;$("excelMsg").textContent=e.message||String(e);$("excelMsg").className="notice error";}}
 async function confirmExcelImport(){if(!canManageCases()||!pendingExcelRows.length)return;const btn=$("confirmExcelImport");btn.disabled=true;btn.textContent="Importing...";try{if(!currentOrgId)await loadOrganizationContext();const payload=pendingExcelRows.map(x=>({...x,organization_id:currentOrgId}));for(let i=0;i<payload.length;i+=100){const r=await db.from("cases").insert(payload.slice(i,i+100));if(r.error)throw r.error;}$("excelMsg").textContent=`Successfully imported ${payload.length} case(s).`;$("excelMsg").className="notice";pendingExcelRows=[];await load();setTimeout(closeExcelModal,700);}catch(e){$("excelMsg").textContent="Import failed: "+(e.message||e);$("excelMsg").className="notice error";}finally{btn.textContent="✓ Import Valid Cases";btn.disabled=!pendingExcelRows.length;}}
-function downloadExcelTemplate(){
-  if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}
-  if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}
-  const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Case Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","Previous Validity End Date","Validity Start Date","Validity End Date","RFE / NOID Deadline","Extension Target Date","Notes"];
-  const e=["IOE1234567890","John Smith","ABC LLC","I-129","H1B CAP","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","","","","2027-01-15","H-1B case"];
-  const ws=XLSX.utils.aoa_to_sheet([h,e]);
-  ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,22,14,14,28,14,20,12,20,22,24,20,20,22,22,35][i]}));
-  const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended."],["For extensions, Previous Validity End Date is optional; if supplied and Validity Start Date is blank, the system calculates Validity Start as the next day."]]);
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");
-}
+function downloadExcelTemplate(){if(!canManageCases()){setNotice("Viewer access is read-only. You cannot download an import template.",true);return;}if(typeof XLSX==="undefined"){setNotice("Excel support could not load. Please refresh the page.",true);return;}const h=["Receipt Number","Beneficiary Name","Employer","Form Type","Case Type","Filing Date","Priority Date","Current Status","Status Date","Case Manager","Amount","Premium Processing","Time Duration (Days)","RFE / NOID Deadline","Extension Target Date","Automatic Monitoring","Notes"],e=["IOE1234567890","John Smith","ABC LLC","I-129","H1B CAP","2026-01-15","","Case Was Received","2026-01-15","Vijay",2805,"Yes","","","2027-01-15","Yes","H-1B case"];const ws=XLSX.utils.aoa_to_sheet([h,e]);ws["!cols"]=h.map((_,i)=>({wch:[20,24,24,14,22,14,14,28,14,20,12,20,20,20,22,20,35][i]}));const info=XLSX.utils.aoa_to_sheet([["USCIS Case Tracker - Bulk Import Template"],["Required: Receipt Number and Beneficiary Name."],["Dates: YYYY-MM-DD recommended. Premium Processing and Automatic Monitoring: Yes/No."]]);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Cases");XLSX.utils.book_append_sheet(wb,info,"Instructions");XLSX.writeFile(wb,"USCIS_Case_Import_Template.xlsx");}
 $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("importExcelBtn").addEventListener("click",openExcelModal);$("chooseExcelBtn").addEventListener("click",()=>{if(canManageCases())$("excelFileInput").click();});$("excelFileInput").addEventListener("change",e=>handleExcelFile(e.target.files?.[0]));$("excelClose").addEventListener("click",closeExcelModal);$("excelCancel").addEventListener("click",closeExcelModal);$("confirmExcelImport").addEventListener("click",confirmExcelImport);$("excelModal").addEventListener("click",e=>{if(e.target===$("excelModal"))closeExcelModal();});
 
 })();
