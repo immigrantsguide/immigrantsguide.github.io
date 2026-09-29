@@ -957,7 +957,10 @@ tbody tr:hover{
   }
 }
 
-</style>
+<style>
+.welcome-banner{margin:0 0 20px;padding:18px 20px;border-radius:16px;background:linear-gradient(135deg,#eff6ff,#f8fafc);border:1px solid #bfdbfe;box-shadow:0 8px 25px rgba(15,23,42,.06)}
+.welcome-banner h2{margin:0;font-size:22px;color:#0f172a}.welcome-banner p{margin:5px 0 0;color:#64748b;font-size:13px}
+</style></style>
 </head>
 <body>
 <aside class="side">
@@ -990,6 +993,7 @@ tbody tr:hover{
 
 
 
+<button id="changePasswordBtn" class="secondary" type="button">🔐 Change Password</button>
 <button id="logout" class="secondary" type="button" onclick="window.__igEmergencyLogout&&window.__igEmergencyLogout()">Log out</button>
 </div>
 </div>
@@ -1012,6 +1016,7 @@ tbody tr:hover{
 </div>
 
 <section id="dashboard">
+<div class="welcome-banner" id="welcomeBanner"><h2>Welcome, <span id="welcomeUser">User</span>! 👋</h2><p id="welcomePortal">Your secure immigration case portal</p></div>
 <div class="cards">
 <div class="card">Total Cases<div id="total" class="num">0</div></div>
 <div class="card">Pending<div id="pending" class="num">0</div></div>
@@ -1244,7 +1249,7 @@ const SUPABASE_URL="https://euzifpjzeuqdznkelxdq.supabase.co";
 const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
-let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null, teamMembers=[];
+let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, currentUser=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null, teamMembers=[];
 
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1274,11 +1279,43 @@ function deadlineTypeLabel(type){
   return type==="RFE"?'<span class="badge rfe">RFE / NOID</span>':'<span class="badge">Extension</span>';
 }
 
+
+function updateWelcome(user){
+  const raw=(user?.user_metadata?.full_name||user?.user_metadata?.name||((user?.email||"").split("@")[0])||"User").trim();
+  const display=raw.replace(/[._-]+/g," ").replace(/\b\w/g,m=>m.toUpperCase());
+  if($("welcomeUser"))$("welcomeUser").textContent=display;
+  if($("welcomePortal"))$("welcomePortal").textContent=(currentOrgName||"Immigrants Guide")+" • "+(String(currentOrgRole||"viewer").charAt(0).toUpperCase()+String(currentOrgRole||"viewer").slice(1));
+}
+
+function openPasswordModal(){
+  if($("passwordModal"))$("passwordModal").style.display="grid";
+  if($("newPassword"))$("newPassword").value="";
+  if($("confirmPassword"))$("confirmPassword").value="";
+  if($("passwordMsg"))$("passwordMsg").innerHTML="";
+}
+function closePasswordModal(){if($("passwordModal"))$("passwordModal").style.display="none";}
+async function saveNewPassword(){
+  const p=$("newPassword")?.value||"", c=$("confirmPassword")?.value||"";
+  const msg=$("passwordMsg");
+  if(p.length<8){msg.innerHTML='<div class="msg error">Password must be at least 8 characters.</div>';return;}
+  if(p!==c){msg.innerHTML='<div class="msg error">Passwords do not match.</div>';return;}
+  const btn=$("savePassword"); btn.disabled=true; btn.textContent="Saving...";
+  try{
+    const r=await db.auth.updateUser({password:p});
+    if(r.error)throw r.error;
+    msg.innerHTML='<div class="msg success">Password updated successfully. You can use this password next time you log in.</div>';
+    setTimeout(closePasswordModal,1200);
+  }catch(e){msg.innerHTML='<div class="msg error">Password update failed: '+esc(e.message||e)+'</div>';}
+  finally{btn.disabled=false;btn.textContent="Save Password";}
+}
+
 async function loadOrganizationContext(){
   const userResult=await db.auth.getUser();
   if(userResult.error)throw userResult.error;
   const user=userResult?.data?.user;
   if(!user)throw new Error("Your login session could not be verified. Please sign in again.");
+  currentUser=user;
+  updateWelcome(user);
   if($("debugUser"))$("debugUser").textContent=user.email||user.id||"Authenticated";
 
   const r=await db.from("organization_members")
@@ -1297,6 +1334,7 @@ async function loadOrganizationContext(){
     const org=await db.from("organizations").select("id,name").eq("id",currentOrgId).maybeSingle();
     if(org.error)throw org.error;
     currentOrgName=org.data?.name||"Immigrants Guide";
+    updateWelcome(user);
   }catch(_){
     currentOrgName="Immigrants Guide";
   }
@@ -2226,6 +2264,13 @@ async function init(){
 
 init();
 
+
+if($("changePasswordBtn"))$("changePasswordBtn").addEventListener("click",openPasswordModal);
+if($("closePasswordModal"))$("closePasswordModal").addEventListener("click",closePasswordModal);
+if($("cancelPassword"))$("cancelPassword").addEventListener("click",closePasswordModal);
+if($("savePassword"))$("savePassword").addEventListener("click",saveNewPassword);
+if($("passwordModal"))$("passwordModal").addEventListener("click",e=>{if(e.target.id==="passwordModal")closePasswordModal();});
+
 $("caseForm").addEventListener("submit",async e=>{
   e.preventDefault();
   $("formMsg").innerHTML="";
@@ -2424,5 +2469,17 @@ $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("impo
 
 })();
 </script>
+
+<div class="modal" id="passwordModal">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-head"><div><h2 style="margin:0">Change Password</h2><div class="small">Set a private password for your portal account.</div></div><button class="close" type="button" id="closePasswordModal">×</button></div>
+    <label for="newPassword">New Password</label>
+    <input id="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+    <label for="confirmPassword">Confirm Password</label>
+    <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Re-enter your password">
+    <div id="passwordMsg"></div>
+    <div class="form-actions"><button class="secondary" type="button" id="cancelPassword">Cancel</button><button class="primary" type="button" id="savePassword">Save Password</button></div>
+  </div>
+</div>
 </body>
 </html>
