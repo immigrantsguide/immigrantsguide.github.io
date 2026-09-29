@@ -968,7 +968,7 @@ tbody tr:hover{
 <div class="nav">
 <button class="active" data-view="dashboard">▦ Dashboard</button>
 <button data-view="cases">▣ All Cases</button>
-<button data-view="history">◷ Case History</button>
+<button id="historyNav" data-view="history">◷ Case History</button>
 <button data-view="calendar">▣ Deadline Calendar</button>
 <button id="reportsNav" data-view="reports" style="display:none">▤ Reports & Settings</button>
 <button id="teamNav" data-view="team" style="display:none">👥 Team Management</button>
@@ -1985,6 +1985,7 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
   const v=btn.dataset.view;
+  if(v==="history" && String($("who")?.textContent||"").toLowerCase()==="kurma@gmail.com") return;
   $("dashboard").style.display=v==="dashboard"?"block":"none";
   $("cases").style.display=v==="cases"?"block":"none";
   $("alerts").style.display=v==="alerts"?"block":"none";
@@ -2082,7 +2083,7 @@ document.addEventListener("click",async e=>{
   }
 
   const profileHistory=e.target.closest(".profileHistoryBtn");
-  if(profileHistory){
+  if(profileHistory && String($("who")?.textContent||"").toLowerCase()!=="kurma@gmail.com"){
     const c=rows.find(x=>String(x.id)===String(profileHistory.dataset.id));
     if(c){
       closeProfile();
@@ -2122,7 +2123,7 @@ document.addEventListener("click",async e=>{
   }
 
   const hist=e.target.closest(".historyBtn");
-  if(hist){
+  if(hist && String($("who")?.textContent||"").toLowerCase()!=="kurma@gmail.com"){
     document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
     document.querySelector('.nav button[data-view="history"]').classList.add("active");
     $("dashboard").style.display="none";
@@ -2199,6 +2200,9 @@ async function init(){
     initialized=true;
     const email=session.user?.email||"";
     if($("who"))$("who").textContent=email||"Authenticated user";
+    if($("historyNav") && email.toLowerCase()==="kurma@gmail.com"){
+      $("historyNav").style.display="none";
+    }
     if($("debugUser"))$("debugUser").textContent=email||session.user?.id||"Authenticated";
     if($("debugBuild"))$("debugBuild").textContent="2026-09-22-role-fix-03";
 
