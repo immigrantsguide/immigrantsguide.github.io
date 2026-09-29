@@ -1707,12 +1707,12 @@ async function load(){
   try{
     if(!currentOrgId)await loadOrganizationContext();
 
-    // RLS remains the security boundary. The organization filter is kept explicit
-    // so the dashboard only renders the active organization.
-    const r=await db.from("cases")
-      .select("*")
-      .eq("organization_id",currentOrgId)
-      .order("created_at",{ascending:false});
+    // RLS remains the security boundary. Global owners can read across portals;
+    // managers/viewers remain explicitly scoped to their active organization.
+    const isGlobalOwner=String(currentOrgRole||"").toLowerCase()==="owner";
+    let rq=db.from("cases").select("*").order("created_at",{ascending:false});
+    if(!isGlobalOwner)rq=rq.eq("organization_id",currentOrgId);
+    const r=await rq;
 
     if(r.error)throw r.error;
     rows=r.data||[];
@@ -1792,7 +1792,7 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
       form_type:cs.formType||c.form_type||null
     };
 
-    const up=await db.from("cases").update(payload).eq("id",c.id).eq("organization_id",currentOrgId);
+    const up=await db.from("cases").update(payload).eq("id",c.id).eq("organization_id",c.organization_id);
     if(up.error)throw up.error;
 
     const previousStatus=c.uscis_status_text||null;
@@ -1800,7 +1800,7 @@ async function checkUSCIS(c,buttonEl=null,showAlert=true){
     if(previousStatus!==statusText || previousModified!==modified){
       const h=await db.from("uscis_status_history").insert({
         case_id:c.id,
-        organization_id:currentOrgId,
+        organization_id:c.organization_id,
         receipt_number:c.receipt_number,
         beneficiary_name:c.beneficiary_name||null,
         previous_uscis_status:previousStatus,
@@ -1868,7 +1868,7 @@ async function loadHistory(caseId=null){
     let uh=[];
     const selectedCase=caseId?rows.find(x=>String(x.id)===String(caseId)):null;
     try{
-      let urq=db.from("uscis_status_history").select("*").eq("organization_id",currentOrgId);
+      let urq=db.from("uscis_status_history").select("*").eq("organization_id",selectedCase?.organization_id||currentOrgId);
       if(selectedCase)urq=urq.eq("receipt_number",selectedCase.receipt_number);
       urq=urq.order("created_at",{ascending:false}).limit(500);
       const ur=await urq;
@@ -2140,7 +2140,7 @@ document.addEventListener("click",async e=>{
     const c=rows.find(x=>String(x.id)===String(del.dataset.id));
     if(!c)return;
     if(confirm("Delete case "+c.receipt_number+"?")){
-      const r=await db.from("cases").delete().eq("id",c.id).eq("organization_id",currentOrgId);
+      const r=await db.from("cases").delete().eq("id",c.id).eq("organization_id",c.organization_id);
       if(r.error)alert("Delete failed: "+r.error.message);
       else await load();
     }
