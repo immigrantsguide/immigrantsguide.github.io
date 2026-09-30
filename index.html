@@ -77,6 +77,49 @@ a{color:inherit}
 
 
 <style>
+  /* ===== US CULTURE BACKGROUND ===== */
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  color: var(--ink);
+
+  background:
+    linear-gradient(
+      rgba(247,251,255,0.72),
+      rgba(255,255,255,0.78)
+    ),
+    url("assets/us-culture-background.png");
+
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Keep the existing website content clear */
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Keep your original header/logo */
+.header {
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(8px);
+}
+
+/* Slight glass effect on existing cards */
+.tool-card,
+.dol-card,
+.side-card,
+.service,
+.service-forms,
+.why,
+.ask-vijay,
+.ai-section {
+  backdrop-filter: blur(5px);
+}
 .vk-ai-inline-logo{width:52px;height:52px;object-fit:contain;display:inline-block;vertical-align:-12px;margin-left:8px;border-radius:12px;}
 @media (max-width:600px){.vk-ai-inline-logo{width:42px;height:42px;vertical-align:-9px;margin-left:5px;border-radius:10px;}}
 </style>
