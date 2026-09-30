@@ -54,6 +54,16 @@ a{color:inherit}
 .vk-ai-inline-logo{width:52px;height:52px;object-fit:contain;display:inline-block;vertical-align:-12px;margin-left:8px;border-radius:12px;}
 @media (max-width:600px){.vk-ai-inline-logo{width:42px;height:42px;vertical-align:-9px;margin-left:5px;border-radius:10px;}}
 </style>
+
+<style>
+.h1b-fee-panel{margin:20px 0 28px;padding:20px;border:1px solid #cfe0f3;border-radius:16px;background:linear-gradient(135deg,#f8fbff,#ffffff);box-shadow:0 8px 24px rgba(20,55,95,.06)}
+.h1b-fee-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:16px}
+.h1b-fee-head h3{margin:0 0 5px;color:#0b3568;font-size:20px}.h1b-fee-head p{margin:0;color:#5b7390;font-size:12px}
+.h1b-form-links{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}.h1b-form-links a{padding:8px 10px;border:1px solid #b8d0ed;border-radius:8px;background:#fff;color:#075bc7;text-decoration:none;font-size:11px;font-weight:800}.h1b-form-links a:hover{background:#eef6ff}
+.h1b-fee-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.h1b-fee-card{border:1px solid #d4e2f0;border-radius:12px;background:#fff;padding:14px}.h1b-fee-title{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px}.h1b-fee-title strong{color:#0b3568;font-size:14px}.h1b-fee-title span{color:#68809a;font-size:10px}
+.h1b-fee-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px}.h1b-fee-columns>div{background:#f7fbff;border:1px solid #e2ebf5;border-radius:9px;padding:10px}.h1b-fee-columns>div:last-child{background:#f7fcfa}.h1b-fee-columns b{display:block;color:#173e69;font-size:11px;margin-bottom:6px}.h1b-fee-columns span{display:block;color:#526b87;font-size:10px;line-height:1.55}.h1b-fee-columns strong{display:block;margin-top:7px;color:#008267;font-size:10px;line-height:1.35}.h1b-note{display:block;margin-top:8px;color:#71839a;font-size:9px;line-height:1.45}.h1b-extra-fees{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.h1b-extra-fees>div{padding:11px;border-radius:10px;background:linear-gradient(135deg,#eef6ff,#effcf8);border:1px solid #d6e6f3}.h1b-extra-fees strong{display:block;color:#124477;font-size:11px}.h1b-extra-fees span{display:block;color:#5d728a;font-size:10px;margin-top:4px;line-height:1.4}.h1b-disclaimer{margin-top:12px;padding:10px 12px;border-radius:9px;background:#fff8e8;border:1px solid #f0dfb4;color:#74694e;font-size:10px;line-height:1.45}
+@media(max-width:800px){.h1b-fee-head{flex-direction:column}.h1b-form-links{justify-content:flex-start}.h1b-fee-grid,.h1b-fee-columns,.h1b-extra-fees{grid-template-columns:1fr}.h1b-fee-panel{padding:14px}}
+</style>
 </head>
 <body>
 <header class="header">
@@ -134,20 +144,63 @@ a{color:inherit}
       <div class="service-form-note">Fees are government filing fees and can change. Verify the current USCIS fee schedule or DOL/FLAG instructions before filing.</div>
     </div>
   </section>
-  <section class="service-info-panels">
-    <div class="service-info-card">
-      <div class="service-info-head"><h3>📰 Latest USCIS News</h3><a href="https://www.uscis.gov/newsroom" target="_blank" rel="noopener">View USCIS Newsroom →</a></div>
-      <a href="https://www.uscis.gov/newsroom/news-releases" target="_blank" rel="noopener">USCIS News Releases &amp; Announcements</a>
-      <a href="https://www.uscis.gov/newsroom/alerts" target="_blank" rel="noopener">USCIS Alerts &amp; Policy Updates</a>
-      <a href="https://www.uscis.gov/forms/forms-updates" target="_blank" rel="noopener">USCIS Forms Updates</a>
-      <small>Use the official USCIS website to verify current announcements before filing.</small>
+  <section class="h1b-fee-panel" aria-label="H-1B petition forms and government filing fees">
+    <div class="h1b-fee-head">
+      <div>
+        <h3>📋 H-1B Petition Forms &amp; Government Filing Fees</h3>
+        <p>Form downloads and a quick fee reference for H-1B cap, transfer, extension and amendment filings.</p>
+      </div>
+      <div class="h1b-form-links">
+        <a href="https://www.uscis.gov/sites/default/files/document/forms/i-129.pdf" target="_blank" rel="noopener">↗ Download Form I-129</a>
+        <a href="https://www.uscis.gov/i-907" target="_blank" rel="noopener">↗ Form I-907 Premium</a>
+        <a href="https://www.uscis.gov/working-in-the-united-states/h-1b-specialty-occupations-and-fashion-models/h-1b-electronic-registration-process" target="_blank" rel="noopener">↗ H-1B Registration</a>
+      </div>
     </div>
-    <div class="service-info-card">
-      <div class="service-info-head"><h3>🔐 E-Verify Portal</h3><a href="https://e-verify.gov/employers" target="_blank" rel="noopener">Open Portal →</a></div>
-      <p><strong>Employer Login:</strong> Use the official E-Verify employer portal to access your organization account and manage verification cases.</p>
-      <a class="service-login-btn" href="https://e-verify.gov/employers" target="_blank" rel="noopener">🔑 E-Verify Employer Login</a>
-      <small>Never store or display E-Verify passwords on this website. Sign in only through the official portal.</small>
+
+    <div class="h1b-fee-grid">
+      <div class="h1b-fee-card">
+        <div class="h1b-fee-title"><strong>🆕 H-1B Cap / Initial Petition</strong><span>New cap-subject H-1B</span></div>
+        <div class="h1b-fee-columns">
+          <div><b>Small Employer ≤25 FTE</b><span>I-129: $460</span><span>ACWIA: $750</span><span>Asylum Program: $300</span><span>Fraud Fee: $500</span><span>Registration: $215</span><strong>Typical total: $2,225</strong></div>
+          <div><b>26+ Employees</b><span>I-129: $780 paper / $730 online</span><span>ACWIA: $1,500</span><span>Asylum Program: $600</span><span>Fraud Fee: $500</span><span>Registration: $215</span><strong>Typical total: $3,595 paper / $3,545 online</strong></div>
+        </div>
+        <small class="h1b-note">Some employers may also owe the $4,000 Public Law 114-113 fee if they have 50+ U.S. employees and more than 50% are in H-1B/L-1 status.</small>
+      </div>
+
+      <div class="h1b-fee-card">
+        <div class="h1b-fee-title"><strong>🔄 H-1B Transfer</strong><span>Change of employer</span></div>
+        <div class="h1b-fee-columns">
+          <div><b>Small Employer ≤25 FTE</b><span>I-129: $460</span><span>ACWIA: $750*</span><span>Asylum Program: $300</span><span>Fraud Fee: $500</span><strong>Typical: $2,010</strong></div>
+          <div><b>26+ Employees</b><span>I-129: $780 paper / $730 online</span><span>ACWIA: $1,500*</span><span>Asylum Program: $600</span><span>Fraud Fee: $500</span><strong>Typical: $3,380 paper / $3,330 online</strong></div>
+        </div>
+        <small class="h1b-note">*ACWIA exemptions can apply depending on the petitioner and filing circumstances.</small>
+      </div>
+
+      <div class="h1b-fee-card">
+        <div class="h1b-fee-title"><strong>📅 H-1B Extension</strong><span>Same employer / continued H-1B</span></div>
+        <div class="h1b-fee-columns">
+          <div><b>Small Employer ≤25 FTE</b><span>I-129: $460</span><span>Asylum Program: $300</span><span>ACWIA: $750* / $0 if exempt</span><strong>Base typical: $760 + applicable ACWIA</strong></div>
+          <div><b>26+ Employees</b><span>I-129: $780 paper / $730 online</span><span>Asylum Program: $600</span><span>ACWIA: $1,500* / $0 if exempt</span><strong>Base typical: $1,380 paper / $1,330 online + applicable ACWIA</strong></div>
+        </div>
+        <small class="h1b-note">USCIS provides ACWIA exemptions for certain filings, including a second or subsequent request for extension of stay for the same beneficiary.</small>
+      </div>
+
+      <div class="h1b-fee-card">
+        <div class="h1b-fee-title"><strong>✏️ H-1B Amendment</strong><span>Same employer amendment</span></div>
+        <div class="h1b-fee-columns">
+          <div><b>Small Employer ≤25 FTE</b><span>I-129: $460</span><span>Asylum Program: $300</span><span>ACWIA: generally exempt when no extension is requested</span><strong>Typical: $760</strong></div>
+          <div><b>26+ Employees</b><span>I-129: $780 paper / $730 online</span><span>Asylum Program: $600</span><span>ACWIA: generally exempt when no extension is requested</span><strong>Typical: $1,380 paper / $1,330 online</strong></div>
+        </div>
+        <small class="h1b-note">Government fees can depend on the exact filing and exemption circumstances. Premium Processing is separate.</small>
+      </div>
     </div>
+
+    <div class="h1b-extra-fees">
+      <div><strong>⚡ Premium Processing — Form I-907</strong><span>$2,805 when applicable</span></div>
+      <div><strong>🏢 Public Law 114-113 Fee</strong><span>$4,000 when the statutory 50+ employee / H-1B-L-1 threshold applies</span></div>
+      <div><strong>📌 H-1B Registration</strong><span>$215 per beneficiary for cap registration</span></div>
+    </div>
+    <div class="h1b-disclaimer">Government fees can change. These figures are a quick reference based on the USCIS fee schedule; verify the current USCIS fee schedule and applicable exemptions before filing. Totals above exclude attorney/service fees and, where applicable, premium processing or the Public Law fee.</div>
   </section>
 
   <section class="why">
