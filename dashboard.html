@@ -991,7 +991,191 @@ tbody tr:hover{
 
 
 
-<button id="changePasswordBtn" class="secondary" type="button">🔐 Change Password</button>
+<script>
+/* ===== FIX: CHANGE PASSWORD ===== */
+(function () {
+  function initChangePassword() {
+
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
+    const passwordModal = document.getElementById("passwordModal");
+    const passwordClose = document.getElementById("passwordClose");
+    const passwordCancel = document.getElementById("passwordCancel");
+    const passwordForm = document.getElementById("passwordForm");
+    const newPassword = document.getElementById("newPassword");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const passwordMsg = document.getElementById("passwordMsg");
+    const savePasswordBtn = document.getElementById("savePasswordBtn");
+
+    if (!changePasswordBtn || !passwordModal || !passwordForm) {
+      console.error("Change Password elements not found.");
+      return;
+    }
+
+    function openPasswordModal() {
+      passwordModal.style.display = "grid";
+
+      if (passwordMsg) {
+        passwordMsg.innerHTML = "";
+      }
+
+      if (newPassword) newPassword.value = "";
+      if (confirmPassword) confirmPassword.value = "";
+
+      setTimeout(function () {
+        if (newPassword) newPassword.focus();
+      }, 100);
+    }
+
+    function closePasswordModal() {
+      passwordModal.style.display = "none";
+
+      if (passwordMsg) {
+        passwordMsg.innerHTML = "";
+      }
+
+      if (newPassword) newPassword.value = "";
+      if (confirmPassword) confirmPassword.value = "";
+    }
+
+    /* Open Change Password */
+    changePasswordBtn.onclick = function (e) {
+      e.preventDefault();
+      openPasswordModal();
+    };
+
+    /* Close buttons */
+    if (passwordClose) {
+      passwordClose.onclick = function (e) {
+        e.preventDefault();
+        closePasswordModal();
+      };
+    }
+
+    if (passwordCancel) {
+      passwordCancel.onclick = function (e) {
+        e.preventDefault();
+        closePasswordModal();
+      };
+    }
+
+    /* Close when clicking outside modal */
+    passwordModal.onclick = function (e) {
+      if (e.target === passwordModal) {
+        closePasswordModal();
+      }
+    };
+
+    /* Save new password */
+    passwordForm.onsubmit = async function (e) {
+      e.preventDefault();
+
+      const newPass = newPassword ? newPassword.value.trim() : "";
+      const confirmPass = confirmPassword ? confirmPassword.value.trim() : "";
+
+      if (!newPass || !confirmPass) {
+        if (passwordMsg) {
+          passwordMsg.innerHTML =
+            '<div class="msg error">Please enter your new password.</div>';
+        }
+        return;
+      }
+
+      if (newPass.length < 8) {
+        if (passwordMsg) {
+          passwordMsg.innerHTML =
+            '<div class="msg error">Password must be at least 8 characters.</div>';
+        }
+        return;
+      }
+
+      if (newPass !== confirmPass) {
+        if (passwordMsg) {
+          passwordMsg.innerHTML =
+            '<div class="msg error">Passwords do not match.</div>';
+        }
+        return;
+      }
+
+      if (!window.db || !window.db.auth) {
+        if (passwordMsg) {
+          passwordMsg.innerHTML =
+            '<div class="msg error">Authentication service is not available. Please refresh the page and try again.</div>';
+        }
+        return;
+      }
+
+      if (savePasswordBtn) {
+        savePasswordBtn.disabled = true;
+        savePasswordBtn.textContent = "Saving...";
+      }
+
+      if (passwordMsg) {
+        passwordMsg.innerHTML =
+          '<div class="msg">Updating password...</div>';
+      }
+
+      try {
+
+        const { data: sessionData } =
+          await window.db.auth.getSession();
+
+        if (!sessionData || !sessionData.session) {
+          throw new Error("Your session has expired. Please log in again.");
+        }
+
+        const { error } =
+          await window.db.auth.updateUser({
+            password: newPass
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        if (passwordMsg) {
+          passwordMsg.innerHTML =
+            '<div class="msg success">Password changed successfully.</div>';
+        }
+
+        if (newPassword) newPassword.value = "";
+        if (confirmPassword) confirmPassword.value = "";
+
+        setTimeout(function () {
+          closePasswordModal();
+        }, 1500);
+
+      } catch (err) {
+
+        console.error("Change password error:", err);
+
+        if (passwordMsg) {
+          passwordMsg.innerHTML =
+            '<div class="msg error">' +
+            (err && err.message
+              ? err.message
+              : "Unable to change password.") +
+            '</div>';
+        }
+
+      } finally {
+
+        if (savePasswordBtn) {
+          savePasswordBtn.disabled = false;
+          savePasswordBtn.textContent = "Save Password";
+        }
+
+      }
+    };
+  }
+
+  /* Make sure the HTML is completely loaded before attaching events */
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initChangePassword);
+  } else {
+    initChangePassword();
+  }
+})();
+</script>
 <button id="logout" class="secondary" type="button" onclick="window.__igEmergencyLogout&&window.__igEmergencyLogout()">Log out</button>
 </div>
 </div>
