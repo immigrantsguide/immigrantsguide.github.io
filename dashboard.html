@@ -2461,92 +2461,63 @@ $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("impo
 
 })();
 
-const passwordModal = $("passwordModal");
-const passwordModal = document.getElementById("passwordModal");
-const passwordForm = document.getElementById("passwordForm");
-const changePasswordBtn = document.getElementById("changePasswordBtn");
-const passwordClose = document.getElementById("passwordClose");
-const passwordCancel = document.getElementById("passwordCancel");
-const passwordMsg = document.getElementById("passwordMsg");
-const newPassword = document.getElementById("newPassword");
-const confirmPassword = document.getElementById("confirmPassword");
-const savePasswordBtn = document.getElementById("savePasswordBtn");
+const passwordModal=$("passwordModal");
+const passwordForm=$("passwordForm");
 
 function closePasswordModal(){
-  passwordModal.style.display = "none";
-  passwordMsg.innerHTML = "";
-  newPassword.value = "";
-  confirmPassword.value = "";
+  passwordModal.style.display="none";
+  $("passwordMsg").innerHTML="";
+  $("newPassword").value="";
+  $("confirmPassword").value="";
 }
 
-changePasswordBtn.addEventListener("click", function(){
-  passwordModal.style.display = "grid";
-  setTimeout(function(){
-    newPassword.focus();
-  }, 50);
+$("changePasswordBtn").addEventListener("click",()=>{
+  passwordModal.style.display="grid";
+  setTimeout(()=>$("newPassword").focus(),50);
+});
+$("passwordClose").addEventListener("click",closePasswordModal);
+$("passwordCancel").addEventListener("click",closePasswordModal);
+passwordModal.addEventListener("click",e=>{
+  if(e.target===passwordModal) closePasswordModal();
 });
 
-passwordClose.addEventListener("click", closePasswordModal);
-passwordCancel.addEventListener("click", closePasswordModal);
-
-passwordModal.addEventListener("click", function(e){
-  if(e.target === passwordModal){
-    closePasswordModal();
-  }
-});
-
-passwordForm.addEventListener("submit", async function(e){
+passwordForm.addEventListener("submit",async e=>{
   e.preventDefault();
+  const newPassword=$("newPassword").value;
+  const confirmPassword=$("confirmPassword").value;
+  const msg=$("passwordMsg");
+  const btn=$("savePasswordBtn");
 
-  const password = newPassword.value.trim();
-  const confirm = confirmPassword.value.trim();
-
-  passwordMsg.innerHTML = "";
-
-  if(password.length < 8){
-    passwordMsg.innerHTML =
-      '<div class="msg error">Password must be at least 8 characters.</div>';
+  if(newPassword.length<8){
+    msg.innerHTML='<div class="msg error">Password must be at least 8 characters.</div>';
+    return;
+  }
+  if(newPassword!==confirmPassword){
+    msg.innerHTML='<div class="msg error">Passwords do not match.</div>';
     return;
   }
 
-  if(password !== confirm){
-    passwordMsg.innerHTML =
-      '<div class="msg error">Passwords do not match.</div>';
-    return;
-  }
+  btn.disabled=true;
+  btn.textContent="Saving...";
+  msg.innerHTML='<div class="msg">Updating password...</div>';
 
-  savePasswordBtn.disabled = true;
-  savePasswordBtn.textContent = "Saving...";
-
-  try {
-    const { error } = await db.auth.updateUser({
-      password: password
-    });
-
+  try{
+    const {error}=await db.auth.updateUser({password:newPassword});
     if(error) throw error;
 
-    passwordMsg.innerHTML =
-      '<div class="msg success">Password changed successfully.</div>';
-
-    setTimeout(function(){
+    msg.innerHTML='<div class="msg success">Password changed successfully.</div>';
+    setTimeout(()=>{
       closePasswordModal();
-      savePasswordBtn.disabled = false;
-      savePasswordBtn.textContent = "Save Password";
-    }, 1200);
-
-  } catch(error) {
-    console.error("Password update error:", error);
-
-    passwordMsg.innerHTML =
-      '<div class="msg error">' +
-      (error.message || "Unable to change password.") +
-      '</div>';
-
-    savePasswordBtn.disabled = false;
-    savePasswordBtn.textContent = "Save Password";
+      btn.disabled=false;
+      btn.textContent="Save Password";
+    },1200);
+  }catch(err){
+    console.error("Password update error:",err);
+    msg.innerHTML='<div class="msg error">'+esc(err?.message||"Unable to change password.")+'</div>';
+    btn.disabled=false;
+    btn.textContent="Save Password";
   }
 });
-
 </script>
 </body>
 </html>
