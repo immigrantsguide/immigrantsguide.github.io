@@ -1271,7 +1271,9 @@ const SUPABASE_KEY="sb_publishable_peFBAVgb_bBF0DbZYpBl_A_ZTu8XWVe";
 const USCIS_FUNCTION="smart-service";
 
 let db=null, rows=[], recentUscisHistory=[], recentMonitorResult=null, calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1), signingOut=false, initialized=false, currentOrgId=null, currentOrgRole=null, currentOrgName=null, teamMembers=[];
-
+window.__getImmigrantsGuideDb = function(){
+  return db;
+};
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-US"):"—";
@@ -2500,7 +2502,7 @@ window.__changePasswordNow = async function(){
 
   try {
 
-    const authDb = window.__igDb;
+   const authDb = window.__getImmigrantsGuideDb();
 
     if(!authDb){
       throw new Error(
