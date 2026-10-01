@@ -1183,9 +1183,7 @@ NOID / Extensions
       <div id="passwordMsg"></div>
       <div class="form-actions">
         <button id="passwordCancel" type="button" class="secondary">Cancel</button>
-        <button id="savePasswordBtn" type="button" class="primary" onclick="window.__changePasswordNow()">
-           Save Password
-        </button>
+        <button id="savePasswordBtn" type="button" class="primary">Save Password</button>
       </div>
     </form>
   </div>
@@ -2484,6 +2482,13 @@ passwordModal.addEventListener("click",e=>{
 });
 
 window.__changePasswordNow = async function(){
+
+  // your existing code stays exactly the same
+
+};
+    
+document.getElementById("savePasswordBtn").addEventListener("click", window.__changePasswordNow);
+</script>
 
   const newPassword = document.getElementById("newPassword").value.trim();
   const confirmPassword = document.getElementById("confirmPassword").value.trim();
