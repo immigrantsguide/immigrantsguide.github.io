@@ -1183,7 +1183,9 @@ NOID / Extensions
       <div id="passwordMsg"></div>
       <div class="form-actions">
         <button id="passwordCancel" type="button" class="secondary">Cancel</button>
-        <button id="savePasswordBtn" type="button" class="primary" onclick="window.__changePasswordNow()">Save Password</button>
+       <button id="savePasswordBtn" type="button" class="primary">
+  Save Password
+</button>
       </div>
     </form>
   </div>
@@ -2461,38 +2463,23 @@ $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("impo
 
 })();
 
-const passwordModal = document.getElementById("passwordModal");
-const passwordForm = document.getElementById("passwordForm");
-
-function closePasswordModal(){
-  passwordModal.style.display = "none";
-  document.getElementById("passwordMsg").innerHTML = "";
-  document.getElementById("newPassword").value = "";
-  document.getElementById("confirmPassword").value = "";
-}
-
-document.getElementById("changePasswordBtn").addEventListener("click", function(){
-  passwordModal.style.display = "grid";
-  setTimeout(function(){
-    document.getElementById("newPassword").focus();
-  }, 50);
-});
-
-document.getElementById("passwordClose").addEventListener("click", closePasswordModal);
-document.getElementById("passwordCancel").addEventListener("click", closePasswordModal);
-
-passwordModal.addEventListener("click", function(e){
-  if(e.target === passwordModal){
-    closePasswordModal();
-  }
-});
+/* =========================
+   CHANGE PASSWORD
+   ========================= */
 
 window.__changePasswordNow = async function(){
 
-  const newPassword = document.getElementById("newPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-  const msg = document.getElementById("passwordMsg");
-  const btn = document.getElementById("savePasswordBtn");
+  const newPassword =
+    document.getElementById("newPassword").value;
+
+  const confirmPassword =
+    document.getElementById("confirmPassword").value;
+
+  const msg =
+    document.getElementById("passwordMsg");
+
+  const btn =
+    document.getElementById("savePasswordBtn");
 
   msg.innerHTML = "";
 
@@ -2511,126 +2498,34 @@ window.__changePasswordNow = async function(){
   btn.disabled = true;
   btn.textContent = "Saving...";
 
-  try{
+  try {
 
-    if(!window.__igDb){
-      throw new Error("Authentication service is not ready. Please refresh the page.");
+    const authDb = window.__igDb;
+
+    if(!authDb){
+      throw new Error(
+        "Authentication service is not ready. Please refresh the page."
+      );
     }
 
-    const sessionResult = await window.__igDb.auth.getSession();
+    const sessionResult =
+      await authDb.auth.getSession();
 
     if(sessionResult.error){
       throw sessionResult.error;
     }
 
     if(!sessionResult.data.session){
-      throw new Error("Your login session has expired. Please log in again.");
-    }
-
-    const updateResult = await window.__igDb.auth.updateUser({
-      password: newPassword
-    });
-
-    if(updateResult.error){
-      throw updateResult.error;
-    }
-
-    msg.innerHTML =
-      '<div class="msg success">✓ Password changed successfully.</div>';
-
-    btn.textContent = "Password Changed";
-
-    setTimeout(function(){
-      closePasswordModal();
-      btn.disabled = false;
-      btn.textContent = "Save Password";
-    }, 1200);
-
-  }catch(error){
-
-    console.error("CHANGE PASSWORD ERROR:", error);
-
-    msg.innerHTML =
-      '<div class="msg error">Password was NOT changed: ' +
-      (error.message || "Unknown error") +
-      '</div>';
-
-    btn.disabled = false;
-    btn.textContent = "Save Password";
-  }
-};
-
-document.getElementById("savePasswordBtn").addEventListener(
-  "click",
-  window.__changePasswordNow
-);
-</script>
-
-  const newPassword = document.getElementById("newPassword").value.trim();
-  const confirmPassword = document.getElementById("confirmPassword").value.trim();
-  const msg = document.getElementById("passwordMsg");
-  const btn = document.getElementById("savePasswordBtn");
-
-  msg.innerHTML = "";
-
-  if(newPassword.length < 8){
-    msg.innerHTML =
-      '<div class="msg error">Password must be at least 8 characters.</div>';
-    return;
-  }
-
-  if(newPassword !== confirmPassword){
-    msg.innerHTML =
-      '<div class="msg error">Passwords do not match.</div>';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Saving...";
-  msg.innerHTML =
-    '<div class="msg">Updating password...</div>';
-
-  try {
-  const authDb = window.__igDb;
-
-  if(!authDb){
-  throw new Error("Authentication service is not ready. Please refresh the page and try again.");
-    }
-
-    /* Make sure the current login session is available */
-    const sessionResult = await authDb.auth.getSession();
-
-    if(sessionResult.error){
-      throw sessionResult.error;
-    }
-
-    let session = sessionResult.data?.session;
-
-    if(!session){
       throw new Error(
         "Your login session has expired. Please log in again."
       );
     }
 
-    /* Refresh the session before password update */
-    const refreshResult = await db.auth.refreshSession();
+    const updateResult =
+      await authDb.auth.updateUser({
+        password: newPassword
+      });
 
-    if(refreshResult.error){
-      throw refreshResult.error;
-    }
-
-    session = refreshResult.data?.session;
-
-    if(!session){
-      throw new Error(
-        "Unable to refresh your login session. Please log in again."
-      );
-    }
-
-    /* ACTUALLY CHANGE THE SUPABASE PASSWORD */
-    const updateResult = await authDb.auth.updateUser({
-  password: newPassword
-});
     if(updateResult.error){
       throw updateResult.error;
     }
@@ -2645,29 +2540,63 @@ document.getElementById("savePasswordBtn").addEventListener(
       document.getElementById("passwordModal").style.display = "none";
 
       document.getElementById("newPassword").value = "";
+
       document.getElementById("confirmPassword").value = "";
 
       msg.innerHTML = "";
 
       btn.disabled = false;
+
       btn.textContent = "Save Password";
 
-    },1800);
+    },1200);
 
-  } catch(error){
+  } catch(error) {
 
-    console.error("CHANGE PASSWORD ERROR:", error);
+    console.error("CHANGE PASSWORD ERROR:",error);
 
     msg.innerHTML =
-      '<div class="msg error">' +
-      'Password was NOT changed: ' +
-      (error?.message || "Unknown error") +
+      '<div class="msg error">Password was NOT changed: ' +
+      (error.message || "Unknown error") +
       '</div>';
 
     btn.disabled = false;
     btn.textContent = "Save Password";
   }
 };
+
+
+/* Open password popup */
+
+document.getElementById("changePasswordBtn")
+.addEventListener("click",function(){
+
+  document.getElementById("passwordModal").style.display = "grid";
+
+});
+
+
+/* Close buttons */
+
+document.getElementById("passwordClose")
+.addEventListener("click",function(){
+
+  document.getElementById("passwordModal").style.display = "none";
+
+});
+
+document.getElementById("passwordCancel")
+.addEventListener("click",function(){
+
+  document.getElementById("passwordModal").style.display = "none";
+
+});
+
+
+/* Save password */
+
+document.getElementById("savePasswordBtn")
+.addEventListener("click",window.__changePasswordNow);
 </script>
 </body>
 </html>
