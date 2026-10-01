@@ -1183,7 +1183,9 @@ NOID / Extensions
       <div id="passwordMsg"></div>
       <div class="form-actions">
         <button id="passwordCancel" type="button" class="secondary">Cancel</button>
-        <button id="savePasswordBtn" type="button" class="primary" onclick="window.__changePasswordNow()">Save Password</button>
+        <button id="savePasswordBtn" type="button" class="primary" onclick="window.__changePasswordNow()">
+           Save Password
+        </button>
       </div>
     </form>
   </div>
@@ -2504,23 +2506,48 @@ window.__changePasswordNow = async function(){
 
   btn.disabled = true;
   btn.textContent = "Saving...";
+  msg.innerHTML =
+    '<div class="msg">Updating password...</div>';
 
   try {
 
     if(!db){
-      throw new Error("Authentication service is not ready. Please refresh the page and try again.");
+      throw new Error(
+        "Authentication service is not ready. Please refresh the page and try again."
+      );
     }
 
+    /* Make sure the current login session is available */
     const sessionResult = await db.auth.getSession();
 
     if(sessionResult.error){
       throw sessionResult.error;
     }
 
-    if(!sessionResult.data.session){
-      throw new Error("Your login session has expired. Please log in again.");
+    let session = sessionResult.data?.session;
+
+    if(!session){
+      throw new Error(
+        "Your login session has expired. Please log in again."
+      );
     }
 
+    /* Refresh the session before password update */
+    const refreshResult = await db.auth.refreshSession();
+
+    if(refreshResult.error){
+      throw refreshResult.error;
+    }
+
+    session = refreshResult.data?.session;
+
+    if(!session){
+      throw new Error(
+        "Unable to refresh your login session. Please log in again."
+      );
+    }
+
+    /* ACTUALLY CHANGE THE SUPABASE PASSWORD */
     const updateResult = await db.auth.updateUser({
       password: newPassword
     });
@@ -2530,26 +2557,32 @@ window.__changePasswordNow = async function(){
     }
 
     msg.innerHTML =
-      '<div class="msg success">✓ Password changed successfully. You can now use your new password.</div>';
+      '<div class="msg success">✓ Password changed successfully.</div>';
 
     btn.textContent = "Password Changed";
 
     setTimeout(function(){
+
       document.getElementById("passwordModal").style.display = "none";
+
       document.getElementById("newPassword").value = "";
       document.getElementById("confirmPassword").value = "";
+
       msg.innerHTML = "";
+
       btn.disabled = false;
       btn.textContent = "Save Password";
-    }, 1800);
 
-  } catch(error) {
+    },1800);
+
+  } catch(error){
 
     console.error("CHANGE PASSWORD ERROR:", error);
 
     msg.innerHTML =
-      '<div class="msg error">Password was NOT changed: ' +
-      (error.message || "Unknown error") +
+      '<div class="msg error">' +
+      'Password was NOT changed: ' +
+      (error?.message || "Unknown error") +
       '</div>';
 
     btn.disabled = false;
