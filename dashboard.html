@@ -1183,7 +1183,7 @@ NOID / Extensions
       <div id="passwordMsg"></div>
       <div class="form-actions">
         <button id="passwordCancel" type="button" class="secondary">Cancel</button>
-        <button id="savePasswordBtn" type="submit" class="primary">Save Password</button>
+        <button id="savePasswordBtn" type="button" class="primary" onclick="window.__changePasswordNow()">Save Password</button>
       </div>
     </form>
   </div>
@@ -2481,43 +2481,81 @@ passwordModal.addEventListener("click",e=>{
   if(e.target===passwordModal) closePasswordModal();
 });
 
-passwordForm.addEventListener("submit",async e=>{
-  e.preventDefault();
-  const newPassword=$("newPassword").value;
-  const confirmPassword=$("confirmPassword").value;
-  const msg=$("passwordMsg");
-  const btn=$("savePasswordBtn");
+window.__changePasswordNow = async function(){
 
-  if(newPassword.length<8){
-    msg.innerHTML='<div class="msg error">Password must be at least 8 characters.</div>';
+  const newPassword = document.getElementById("newPassword").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const msg = document.getElementById("passwordMsg");
+  const btn = document.getElementById("savePasswordBtn");
+
+  msg.innerHTML = "";
+
+  if(newPassword.length < 8){
+    msg.innerHTML =
+      '<div class="msg error">Password must be at least 8 characters.</div>';
     return;
   }
-  if(newPassword!==confirmPassword){
-    msg.innerHTML='<div class="msg error">Passwords do not match.</div>';
+
+  if(newPassword !== confirmPassword){
+    msg.innerHTML =
+      '<div class="msg error">Passwords do not match.</div>';
     return;
   }
 
-  btn.disabled=true;
-  btn.textContent="Saving...";
-  msg.innerHTML='<div class="msg">Updating password...</div>';
+  btn.disabled = true;
+  btn.textContent = "Saving...";
 
-  try{
-    const {error}=await db.auth.updateUser({password:newPassword});
-    if(error) throw error;
+  try {
 
-    msg.innerHTML='<div class="msg success">Password changed successfully.</div>';
-    setTimeout(()=>{
-      closePasswordModal();
-      btn.disabled=false;
-      btn.textContent="Save Password";
-    },1200);
-  }catch(err){
-    console.error("Password update error:",err);
-    msg.innerHTML='<div class="msg error">'+esc(err?.message||"Unable to change password.")+'</div>';
-    btn.disabled=false;
-    btn.textContent="Save Password";
+    if(!db){
+      throw new Error("Authentication service is not ready. Please refresh the page and try again.");
+    }
+
+    const sessionResult = await db.auth.getSession();
+
+    if(sessionResult.error){
+      throw sessionResult.error;
+    }
+
+    if(!sessionResult.data.session){
+      throw new Error("Your login session has expired. Please log in again.");
+    }
+
+    const updateResult = await db.auth.updateUser({
+      password: newPassword
+    });
+
+    if(updateResult.error){
+      throw updateResult.error;
+    }
+
+    msg.innerHTML =
+      '<div class="msg success">✓ Password changed successfully. You can now use your new password.</div>';
+
+    btn.textContent = "Password Changed";
+
+    setTimeout(function(){
+      document.getElementById("passwordModal").style.display = "none";
+      document.getElementById("newPassword").value = "";
+      document.getElementById("confirmPassword").value = "";
+      msg.innerHTML = "";
+      btn.disabled = false;
+      btn.textContent = "Save Password";
+    }, 1800);
+
+  } catch(error) {
+
+    console.error("CHANGE PASSWORD ERROR:", error);
+
+    msg.innerHTML =
+      '<div class="msg error">Password was NOT changed: ' +
+      (error.message || "Unknown error") +
+      '</div>';
+
+    btn.disabled = false;
+    btn.textContent = "Save Password";
   }
-});
+};
 </script>
 </body>
 </html>
