@@ -1183,7 +1183,7 @@ NOID / Extensions
       <div id="passwordMsg"></div>
       <div class="form-actions">
         <button id="passwordCancel" type="button" class="secondary">Cancel</button>
-        <button id="savePasswordBtn" type="button" class="primary">Save Password</button>
+        <button id="savePasswordBtn" type="button" class="primary" onclick="window.__changePasswordNow()">Save Password</button>
       </div>
     </form>
   </div>
@@ -2215,7 +2215,7 @@ async function init(){
         storageKey:"sb-euzifpjzeuqdznkelxdq-auth-token"
       }
     });
-
+    window.__igDb = db;
     const result=await db.auth.getSession();
     if(result?.error)throw result.error;
     const session=result?.data?.session;
@@ -2515,15 +2515,14 @@ document.getElementById("savePasswordBtn").addEventListener("click", window.__ch
     '<div class="msg">Updating password...</div>';
 
   try {
+  const authDb = window.__igDb;
 
-    if(!db){
-      throw new Error(
-        "Authentication service is not ready. Please refresh the page and try again."
-      );
+  if(!authDb){
+  throw new Error("Authentication service is not ready. Please refresh the page and try again.");
     }
 
     /* Make sure the current login session is available */
-    const sessionResult = await db.auth.getSession();
+    const sessionResult = await authDb.auth.getSession();
 
     if(sessionResult.error){
       throw sessionResult.error;
@@ -2553,10 +2552,9 @@ document.getElementById("savePasswordBtn").addEventListener("click", window.__ch
     }
 
     /* ACTUALLY CHANGE THE SUPABASE PASSWORD */
-    const updateResult = await db.auth.updateUser({
-      password: newPassword
-    });
-
+    const updateResult = await authDb.auth.updateUser({
+  password: newPassword
+});
     if(updateResult.error){
       throw updateResult.error;
     }
