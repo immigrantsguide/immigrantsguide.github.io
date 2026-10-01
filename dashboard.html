@@ -1165,9 +1165,21 @@ NOID / Extensions
 <div class="panel" style="margin-top:20px"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Deadline</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div>
 </section>
-<section id="resources" style="display:none;"></section>
+<section id="resources" style="display:none;">
+  <iframe
+    src="resources.html"
+    style="width:100%;height:calc(100vh - 120px);border:0;border-radius:16px;background:#fff;"
+    title="Immigrants Guide Resources">
+  </iframe>
+</section>
 
-<section id="services" style="display:none;"></section>
+<section id="services" style="display:none;">
+  <iframe
+    src="services.html"
+    style="width:100%;height:calc(100vh - 120px);border:0;border-radius:16px;background:#fff;"
+    title="Immigrants Guide Services">
+  </iframe>
+</section>
 </main>
 
 <div id="passwordModal" class="modal">
@@ -2033,13 +2045,6 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   $("team").style.display=v==="team"?"block":"none";
   $("resources").style.display=v==="resources"?"block":"none";
   $("services").style.display=v==="services"?"block":"none";
-  if(v==="resources"){
-  loadDashboardPageContent("resources","resources.html");
-}
-
-if(v==="services"){
-  loadDashboardPageContent("services","services.html");
-}
   $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":v==="team"?"Team Management":v==="resources"?"Immigration Resources":v==="services"?"Immigration Services":"Alerts & Monitoring";
   if(v==="history")loadHistory();
   if(v==="calendar")drawCalendar();
@@ -2614,46 +2619,6 @@ document.getElementById("passwordCancel")
 
 document.getElementById("savePasswordBtn")
 .addEventListener("click",window.__changePasswordNow);
-async function loadDashboardPageContent(view, url){
-
-  const container = document.getElementById(view);
-
-  if(!container) return;
-
-  container.innerHTML =
-    '<div style="padding:40px;text-align:center;">Loading...</div>';
-
-  try{
-
-    const response = await fetch(url);
-
-    if(!response.ok){
-      throw new Error("Unable to load page.");
-    }
-
-    const html = await response.text();
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html,"text/html");
-
-    const main = doc.querySelector("main");
-
-    if(!main){
-      throw new Error("Page content was not found.");
-    }
-
-    container.innerHTML = main.innerHTML;
-
-  }catch(error){
-
-    console.error("Dashboard page loading error:",error);
-
-    container.innerHTML =
-      '<div style="padding:30px;color:#b91c1c;background:#fff1f2;border-radius:12px;">' +
-      'Unable to load this page. Please refresh and try again.' +
-      '</div>';
-  }
-}
 </script>
 </body>
 </html>
