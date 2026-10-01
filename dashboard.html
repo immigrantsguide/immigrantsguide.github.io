@@ -978,23 +978,8 @@ tbody tr:hover{
 <button id="importExcelBtn" class="secondary bulk-nav-btn" type="button">📤 Import Excel</button>
 <input id="excelFileInput" type="file" accept=".xlsx,.xls" style="display:none">
 <button data-view="alerts">⚑ Alerts</button>
-<a href="resources.html"
-   style="display:block;width:100%;padding:13px 14px;margin:8px 0;border-radius:12px;color:#b8c5dc;text-decoration:none;font-weight:700;font-size:16px;transition:all .2s ease; sidebar-link:hover{
-  color:#fff;
-  background:linear-gradient(90deg,#1769e8,#7c3aed,#d61f8c);
-  transform:translateX(2px);
-}">
-   📚 Resources
-</a>
-
-<a href="services.html"
-   style="display:block;width:100%;padding:13px 14px;margin:8px 0;border-radius:12px;color:#b8c5dc;text-decoration:none;font-weight:700;font-size:16px; transition:all .2s ease; sidebar-link:hover{
-  color:#fff;
-  background:linear-gradient(90deg,#1769e8,#7c3aed,#d61f8c);
-  transform:translateX(2px);
-}">">
-   🛠️ Services
-</a>
+<button data-view="resources">📚 Resources</button>
+<button data-view="services">🛠️ Services</button>
 
 </div>
 </aside>
@@ -1179,6 +1164,21 @@ NOID / Extensions
 </div>
 <div class="panel" style="margin-top:20px"><div class="panel-head"><h2>RFE / NOID Alerts</h2></div>
 <div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Beneficiary</th><th>Status</th><th>Status Date</th><th>Deadline</th><th>Notes</th><th>Action</th></tr></thead><tbody id="alertBody"></tbody></table></div></div>
+</section>
+<section id="resources" style="display:none;">
+  <iframe
+    src="resources.html"
+    style="width:100%;height:calc(100vh - 120px);border:0;border-radius:16px;background:#fff;"
+    title="Immigrants Guide Resources">
+  </iframe>
+</section>
+
+<section id="services" style="display:none;">
+  <iframe
+    src="services.html"
+    style="width:100%;height:calc(100vh - 120px);border:0;border-radius:16px;background:#fff;"
+    title="Immigrants Guide Services">
+  </iframe>
 </section>
 </main>
 
@@ -2043,7 +2043,9 @@ document.querySelectorAll(".nav button[data-view]").forEach(btn=>btn.addEventLis
   $("calendar").style.display=v==="calendar"?"block":"none";
   $("reports").style.display=v==="reports"?"block":"none";
   $("team").style.display=v==="team"?"block":"none";
-  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":v==="team"?"Team Management":"Alerts & Monitoring";
+  $("resources").style.display=v==="resources"?"block":"none";
+  $("services").style.display=v==="services"?"block":"none";
+  $("title").textContent=v==="dashboard"?"USCIS Case Tracker":v==="cases"?"All USCIS Cases":v==="history"?"Case History":v==="calendar"?"Deadline Calendar":v==="reports"?"Reports & Settings":v==="team"?"Team Management":v==="resources"?"Immigration Resources":v==="services"?"Immigration Services":"Alerts & Monitoring";
   if(v==="history")loadHistory();
   if(v==="calendar")drawCalendar();
   if(v==="reports"){drawReports();loadEmailPrefs();renderSecurity();}
