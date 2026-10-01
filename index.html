@@ -234,8 +234,11 @@ body {
       <div class="utility-clock"><b id="utilityESTLabel">EST</b><strong id="utilityEST">--:--:--</strong><small id="utilityESTDate">---</small></div>
       <div class="utility-clock"><b id="utilityCSTLabel">CST</b><strong id="utilityCST">--:--:--</strong><small id="utilityCSTDate">---</small></div>
       <div class="utility-clock"><b id="utilityPSTLabel">PST</b><strong id="utilityPST">--:--:--</strong><small id="utilityPSTDate">---</small></div>
+      <div class="utility-clock"><b id="utilityINDLabel">IST</b><strong id="utilityIND">--:--:--</strong><small id="utilityINDDate">---</small></div>
+      <div class="utility-clock"><b id="utilityUKLabel">GMT</b><strong id="utilityUK">--:--:--</strong><small id="utilityUKDate">---</small></div>
+      <div class="utility-clock"><b id="utilityUAELabel">GST</b><strong id="utilityUAE">--:--:--</strong><small id="utilityUAEDate">---</small></div>
     </div>
-    <div class="utility-footer">Eastern • Central • Pacific Time</div>
+    <div class="utility-footer">Eastern • Central • Pacific • India • UK • UAE Time</div>
   </div>
 
   <div class="utility-card">
@@ -681,7 +684,7 @@ init();
 /* ========================= IMMIGRATION UTILITY CENTER JS ========================= */
 (function(){
   const $u=id=>document.getElementById(id);
-  const zones={EST:"America/New_York",CST:"America/Chicago",PST:"America/Los_Angeles"};
+  const zones={EST:"America/New_York",CST:"America/Chicago",PST:"America/Los_Angeles",IND:"Asia/Kolkata",UK:"Europe/London",UAE:"Asia/Dubai"};
 
   function updateUtilityClocks(){
     const now=new Date();
