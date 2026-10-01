@@ -2461,33 +2461,109 @@ $("downloadTemplateBtn").addEventListener("click",downloadExcelTemplate);$("impo
 
 })();
 
-const passwordModal=$("passwordModal");
-const passwordForm=$("passwordForm");
+const passwordModal = document.getElementById("passwordModal");
+const passwordForm = document.getElementById("passwordForm");
 
 function closePasswordModal(){
-  passwordModal.style.display="none";
-  $("passwordMsg").innerHTML="";
-  $("newPassword").value="";
-  $("confirmPassword").value="";
+  passwordModal.style.display = "none";
+  document.getElementById("passwordMsg").innerHTML = "";
+  document.getElementById("newPassword").value = "";
+  document.getElementById("confirmPassword").value = "";
 }
 
-$("changePasswordBtn").addEventListener("click",()=>{
-  passwordModal.style.display="grid";
-  setTimeout(()=>$("newPassword").focus(),50);
+document.getElementById("changePasswordBtn").addEventListener("click", function(){
+  passwordModal.style.display = "grid";
+  setTimeout(function(){
+    document.getElementById("newPassword").focus();
+  }, 50);
 });
-$("passwordClose").addEventListener("click",closePasswordModal);
-$("passwordCancel").addEventListener("click",closePasswordModal);
-passwordModal.addEventListener("click",e=>{
-  if(e.target===passwordModal) closePasswordModal();
+
+document.getElementById("passwordClose").addEventListener("click", closePasswordModal);
+document.getElementById("passwordCancel").addEventListener("click", closePasswordModal);
+
+passwordModal.addEventListener("click", function(e){
+  if(e.target === passwordModal){
+    closePasswordModal();
+  }
 });
 
 window.__changePasswordNow = async function(){
 
-  // your existing code stays exactly the same
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+  const msg = document.getElementById("passwordMsg");
+  const btn = document.getElementById("savePasswordBtn");
 
+  msg.innerHTML = "";
+
+  if(newPassword.length < 8){
+    msg.innerHTML =
+      '<div class="msg error">Password must be at least 8 characters.</div>';
+    return;
+  }
+
+  if(newPassword !== confirmPassword){
+    msg.innerHTML =
+      '<div class="msg error">Passwords do not match.</div>';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  try{
+
+    if(!window.__igDb){
+      throw new Error("Authentication service is not ready. Please refresh the page.");
+    }
+
+    const sessionResult = await window.__igDb.auth.getSession();
+
+    if(sessionResult.error){
+      throw sessionResult.error;
+    }
+
+    if(!sessionResult.data.session){
+      throw new Error("Your login session has expired. Please log in again.");
+    }
+
+    const updateResult = await window.__igDb.auth.updateUser({
+      password: newPassword
+    });
+
+    if(updateResult.error){
+      throw updateResult.error;
+    }
+
+    msg.innerHTML =
+      '<div class="msg success">✓ Password changed successfully.</div>';
+
+    btn.textContent = "Password Changed";
+
+    setTimeout(function(){
+      closePasswordModal();
+      btn.disabled = false;
+      btn.textContent = "Save Password";
+    }, 1200);
+
+  }catch(error){
+
+    console.error("CHANGE PASSWORD ERROR:", error);
+
+    msg.innerHTML =
+      '<div class="msg error">Password was NOT changed: ' +
+      (error.message || "Unknown error") +
+      '</div>';
+
+    btn.disabled = false;
+    btn.textContent = "Save Password";
+  }
 };
-    
-document.getElementById("savePasswordBtn").addEventListener("click", window.__changePasswordNow);
+
+document.getElementById("savePasswordBtn").addEventListener(
+  "click",
+  window.__changePasswordNow
+);
 </script>
 
   const newPassword = document.getElementById("newPassword").value.trim();
