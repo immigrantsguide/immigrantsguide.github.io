@@ -236,17 +236,17 @@ body {
       <div class="utility-clock"><b id="utilityPSTLabel">PST</b><strong id="utilityPST">--:--:--</strong><small id="utilityPSTDate">---</small></div>
       <div class="utility-clock"><b id="utilityINDLabel">IST</b><strong id="utilityIND">--:--:--</strong><small id="utilityINDDate">---</small></div>
       <div class="utility-clock"><b id="utilityUKLabel">GMT</b><strong id="utilityUK">--:--:--</strong><small id="utilityUKDate">---</small></div>
-      <div class="utility-clock"><b id="utilityUAELabel">GST</b><strong id="utilityUAE">--:--:--</strong><small id="utilityUAEDate">---</small></div>
+      <div class="utility-clock"><b id="utilityRUSLabel">MSK</b><strong id="utilityRUS">--:--:--</strong><small id="utilityRUSDate">---</small></div>
     </div>
-    <div class="utility-footer">Eastern • Central • Pacific • India • UK • UAE Time</div>
+    <div class="utility-footer">Eastern • Central • Pacific • India • UK • Russia Time</div>
   </div>
 
   <div class="utility-card">
     <div class="utility-title"><span>🌎</span><h2>Time Converter</h2></div>
     <div class="utility-converter-row">
       <div><label>From</label><select id="utilityTimeFrom">
-        <option value="Asia/Kolkata">🇮🇳 IST — India</option>
         <option value="America/New_York">🇺🇸 Eastern Time</option>
+        <option value="Asia/Kolkata">🇮🇳 IST — India</option>
         <option value="America/Chicago">🇺🇸 Central Time</option>
         <option value="America/Denver">🇺🇸 Mountain Time</option>
         <option value="America/Los_Angeles">🇺🇸 Pacific Time</option>
@@ -254,15 +254,15 @@ body {
       </select></div>
       <div class="utility-arrow">⇄</div>
       <div><label>To</label><select id="utilityTimeTo">
+        <option value="Asia/Kolkata">🇮🇳 IST — India</option>
         <option value="America/New_York">🇺🇸 Eastern Time</option>
         <option value="America/Chicago">🇺🇸 Central Time</option>
         <option value="America/Denver">🇺🇸 Mountain Time</option>
         <option value="America/Los_Angeles">🇺🇸 Pacific Time</option>
-        <option value="Asia/Kolkata">🇮🇳 IST — India</option>
         <option value="UTC">🌐 UTC</option>
       </select></div>
     </div>
-    <input id="utilityTimeInput" type="datetime-local" class="utility-input">
+    <input id="utilityTimeInput" type="time" class="utility-input">
     <button type="button" class="utility-button" id="utilityConvertBtn">🔄 Convert Time</button>
     <div id="utilityConvertedTime" class="utility-result">Select a date and time to convert.</div>
   </div>
@@ -684,7 +684,7 @@ init();
 /* ========================= IMMIGRATION UTILITY CENTER JS ========================= */
 (function(){
   const $u=id=>document.getElementById(id);
-  const zones={EST:"America/New_York",CST:"America/Chicago",PST:"America/Los_Angeles",IND:"Asia/Kolkata",UK:"Europe/London",UAE:"Asia/Dubai"};
+  const zones={EST:"America/New_York",CST:"America/Chicago",PST:"America/Los_Angeles",IND:"Asia/Kolkata",UK:"Europe/London",RUS:"Europe/Moscow"};
 
   function updateUtilityClocks(){
     const now=new Date();
@@ -708,27 +708,32 @@ init();
 
   function convertUtilityTime(){
     const input=$u("utilityTimeInput").value,result=$u("utilityConvertedTime");
-    if(!input){result.textContent="Please select a date and time.";return;}
+    if(!input){result.textContent="Please select a time to convert.";return;}
     const from=$u("utilityTimeFrom").value,to=$u("utilityTimeTo").value;
-    const [d,t]=input.split("T"),[y,m,day]=d.split("-").map(Number),[h,min]=t.split(":").map(Number);
-    const assumedUTC=Date.UTC(y,m-1,day,h,min,0);
+    const [h,min]=input.split(":").map(Number);
+    // Use today's date internally for the correct daylight-saving offset, while showing only the time to the user.
+    const now=new Date();
+    const fromParts=new Intl.DateTimeFormat("en-US",{timeZone:from,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now);
+    const fv={};fromParts.forEach(x=>{if(x.type!=="literal")fv[x.type]=x.value;});
+    const assumedUTC=Date.UTC(+fv.year,+fv.month-1,+fv.day,h,min,0);
     const utcMs=assumedUTC-getZoneOffset(new Date(assumedUTC),from);
-    result.textContent=new Intl.DateTimeFormat("en-US",{timeZone:to,weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"}).format(new Date(utcMs));
+    const converted=new Intl.DateTimeFormat("en-US",{timeZone:to,hour:"numeric",minute:"2-digit",hour12:true,timeZoneName:"short"}).format(new Date(utcMs));
+    result.textContent=converted;
   }
   $u("utilityConvertBtn").addEventListener("click",convertUtilityTime);
 
   function localInputValue(zone){
-    const p=new Intl.DateTimeFormat("en-US",{timeZone:zone,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());
+    const p=new Intl.DateTimeFormat("en-US",{timeZone:zone,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());
     const v={};p.forEach(x=>{if(x.type!=="literal")v[x.type]=x.value;});
-    return `${v.year}-${v.month}-${v.day}T${v.hour}:${v.minute}`;
+    return `${v.hour}:${v.minute}`;
   }
-  $u("utilityTimeInput").value=localInputValue("Asia/Kolkata");
+  $u("utilityTimeInput").value=localInputValue("America/New_York");
 
   const usFederal2026={"2026-01-01":"New Year's Day","2026-01-19":"Birthday of Martin Luther King, Jr.","2026-02-16":"Washington's Birthday","2026-05-25":"Memorial Day","2026-06-19":"Juneteenth National Independence Day","2026-07-03":"Independence Day (Observed)","2026-09-07":"Labor Day","2026-10-12":"Columbus Day","2026-11-11":"Veterans Day","2026-11-26":"Thanksgiving Day","2026-12-25":"Christmas Day"};
   const indiaGazetted2026={"2026-01-26":"Republic Day","2026-03-04":"Holi","2026-03-21":"Id-ul-Fitr","2026-03-26":"Ram Navami","2026-03-31":"Mahavir Jayanti","2026-04-03":"Good Friday","2026-05-01":"Buddha Purnima","2026-05-27":"Id-ul-Zuha (Bakrid)","2026-06-26":"Muharram","2026-08-15":"Independence Day","2026-08-26":"Milad-un-Nabi / Id-e-Milad","2026-09-04":"Janmashtami","2026-10-02":"Gandhi Jayanti","2026-10-20":"Dussehra","2026-11-08":"Diwali (Deepavali)","2026-11-24":"Guru Nanak's Birthday","2026-12-25":"Christmas Day"};
   const purnima2026=new Set(["2026-01-03","2026-02-01","2026-03-03","2026-04-02","2026-05-01","2026-05-31","2026-06-29","2026-07-29","2026-08-28","2026-09-26","2026-10-25","2026-11-24","2026-12-24"]);
   const amavasya2026=new Set(["2026-01-18","2026-02-17","2026-03-18","2026-04-17","2026-05-16","2026-06-15","2026-07-14","2026-08-12","2026-09-10","2026-10-10","2026-11-09","2026-12-09"]);
-  const panchang2026={"2026-10-01":{tithi:"Krishna Panchami until 12:35 PM; then Krishna Shashthi",nakshatra:"Rohini until 4:27 AM; then Mrigashira",special:"Shashthi Shraddha • Rohini Vrat"}};
+  const panchang2026={"2026-10-01":{tithi:"Krishna Panchami until 12:35 PM; then Krishna Shashthi",nakshatra:"Rohini until 4:27 AM; then Mrigashira",special:"Shashthi Shraddha • Rohini Vrat"},"2026-10-02":{tithi:"Krishna Shashthi until 10:15 AM; then Krishna Saptami",nakshatra:"Mrigashira until 2:55 AM, Oct 3; then Ardra",special:"Hyderabad Panchang • Krishna Paksha"}};
 
   function indiaKey(){
     const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
