@@ -424,14 +424,14 @@ body::after{width:500px;height:500px;right:-190px;bottom:30px;background:radial-
 <body>
 <header class="header">
   <div class="brand">
-    <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
+    <img class="logo-mark" src="assets/immigrants-guide-logo-icon.svg" alt="Immigrants Guide VK eagle globe USA logo">
     <div><div class="brand-name">Immigrants Guide</div><div class="brand-tag">Your Partner in U.S. Immigration Journey</div></div>
   </div>
   <nav class="nav"><a href="index.html">Home</a><a href="index.html#about">About</a><a href="services.html" >🛠️ Services</a><a href="resources.html">📚 Resources</a><a href="#contact">Contact</a></nav>
   <div class="header-right"><a class="dash-btn" href="#" id="dashboardBtn">🔒 Go to Dashboard →</a><div class="flag">
       <div class="ask-vijay-actions">
       <div class="ask-vijay-actions">
-        <img src="assets/ig-inline-1.webp" decoding="async" alt="US Track · Plan · Stay Informed"></div></div>
+        <img src="assets/inline-0.png" alt="US Track · Plan · Stay Informed"></div></div>
 </header>
 
 
@@ -638,10 +638,10 @@ body::after{width:500px;height:500px;right:-190px;bottom:30px;background:radial-
 
   <section class="ai-section" id="immigration-ai">
     <div class="ai-inner">
-      <div class="ai-visual"><img src="assets/immigrants-guide-ai-captain.png" alt="Immigrants Guide AI immigration assistant cartoon"></div>
+      <div class="ai-visual"><img src="assets/inline-1.png" alt="Immigrants Guide AI immigration assistant cartoon"></div>
       <div class="ai-copy">
         <div class="ai-kicker">✨ AI-Powered Immigration Assistant</div>
-        <h2>Immigrants Guide <span>AI</span> <img class="vk-ai-inline-logo" src="assets/ig-inline-4.webp" decoding="async" alt="VK AI logo"></h2>
+        <h2>Immigrants Guide <span>AI</span> <img class="vk-ai-inline-logo" src="assets/vk-ai-logo.png" alt="VK AI logo"></h2>
         <p>Get quick answers to your U.S. immigration questions and find relevant USCIS resources in one place.</p>
         <div class="ai-features">
           <div class="ai-feature"><span class="ai-icon">💬</span><div><b>Instant Answers</b>Quick immigration information</div></div>
@@ -671,7 +671,7 @@ body::after{width:500px;height:500px;right:-190px;bottom:30px;background:radial-
         <h2>💬 Have an Immigration Question?</h2>
         <p>Ask Vijay Krishna directly. Submit your immigration question, contact details, and any context you want to share. Your message will be sent to the Immigrants Guide team for review.</p>
       </div>
-      <img src="assets/ig-inline-3.webp" loading="lazy" decoding="async" alt="VK Superman" class="ask-vijay-superman">
+      <img src="assets/inline-1.png" alt="VK Superman" class="ask-vijay-superman">
         <button class="ask-vijay-btn" id="askVijayOpen" type="button">Ask Vijay Krishna →</button>
       </div>
       </div>
@@ -720,7 +720,7 @@ body::after{width:500px;height:500px;right:-190px;bottom:30px;background:radial-
 <footer class="footer" id="contact">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
+      <img class="logo-mark" src="assets/immigrants-guide-logo-icon.svg" alt="Immigrants Guide VK eagle globe USA logo">
       <div><strong>Immigrants Guide</strong><small>Your Partner in U.S. Immigration Journey</small></div>
     </div>
     <div class="footer-nav"><a href="#home">Home</a> | <a href="#about">About</a> | <a href="services.html">Services</a> | <a href="resources.html">Resources</a> | <a href="#contact">Contact</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a> | <a href="disclaimer.html">Immigration Disclaimer</a></div>
@@ -821,7 +821,7 @@ function closeLogin(){ $("loginModal").style.display="none"; $("msg").className=
 function goDashboard(){ window.location.href="dashboard.html"; }
 async function init(){
   if(!window.supabase) return;
-  db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});window.db=db;
+  db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}); window.db=db;
 }
 $("loginForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("loginBtn");btn.disabled=true;btn.textContent="Connecting...";$("msg").className="msg info";$("msg").textContent="Signing in...";try{if(!db)await init();const {error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;window.location.replace("dashboard.html");}catch(err){$("msg").className="msg err";$("msg").textContent=err?.message||"Login failed. Please try again.";btn.disabled=false;btn.textContent="Log In";}});
 $("loginOpen")?.addEventListener("click",openLogin);$("loginClose")?.addEventListener("click",closeLogin);$("loginModal").addEventListener("click",e=>{if(e.target===$("loginModal"))closeLogin();});
@@ -1134,7 +1134,7 @@ init();
 <div class="reminder-modal" id="callReminderModal" aria-hidden="true">
   <div class="reminder-card" role="dialog" aria-modal="true" aria-labelledby="callReminderTitle">
     <div class="reminder-head">
-      <div><h2 id="callReminderTitle">⏰ Call Reminder</h2><p>Get an email 5 minutes before your call.</p></div>
+      <div><h2 id="callReminderTitle">⏰ Call Reminder</h2><p>Get an email 5 minutes before your call — no dashboard login required.</p></div>
       <button type="button" class="reminder-close" id="callReminderClose" aria-label="Close">×</button>
     </div>
     <form class="reminder-form" id="callReminderForm">
@@ -1163,7 +1163,7 @@ function openCallReminder(){
   const d=new Date();
   document.getElementById("reminderDate").value=d.toLocaleDateString("en-CA");
   document.getElementById("reminderTime").value=d.toTimeString().slice(0,5);
-  if(window.db?.auth){window.db.auth.getUser().then(r=>{const email=r?.data?.user?.email;if(email&&!document.getElementById("reminderEmail").value)document.getElementById("reminderEmail").value=email;});}
+  if(window.db?.auth){window.db.auth.getUser().then(r=>{const email=r?.data?.user?.email;if(email&&!document.getElementById("reminderEmail").value)document.getElementById("reminderEmail").value=email;}).catch(()=>{});}
   setTimeout(()=>document.getElementById("reminderTitle")?.focus(),30);
 }
 function closeCallReminder(){if(!callReminderModal)return;callReminderModal.classList.remove("show");callReminderModal.setAttribute("aria-hidden","true");}
@@ -1172,7 +1172,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeCallReminder();
 callReminderForm?.addEventListener("submit",async e=>{
   e.preventDefault();const btn=document.getElementById("reminderSubmit");btn.disabled=true;btn.textContent="Scheduling...";reminderStatus.className="reminder-status";reminderStatus.textContent="";
   try{
-    if(!window.db)throw new Error("Please wait a moment and try again after the page finishes loading.");
+    if(!window.db){await init();} if(!window.db)throw new Error("Unable to connect to the reminder service. Please refresh the page.");
     const email=document.getElementById("reminderEmail").value.trim();
     const title=document.getElementById("reminderTitle").value.trim();
     const date=document.getElementById("reminderDate").value;const time=document.getElementById("reminderTime").value;
@@ -1181,8 +1181,9 @@ callReminderForm?.addEventListener("submit",async e=>{
     const callAtLocal=new Date(date+"T"+time);
     const remindAt=new Date(callAtLocal.getTime()-5*60000);
     if(Number.isNaN(callAtLocal.getTime())||remindAt<=new Date())throw new Error("Please choose a future call time at least 6 minutes from now.");
-    const userResult=await window.db.auth.getUser();const user=userResult?.data?.user;if(!user)throw new Error("Please sign in to schedule a reminder.");
-    const r=await window.db.from("call_reminders").insert({user_id:user.id,email,title,call_at:callAtLocal.toISOString(),remind_at:remindAt.toISOString(),timezone});
+    let userId=null;
+    try{const userResult=await window.db.auth.getUser();userId=userResult?.data?.user?.id||null;}catch(_){userId=null;}
+    const r=await window.db.from("call_reminders").insert({user_id:userId,email,title,call_at:callAtLocal.toISOString(),remind_at:remindAt.toISOString(),timezone});
     if(r.error)throw r.error;
     reminderStatus.className="reminder-status ok";reminderStatus.textContent="✅ Reminder scheduled. Email will be sent 5 minutes before the call.";
     setTimeout(closeCallReminder,1400);
