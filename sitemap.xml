@@ -1,3 +1,16 @@
-https://www.immigrantsguide.in/
-https://www.immigrantsguide.in/services.html
-https://www.immigrantsguide.in/resources.html
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://www.immigrantsguide.in/</loc>
+  </url>
+
+  <url>
+    <loc>https://www.immigrantsguide.in/services.html</loc>
+  </url>
+
+  <url>
+    <loc>https://www.immigrantsguide.in/resources.html</loc>
+  </url>
+
+</urlset>
