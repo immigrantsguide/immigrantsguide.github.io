@@ -152,7 +152,16 @@ img{max-width:100%;height:auto}
  html{scroll-behavior:auto}
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
-</style></head>
+</style>
+<style id="ig-logo-and-hero-position-fix">
+/* Only requested positioning fixes */
+.brand{gap:14px;align-items:center}
+.brand-logo{width:92px;height:92px;object-fit:contain}
+.culture-eagle{top:105px}
+@media(max-width:1050px){.brand-logo{width:82px;height:82px}}
+@media(max-width:720px){.brand-logo{width:70px;height:70px}}
+</style>
+</head>
 <body>
 <header class="header">
 <div class="brand">
@@ -174,7 +183,7 @@ img{max-width:100%;height:auto}
 <img class="culture-flag" src="assets/bottom-us-flag.png" alt="" width="700" height="140" loading="lazy" decoding="async">
 </div>
 <div class="hero-main">
-<div class="eyebrow">Information  |  Guidance  |  Case Tracking</div>
+<div class="eyebrow">Information  |  Guidance  |  Case Tracking</div>
 <h1>USCIS Case Status <span>&amp; I-94 Lookup</span></h1>
 <p>Check your USCIS case status and I-94 information directly from the official government sources.</p>
 <div class="tools">
