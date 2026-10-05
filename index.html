@@ -162,6 +162,26 @@ img{max-width:100%;height:auto}
  html{scroll-behavior:auto}
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* ================= IMMIGRATION SMART TOOLS ================= */
+.ig-smart-tools{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0 24px}
+.ig-smart-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 25px #15365d0b;overflow:hidden}
+.ig-smart-head{display:flex;align-items:center;gap:11px;padding:16px 18px;background:linear-gradient(135deg,#0d2b55,#1769e8);color:#fff}
+.ig-smart-head h2{margin:0;font-size:19px;color:#fff}.ig-smart-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:#ffffff22;font-size:21px}
+.ig-smart-body{padding:16px 18px}.ig-smart-body label{display:block;font-size:12px;font-weight:800;color:#334b68;margin:0 0 6px}
+.ig-smart-textarea,.ig-smart-input,.ig-smart-select{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #bfd0e4;border-radius:9px;background:#fff;color:#10284a;font:inherit;outline:none}
+.ig-smart-textarea{min-height:135px;resize:vertical;line-height:1.5}.ig-smart-textarea:focus,.ig-smart-input:focus,.ig-smart-select:focus{border-color:#3981ef;box-shadow:0 0 0 3px #3981ef18}
+.ig-smart-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:12px}.ig-smart-field{min-width:0}
+.ig-smart-buttons{display:flex;gap:9px;margin-top:13px}.ig-smart-btn{flex:1;border:0;border-radius:9px;padding:12px;font-weight:850;color:#fff;cursor:pointer;font-size:13px}.ig-smart-btn:hover{transform:translateY(-1px)}
+.ig-smart-btn-primary{background:linear-gradient(135deg,#1769e8,#0757cf)}.ig-smart-btn-secondary{background:linear-gradient(135deg,#0c9674,#08785f)}
+.ig-smart-result{display:none;margin-top:13px;padding:13px;border:1px solid var(--line);border-radius:10px;background:#f8fbff;color:#243b53;font-size:13px;line-height:1.55}.ig-smart-result.show{display:block}
+.ig-meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px}.ig-meta-box{background:#fff;border:1px solid #dbe5f1;border-radius:9px;padding:9px}.ig-meta-label{font-size:9px;color:#71839a;font-weight:850;text-transform:uppercase}.ig-meta-value{font-weight:800;color:#17365d;margin-top:2px;font-size:12px}
+.ig-duty-list{margin:8px 0 0;padding-left:19px}.ig-duty-list li{margin-bottom:7px}.ig-small-note{margin-top:10px;color:#71839a;font-size:10px;line-height:1.45}
+.ig-distance-stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.ig-distance-box{background:#fff;border:1px solid #dbe5f1;border-radius:9px;padding:10px}.ig-distance-box strong{display:block;font-size:9px;color:#71839a;text-transform:uppercase;margin-bottom:2px}
+.ig-amendment{border-radius:9px;padding:11px 12px;font-weight:750;margin-top:10px}.ig-amendment.green{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}.ig-amendment.yellow{background:#fffbeb;color:#a16207;border:1px solid #fde68a}.ig-amendment.red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}.ig-loading{color:#1769e8;font-weight:800}
+@media(max-width:1050px){.ig-smart-tools{grid-template-columns:1fr}}@media(max-width:720px){.ig-smart-grid,.ig-meta-grid,.ig-distance-stat{grid-template-columns:1fr}.ig-smart-buttons{flex-direction:column}}
+/* ================= END IMMIGRATION SMART TOOLS ================= */
+
 </style></head>
 <body>
 <header class="header">
@@ -232,6 +252,35 @@ img{max-width:100%;height:auto}
 </div>
 </div>
 </div>
+
+<!-- ========================= IMMIGRATION SMART TOOLS ========================= -->
+<section class="ig-smart-tools" id="immigrationSmartTools">
+<div class="ig-smart-card">
+<div class="ig-smart-head"><div class="ig-smart-icon">📝</div><h2>Job Duties Converter</h2></div>
+<div class="ig-smart-body">
+<label for="igJobDuties">Enter Job Duties</label>
+<textarea id="igJobDuties" class="ig-smart-textarea" placeholder="Paste job duties in any tense. Example:\nManaged software development projects.\nLed a team of developers.\nDeveloped Java applications."></textarea>
+<div class="ig-smart-grid">
+<div class="ig-smart-field"><label for="igExperience">Experience Required</label><input id="igExperience" class="ig-smart-input" placeholder="Example: 3–5 years"></div>
+<div class="ig-smart-field"><label for="igSocCode">SOC Code</label><input id="igSocCode" class="ig-smart-input" placeholder="Example: 15-1252"></div>
+<div class="ig-smart-field"><label for="igWageLevel">Wage Level</label><select id="igWageLevel" class="ig-smart-select"><option value="">Select</option><option>Level I</option><option>Level II</option><option>Level III</option><option>Level IV</option></select></div>
+</div>
+<div class="ig-smart-buttons"><button type="button" id="igConvertDuties" class="ig-smart-btn ig-smart-btn-primary">✨ CONVERT</button><button type="button" id="igSuggestDuties" class="ig-smart-btn ig-smart-btn-secondary">💡 SUGGEST</button></div>
+<div id="igJobResult" class="ig-smart-result"></div>
+<div class="ig-small-note">Preliminary drafting assistance only. Verify the final SOC and wage level against official DOL/OFLC data.</div>
+</div></div>
+<div class="ig-smart-card">
+<div class="ig-smart-head"><div class="ig-smart-icon">📍</div><h2>Distance Calculator</h2></div>
+<div class="ig-smart-body">
+<label for="igFromLocation">From Location</label><input id="igFromLocation" class="ig-smart-input" placeholder="Example: Dallas, TX">
+<label for="igToLocation" style="margin-top:12px">To Location</label><input id="igToLocation" class="ig-smart-input" placeholder="Example: Fort Worth, TX">
+<button type="button" id="igCalculateDistance" class="ig-smart-btn ig-smart-btn-primary" style="width:100%;margin-top:14px">📏 CALCULATE DISTANCE</button>
+<div id="igDistanceResult" class="ig-smart-result"></div>
+<div class="ig-small-note">Distance is a preliminary screening tool. H-1B amendment requirements depend on the applicable LCA area of intended employment and petition facts, not mileage alone.</div>
+</div></div>
+</section>
+<!-- ========================= END IMMIGRATION SMART TOOLS ========================= -->
+
 <!-- ========================= IMMIGRATION UTILITY CENTER ========================= -->
 <section class="utility-center" id="immigrationUtilities">
 <div class="utility-card">
@@ -755,6 +804,38 @@ init();
   next.addEventListener('click',()=>{view.setMonth(view.getMonth()+1);render();});
   render();
 })();
+
+/* ========================= IMMIGRATION SMART TOOLS JS ========================= */
+(function(){
+const $=id=>document.getElementById(id), job=$('igJobDuties'), exp=$('igExperience'), soc=$('igSocCode'), wage=$('igWageLevel'), result=$('igJobResult');
+if(!job||!result)return;
+const rules=[
+{keys:['software','java','python','developer','programming','application','api','microservice','javascript','react','node'],soc:'15-1252',title:'Software Developers',experience:'3–5 years',wage:'Level II',duties:['Develops and maintains software applications based on business and technical requirements.','Designs and implements application components using appropriate programming languages and frameworks.','Analyzes application requirements and translates them into technical solutions.','Develops and integrates APIs and backend services.','Tests application functionality and resolves software defects.']},
+{keys:['data','database','sql','etl','tableau','power bi','analytics','data warehouse'],soc:'15-2051',title:'Data Scientists',experience:'3–5 years',wage:'Level II',duties:['Analyzes structured and unstructured data to identify trends and business insights.','Develops data models and analytical solutions based on business requirements.','Uses SQL and analytical tools to extract and transform data.','Creates dashboards and reports to communicate analytical findings.']},
+{keys:['network','router','switch','firewall','lan','wan','cisco','tcp','ip'],soc:'15-1231',title:'Computer Network Support Specialists',experience:'2–4 years',wage:'Level II',duties:['Configures and supports network devices including routers, switches, and firewalls.','Monitors network performance and investigates connectivity issues.','Troubleshoots LAN, WAN, and TCP/IP-related network problems.','Maintains network documentation and configuration records.']},
+{keys:['cyber','security','soc','siem','threat','vulnerability','incident response','penetration'],soc:'15-1212',title:'Information Security Analysts',experience:'3–5 years',wage:'Level II',duties:['Monitors security events and investigates potential security incidents.','Analyzes security alerts using SIEM and security monitoring tools.','Identifies vulnerabilities and supports remediation activities.','Investigates suspicious activity and documents incident findings.']},
+{keys:['project','scrum','agile','stakeholder','sprint','jira','project management'],soc:'13-1082',title:'Project Management Specialists',experience:'3–5 years',wage:'Level II',duties:['Coordinates project activities and tracks project milestones.','Facilitates Agile ceremonies including sprint planning and retrospectives.','Communicates project status, risks, and dependencies to stakeholders.','Maintains project schedules, documentation, and action items.']},
+{keys:['accounting','accounts payable','accounts receivable','ledger','reconciliation','general ledger'],soc:'13-2011',title:'Accountants and Auditors',experience:'2–5 years',wage:'Level II',duties:['Prepares and maintains accounting records and financial information.','Performs account reconciliations and investigates discrepancies.','Reviews accounts payable and accounts receivable transactions.']},
+{keys:['marketing','campaign','digital marketing','seo','social media','market research'],soc:'13-1161',title:'Market Research Analysts and Marketing Specialists',experience:'2–5 years',wage:'Level II',duties:['Develops and supports marketing campaigns based on business objectives.','Analyzes market trends and customer information.','Tracks campaign performance and prepares marketing reports.']}
+];
+function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+function split(t){return t.replace(/\r/g,'').split(/\n|•|\u2022|;/).flatMap(x=>x.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[]).map(x=>x.trim()).filter(Boolean)}
+function normalize(t){let s=t.trim();const r=[[/\bwas responsible for\b/gi,'is responsible for'],[/\bmanaged\b|\bmanaging\b|\bmanage\b/gi,'manages'],[/\bled\b|\bleading\b|\blead\b/gi,'leads'],[/\bsupervised\b|\bsupervising\b|\bsupervise\b/gi,'supervises'],[/\bdeveloped\b|\bdeveloping\b|\bdevelop\b/gi,'develops'],[/\bdesigned\b|\bdesigning\b/gi,'designs'],[/\bimplemented\b|\bimplementing\b|\bimplement\b/gi,'implements'],[/\bmaintained\b|\bmaintaining\b/gi,'maintains'],[/\btested\b|\btesting\b/gi,'tests'],[/\bcreated\b|\bcreating\b/gi,'creates'],[/\banalyzed\b|\banalyzing\b/gi,'analyzes'],[/\bconfigured\b|\bconfiguring\b/gi,'configures'],[/\bdeployed\b|\bdeploying\b/gi,'deploys'],[/\bworked with\b/gi,'works with'],[/\bworked on\b/gi,'works on'],[/\bperformed\b|\bperforming\b/gi,'performs'],[/\bprovided\b|\bproviding\b/gi,'provides'],[/\butilized\b|\butilizing\b|\bused\b/gi,'uses'],[/\bsupported\b|\bsupporting\b/gi,'supports'],[/\bhandled\b|\bhandling\b/gi,'handles'],[/\bcoordinated\b|\bcoordinating\b/gi,'coordinates'],[/\bparticipated in\b/gi,'participates in']];r.forEach(([a,b])=>s=s.replace(a,b));s=s.replace(/\s+/g,' ').trim();if(s)s=s[0].toUpperCase()+s.slice(1);if(s&&!/[.!?]$/.test(s))s+='.';return s}
+function ruleFor(t){const x=t.toLowerCase();let best=null,score=0;rules.forEach(r=>{let n=r.keys.reduce((a,k)=>a+(x.includes(k)?1:0),0);if(n>score){score=n;best=r}});return best}
+function render(ds,r,extra=false){let h=r?'<div class="ig-meta-grid"><div class="ig-meta-box"><div class="ig-meta-label">SOC Code</div><div class="ig-meta-value">'+esc(r.soc)+'</div></div><div class="ig-meta-box"><div class="ig-meta-label">Occupation</div><div class="ig-meta-value">'+esc(r.title)+'</div></div><div class="ig-meta-box"><div class="ig-meta-label">Experience</div><div class="ig-meta-value">'+esc(r.experience)+'</div></div></div>':'';h+='<strong>Professional Present-Tense Duties</strong><ul class="ig-duty-list">'+ds.map(d=>'<li>'+esc(d)+'</li>').join('')+'</ul>';if(r)h+='<div style="margin-top:9px"><b>Suggested Wage Level:</b> '+esc(r.wage)+'</div>';result.innerHTML=h;result.classList.add('show')}
+$('igConvertDuties')?.addEventListener('click',()=>{const raw=job.value.trim();if(!raw){result.innerHTML='<b style="color:#b91c1c">Please enter job duties first.</b>';result.classList.add('show');return}render(split(raw).map(normalize),ruleFor(raw))});
+$('igSuggestDuties')?.addEventListener('click',()=>{const raw=job.value.trim();if(!raw){result.innerHTML='<b style="color:#b91c1c">Please enter job duties first.</b>';result.classList.add('show');return}const r=ruleFor(raw);if(!r){result.innerHTML='<b>Unable to confidently identify a SOC code from these duties.</b><p>Please add technologies, responsibilities, industry, and primary day-to-day functions.</p>';result.classList.add('show');return}soc.value=r.soc;exp.value=r.experience;wage.value=r.wage;render([...split(raw).map(normalize),...r.duties],r,true)});
+
+const from=$('igFromLocation'),to=$('igToLocation'),dr=$('igDistanceResult');
+function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&q='+encodeURIComponent(q),{headers:{Accept:'application/json'}}).then(r=>{if(!r.ok)throw Error('Location search failed.');return r.json()}).then(d=>{if(!d.length)throw Error('Location not found: '+q);return d[0]})}
+function county(p){return p.address?.county||'County not available'}function state(p){return p.address?.state||''}function city(p){return p.address?.city||p.address?.town||p.address?.village||p.address?.municipality||p.display_name.split(',')[0]||''}
+function miles(a,b){const R=3958.7613,rad=x=>x*Math.PI/180,dlat=rad(+b.lat-+a.lat),dlon=rad(+b.lon-+a.lon),v=Math.sin(dlat/2)**2+Math.cos(rad(+a.lat))*Math.cos(rad(+b.lat))*Math.sin(dlon/2)**2;return R*2*Math.atan2(Math.sqrt(v),Math.sqrt(1-v))}
+function msa(c,s){const m={'dallas county|texas':'Dallas-Fort Worth-Arlington, TX MSA','tarrant county|texas':'Dallas-Fort Worth-Arlington, TX MSA','collin county|texas':'Dallas-Fort Worth-Arlington, TX MSA','denton county|texas':'Dallas-Fort Worth-Arlington, TX MSA','travis county|texas':'Austin-Round Rock-Georgetown, TX MSA','harris county|texas':'Houston-The Woodlands-Sugar Land, TX MSA','fort bend county|texas':'Houston-The Woodlands-Sugar Land, TX MSA','bexar county|texas':'San Antonio-New Braunfels, TX MSA','maricopa county|arizona':'Phoenix-Mesa-Chandler, AZ MSA','cook county|illinois':'Chicago-Naperville-Elgin, IL-IN-WI MSA','queens county|new york':'New York-Newark-Jersey City, NY-NJ MSA','new york county|new york':'New York-Newark-Jersey City, NY-NJ MSA','king county|washington':'Seattle-Tacoma-Bellevue, WA MSA'};return m[c.toLowerCase().trim()+'|'+s.toLowerCase().trim()]||'Official geographic-area verification recommended'}
+function amendment(a,b,d){const same=county(a).toLowerCase()===county(b).toLowerCase()&&state(a).toLowerCase()===state(b).toLowerCase();if(same)return ['green','Likely no H-1B amendment based on location alone. Verify that the new location remains within the same applicable area of intended employment.'];if(d<=50)return ['yellow','Potential amendment review required. Verify the applicable LCA area of intended employment before making a determination.'];return ['red','Potential new LCA / H-1B amendment issue. Review the area of intended employment and petition requirements.']}
+$('igCalculateDistance')?.addEventListener('click',async()=>{if(!from.value.trim()||!to.value.trim()){dr.innerHTML='<b style="color:#b91c1c">Please enter both locations.</b>';dr.classList.add('show');return}dr.innerHTML='<div class="ig-loading">🔎 Searching both locations...</div>';dr.classList.add('show');try{const [a,b]=await Promise.all([geocode(from.value.trim()),geocode(to.value.trim())]),d=miles(a,b),ac=county(a),bc=county(b),as=state(a),bs=state(b),am=amendment(a,b,d);dr.innerHTML='<div class="ig-distance-stat"><div class="ig-distance-box"><strong>Distance</strong>'+d.toFixed(1)+' miles</div><div class="ig-distance-box"><strong>From County</strong>'+esc(ac)+'</div><div class="ig-distance-box"><strong>To County</strong>'+esc(bc)+'</div></div><div class="ig-meta-grid"><div class="ig-meta-box"><div class="ig-meta-label">From Location</div><div class="ig-meta-value">'+esc(city(a))+', '+esc(as)+'</div></div><div class="ig-meta-box"><div class="ig-meta-label">From MSA</div><div class="ig-meta-value">'+esc(msa(ac,as))+'</div></div><div class="ig-meta-box"><div class="ig-meta-label">To Location</div><div class="ig-meta-value">'+esc(city(b))+', '+esc(bs)+'</div></div></div><div class="ig-meta-box"><div class="ig-meta-label">To MSA</div><div class="ig-meta-value">'+esc(msa(bc,bs))+'</div></div><div class="ig-amendment '+am[0]+'">'+esc(am[1])+'</div>'}catch(e){dr.innerHTML='<b style="color:#b91c1c">'+esc(e.message||'Unable to calculate distance.')+'</b>'}});
+})();
+/* ======================= END IMMIGRATION SMART TOOLS JS ======================= */
+
 </script>
 <div aria-hidden="true" class="reminder-modal" id="callReminderModal">
 <div aria-labelledby="callReminderTitle" aria-modal="true" class="reminder-card" role="dialog">
