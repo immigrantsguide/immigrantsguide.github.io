@@ -182,7 +182,16 @@ img{max-width:100%;height:auto}
 @media(max-width:1050px){.ig-smart-tools{grid-template-columns:1fr}}@media(max-width:720px){.ig-smart-grid,.ig-meta-grid,.ig-distance-stat{grid-template-columns:1fr}.ig-smart-buttons{flex-direction:column}}
 /* ================= END IMMIGRATION SMART TOOLS ================= */
 
-</style></head>
+</style>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d2b55">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Immigrants Guide">
+<link rel="apple-touch-icon" href="/assets/immigrants-guide-logo-icon.png">
+
+</head>
 <body>
 <header class="header">
 <div class="brand">
@@ -926,5 +935,17 @@ callReminderForm?.addEventListener("submit",async e=>{
   finally{btn.disabled=false;btn.textContent="📧 Schedule 5-Minute Reminder";}
 });
 </script>
+
+<script>
+/* Immigrants Guide — PWA registration only. Existing site functionality is unchanged. */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/service-worker.js").catch(function (err) {
+      console.warn("Immigrants Guide PWA service worker registration failed:", err);
+    });
+  });
+}
+</script>
+
 </body>
 </html>
