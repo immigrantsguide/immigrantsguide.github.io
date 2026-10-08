@@ -5,75 +5,114 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Immigrants Guide – Petition Checklists</title>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f5f9ff;color:#17365d}
-body{min-height:100vh}
-.header{height:84px;background:#fff;border-bottom:1px solid #dbe5f1;display:flex;align-items:center;padding:10px 3.5%;gap:24px;position:sticky;top:0;z-index:20}
-.brand{display:flex;align-items:center;gap:11px;min-width:360px}
-.brand .logo-mark{width:70px;height:70px;object-fit:contain;border-radius:9px}
-.brand-name{font-size:25px;font-weight:900;color:#102f56;line-height:1.05}
-.brand-tag{font-size:12px;color:#71839a;margin-top:5px}
-.nav{display:flex;align-items:center;gap:4px;margin-left:auto}
-.nav a{color:#17365d;text-decoration:none;font-size:14px;font-weight:600;padding:9px 11px;border-radius:8px}
-.nav a:hover{background:#eef5ff}
-.header-right{display:flex;align-items:center}
-.dash-btn{display:inline-block;text-decoration:none;background:#0d2b55;color:#fff;padding:10px 14px;border-radius:9px;font-weight:800;font-size:12px}
-.container{width:min(1120px,92%);margin:0 auto;padding:46px 0 60px}
-.contact-hero{text-align:center;padding:12px 0 30px}
-.contact-hero h1{margin:0;color:#0d2b55;font-size:38px}
-.contact-hero p{max-width:720px;margin:12px auto 0;color:#60758d;line-height:1.6;font-size:15px}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
-.card{background:#fff;border:1px solid #dbe5f1;border-radius:16px;padding:28px;box-shadow:0 8px 24px rgba(13,43,85,.06)}
-.card h2{margin:0 0 10px;color:#0d2b55;font-size:24px}
-.card p{color:#60758d;line-height:1.6}
-.contact-person{display:flex;gap:18px;align-items:center;margin-top:20px;padding:18px;border-radius:12px;background:#f7faff;border:1px solid #e1eaf4}
-.contact-person img{width:78px;height:78px;object-fit:contain;border-radius:10px}
-.person-name{font-size:22px;font-weight:900;color:#102f56}
-.person-role{margin-top:4px;font-weight:700;color:#536a84}
-.person-company{margin-top:3px;color:#71839a}
-.contact-links{margin-top:20px;display:grid;gap:11px}
-.contact-links a{display:block;text-decoration:none;color:#0b63ce;background:#eef6ff;border:1px solid #d7e8fb;border-radius:10px;padding:12px 14px;font-weight:700}
-.contact-links a:hover{background:#e4f0ff}
-.app-card{display:flex;flex-direction:column;justify-content:center}
-.app-brand{display:flex;gap:16px;align-items:center}
-.app-brand img{width:82px;height:82px;object-fit:contain;border-radius:12px}
-.app-title{font-size:25px;font-weight:900;color:#0d2b55}
-.app-subtitle{margin-top:6px;color:#60758d;line-height:1.5;font-size:14px}
-.app-button{display:inline-block;margin-top:24px;background:#0d2b55;color:#fff;text-decoration:none;padding:14px 18px;border-radius:10px;font-weight:900;text-align:center}
-.app-button:hover{background:#123b70}
-.app-note{margin-top:10px;font-size:11px;color:#71839a;line-height:1.45}
-.back-home{text-align:center;margin-top:28px}
-.back-home a{color:#0b63ce;text-decoration:none;font-weight:800}
-.footer{background:#0c294d;color:#fff;padding:26px 3.5% 20px}
-.footer-inner{width:min(1480px,100%);margin:auto;display:grid;grid-template-columns:1.2fr 1fr 1.2fr;gap:20px;align-items:center}
-.footer-brand{display:flex;align-items:center;gap:10px}
-.footer-brand .logo-mark{width:58px;height:58px;object-fit:contain}
-.footer-brand strong{font-size:19px}.footer-brand small{display:block;color:#a9bdd6;margin-top:4px}
-.footer-nav{text-align:center}.footer-nav a{color:#d6e2f2;text-decoration:none;font-size:13px;margin:0 9px}.footer-nav a:hover{text-decoration:underline}
-.footer-contact{text-align:right;color:#d6e2f2;font-size:13px}.footer-contact a{color:#fff}
-.copyright{border-top:1px solid #294565;margin-top:20px;padding-top:13px;display:flex;justify-content:space-between;color:#a9bdd6;font-size:11px}
-@media(max-width:900px){.header{height:auto;flex-wrap:wrap;padding:10px 4%}.brand{min-width:auto}.nav{order:3;width:100%;justify-content:center;flex-wrap:wrap;margin-left:0}.header-right{display:none}.contact-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}.footer-nav{text-align:left}.footer-contact{text-align:left}}
-@media(max-width:560px){.brand .logo-mark{width:58px;height:58px}.brand-name{font-size:21px}.brand-tag{font-size:10px}.container{padding-top:28px}.contact-hero h1{font-size:30px}.card{padding:20px}.contact-person{align-items:flex-start}.app-brand{align-items:flex-start}.copyright{flex-direction:column;gap:7px}}
-</style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f9ff;
+    color:#102a43;
+    line-height:1.6;
+  }
+  .topbar{
+    background:#fff;
+    border-bottom:1px solid #d9e5f2;
+    padding:18px 24px;
+    text-align:center;
+  }
+  .topbar a{
+    color:#075bd6;
+    text-decoration:none;
+    font-weight:700;
+  }
+  .wrap{
+    max-width:1050px;
+    margin:0 auto;
+    padding:30px 20px 60px;
+  }
+  .hero{
+    background:linear-gradient(135deg,#0d2b55,#1769aa);
+    color:#fff;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(13,43,85,.14);
+    margin-bottom:24px;
+  }
+  .hero h1{margin:0 0 8px;font-size:32px}
+  .hero p{margin:0;opacity:.95}
+  .notice{
+    background:#fff8df;
+    border:1px solid #ecd98b;
+    border-radius:12px;
+    padding:16px 18px;
+    margin:20px 0 28px;
+  }
+  .notice strong{display:block;margin-bottom:4px}
+  .toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  button{
+    border:0;
+    border-radius:9px;
+    padding:10px 15px;
+    cursor:pointer;
+    font-weight:700;
+    background:#0d2b55;
+    color:#fff;
+  }
+  button.secondary{background:#e8f0fa;color:#0d2b55}
+  .card{
+    background:#fff;
+    border:1px solid #dce7f2;
+    border-radius:16px;
+    margin:18px 0;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(15,45,75,.06);
+  }
+  .card h2{
+    margin:0;
+    padding:18px 20px;
+    background:#eef5fc;
+    color:#0d2b55;
+    font-size:21px;
+  }
+  .items{padding:12px 20px 18px}
+  label{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:9px 4px;
+    border-bottom:1px solid #edf2f7;
+    cursor:pointer;
+  }
+  label:last-child{border-bottom:0}
+  input[type=checkbox]{
+    width:19px;
+    height:19px;
+    margin-top:3px;
+    accent-color:#0d2b55;
+    flex:0 0 auto;
+  }
+  label.checked span{text-decoration:line-through;color:#718096}
+  .footer{
+    text-align:center;
+    padding:24px;
+    color:#62748a;
+    font-size:14px;
+  }
+  @media(max-width:650px){
+    .hero h1{font-size:26px}
+    .wrap{padding:22px 14px 45px}
+  }
+.sample-link{color:#075bd6;font-weight:700;text-decoration:none}.sample-link:hover{text-decoration:underline}</style>
 </head>
 <body>
-<header class="header">
-  <div class="brand">
-    <img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo">
-    <div>
-      <div class="brand-name">Immigrants Guide</div>
-      <div class="brand-tag">Your Partner in U.S. Immigration Journey</div>
-    </div>
-  </div>
-  <nav class="nav">
-    <a href="index.html">Home</a>
-    <a href="index.html#about">About</a>
-    <a href="services.html">🛠️ Services</a>
-    <a href="resources.html">📚 Resources</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <div class="header-right"><a class="dash-btn" href="index.html">← Home</a></div>
-</header>
+
+<div class="topbar">
+  <a href="index.html">← Back to Immigrants Guide</a>
+</div>
 
 <main class="wrap">
   <section class="hero">
