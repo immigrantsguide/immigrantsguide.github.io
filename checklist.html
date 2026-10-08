@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Immigrants Guide – Petition Checklists</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f9ff;
+    color:#102a43;
+    line-height:1.6;
+  }
+  .topbar{
+    background:#fff;
+    border-bottom:1px solid #d9e5f2;
+    padding:18px 24px;
+    text-align:center;
+  }
+  .topbar a{
+    color:#075bd6;
+    text-decoration:none;
+    font-weight:700;
+  }
+  .wrap{
+    max-width:1050px;
+    margin:0 auto;
+    padding:30px 20px 60px;
+  }
+  .hero{
+    background:linear-gradient(135deg,#0d2b55,#1769aa);
+    color:#fff;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 25px rgba(13,43,85,.14);
+    margin-bottom:24px;
+  }
+  .hero h1{margin:0 0 8px;font-size:32px}
+  .hero p{margin:0;opacity:.95}
+  .notice{
+    background:#fff8df;
+    border:1px solid #ecd98b;
+    border-radius:12px;
+    padding:16px 18px;
+    margin:20px 0 28px;
+  }
+  .notice strong{display:block;margin-bottom:4px}
+  .toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  button{
+    border:0;
+    border-radius:9px;
+    padding:10px 15px;
+    cursor:pointer;
+    font-weight:700;
+    background:#0d2b55;
+    color:#fff;
+  }
+  button.secondary{background:#e8f0fa;color:#0d2b55}
+  .card{
+    background:#fff;
+    border:1px solid #dce7f2;
+    border-radius:16px;
+    margin:18px 0;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(15,45,75,.06);
+  }
+  .card h2{
+    margin:0;
+    padding:18px 20px;
+    background:#eef5fc;
+    color:#0d2b55;
+    font-size:21px;
+  }
+  .items{padding:12px 20px 18px}
+  label{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:9px 4px;
+    border-bottom:1px solid #edf2f7;
+    cursor:pointer;
+  }
+  label:last-child{border-bottom:0}
+  input[type=checkbox]{
+    width:19px;
+    height:19px;
+    margin-top:3px;
+    accent-color:#0d2b55;
+    flex:0 0 auto;
+  }
+  label.checked span{text-decoration:line-through;color:#718096}
+  .footer{
+    text-align:center;
+    padding:24px;
+    color:#62748a;
+    font-size:14px;
+  }
+  @media(max-width:650px){
+    .hero h1{font-size:26px}
+    .wrap{padding:22px 14px 45px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Back to Immigrants Guide</a>
+</div>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>📋 Immigrants Guide – Petition Checklists</h1>
+    <p>Practical planning checklists for common immigration petitions and responses.</p>
+  </section>
+
+  <div class="notice">
+    <strong>Important Notice</strong>
+    Sample / Educational Resource — Use as a planning checklist and customize for the specific petition and facts.
+    This document is not legal advice and does not replace the applicable USCIS/DOL requirements.
+  </div>
+
+  <div class="toolbar">
+    <button onclick="checkAll()">✓ Check All</button>
+    <button class="secondary" onclick="clearAll()">↺ Clear All</button>
+  </div>
+
+  <section class="card">
+    <h2>H-1B New / Cap</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Passport</span></label>
+      <label><input type="checkbox"><span>Current immigration status documents, if applicable</span></label>
+      <label><input type="checkbox"><span>I-94, if applicable</span></label>
+      <label><input type="checkbox"><span>Resume/CV</span></label>
+      <label><input type="checkbox"><span>Degree and transcripts</span></label>
+      <label><input type="checkbox"><span>Experience letters, if applicable</span></label>
+      <label><input type="checkbox"><span>Offer/employment letter</span></label>
+      <label><input type="checkbox"><span>Employer/company documents</span></label>
+      <label><input type="checkbox"><span>LCA</span></label>
+      <label><input type="checkbox"><span>Client/vendor/project documentation, if applicable</span></label>
+      <label><input type="checkbox"><span>Support letter</span></label>
+      <label><input type="checkbox"><span>Petition forms and filing-fee documentation</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>H-1B Transfer</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Passport</span></label>
+      <label><input type="checkbox"><span>Current/most recent I-94</span></label>
+      <label><input type="checkbox"><span>Current H-1B approval notice(s)</span></label>
+      <label><input type="checkbox"><span>Current H-1B visa/status documentation, as applicable</span></label>
+      <label><input type="checkbox"><span>Resume/CV</span></label>
+      <label><input type="checkbox"><span>Degree and transcripts</span></label>
+      <label><input type="checkbox"><span>Experience letters, if applicable</span></label>
+      <label><input type="checkbox"><span>New employer documents</span></label>
+      <label><input type="checkbox"><span>Offer/employment letter</span></label>
+      <label><input type="checkbox"><span>LCA</span></label>
+      <label><input type="checkbox"><span>Client/vendor/project documentation, if applicable</span></label>
+      <label><input type="checkbox"><span>Support letter</span></label>
+      <label><input type="checkbox"><span>Petition forms and filing-fee documentation</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>H-1B Extension</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Passport</span></label>
+      <label><input type="checkbox"><span>Current I-94</span></label>
+      <label><input type="checkbox"><span>Current H-1B approval notice</span></label>
+      <label><input type="checkbox"><span>Recent paystubs</span></label>
+      <label><input type="checkbox"><span>W-2s, if applicable</span></label>
+      <label><input type="checkbox"><span>Employment verification</span></label>
+      <label><input type="checkbox"><span>Updated LCA</span></label>
+      <label><input type="checkbox"><span>Updated support letter</span></label>
+      <label><input type="checkbox"><span>Client/vendor/project documentation, if applicable</span></label>
+      <label><input type="checkbox"><span>Petition forms and filing-fee documentation</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>H-1B Amendment</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Current H-1B approval notice</span></label>
+      <label><input type="checkbox"><span>Current I-94</span></label>
+      <label><input type="checkbox"><span>Passport</span></label>
+      <label><input type="checkbox"><span>New worksite/project information</span></label>
+      <label><input type="checkbox"><span>Updated LCA, if required</span></label>
+      <label><input type="checkbox"><span>Client/vendor letter, if applicable</span></label>
+      <label><input type="checkbox"><span>Updated duties and position information</span></label>
+      <label><input type="checkbox"><span>Updated support letter</span></label>
+      <label><input type="checkbox"><span>Petition forms and filing-fee documentation</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>H-4 Extension</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Principal H-1B approval/status documents</span></label>
+      <label><input type="checkbox"><span>H-4 applicant passport</span></label>
+      <label><input type="checkbox"><span>Marriage certificate or qualifying relationship documentation</span></label>
+      <label><input type="checkbox"><span>H-4 I-94</span></label>
+      <label><input type="checkbox"><span>Prior H-4 approval notice, if applicable</span></label>
+      <label><input type="checkbox"><span>Required petition/application forms and filing-fee documentation</span></label>
+      <label><input type="checkbox"><span>Supporting evidence applicable to the specific case</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>H-4 EAD</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>H-4 status documentation</span></label>
+      <label><input type="checkbox"><span>Principal H-1B approval/status documentation</span></label>
+      <label><input type="checkbox"><span>Passport</span></label>
+      <label><input type="checkbox"><span>I-94</span></label>
+      <label><input type="checkbox"><span>Marriage certificate or qualifying relationship documentation</span></label>
+      <label><input type="checkbox"><span>Prior EAD, if applicable</span></label>
+      <label><input type="checkbox"><span>Required application forms and filing-fee documentation</span></label>
+      <label><input type="checkbox"><span>Supporting evidence applicable to the specific case</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>I-140 EB-2 / EB-3</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Applicable labor certification/PERM documentation, if required</span></label>
+      <label><input type="checkbox"><span>ETA-9089, if applicable</span></label>
+      <label><input type="checkbox"><span>Degree and transcripts</span></label>
+      <label><input type="checkbox"><span>Experience letters</span></label>
+      <label><input type="checkbox"><span>Employer/company documentation</span></label>
+      <label><input type="checkbox"><span>Job offer and position information, as applicable</span></label>
+      <label><input type="checkbox"><span>Priority-date information</span></label>
+      <label><input type="checkbox"><span>Required petition forms and filing-fee documentation</span></label>
+      <label><input type="checkbox"><span>Supporting evidence applicable to the classification</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>RFE / NOID / NOIR Response</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>USCIS notice</span></label>
+      <label><input type="checkbox"><span>Response deadline</span></label>
+      <label><input type="checkbox"><span>Issues/evidence requested in the notice</span></label>
+      <label><input type="checkbox"><span>Supporting documents addressing each requested item</span></label>
+      <label><input type="checkbox"><span>Updated letters or declarations, if applicable</span></label>
+      <label><input type="checkbox"><span>Client/vendor/project evidence, if applicable</span></label>
+      <label><input type="checkbox"><span>Attorney/legal representative review, if applicable</span></label>
+      <label><input type="checkbox"><span>Complete response package and delivery/filing confirmation</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Sample Letter Resources</h2>
+    <div class="items">
+      <label><input type="checkbox"><span>Sample Client Letter — use the separate client-letter template provided with Immigrants Guide.</span></label>
+      <label><input type="checkbox"><span>Sample Vendor Letter — use the separate vendor-letter template provided with Immigrants Guide.</span></label>
+    </div>
+  </section>
+
+  <div class="footer">
+    © 2026 Immigrants Guide · Track · Plan · Stay Informed
+  </div>
+</main>
+
+<script>
+function boxes(){return Array.from(document.querySelectorAll('input[type="checkbox"]'))}
+function updateLabel(box){
+  const label=box.closest('label');
+  if(label) label.classList.toggle('checked',box.checked);
+}
+boxes().forEach((box,i)=>{
+  const key='ig-checklist-'+i;
+  box.checked=localStorage.getItem(key)==='1';
+  updateLabel(box);
+  box.addEventListener('change',()=>{
+    localStorage.setItem(key,box.checked?'1':'0');
+    updateLabel(box);
+  });
+});
+function checkAll(){
+  boxes().forEach((box,i)=>{
+    box.checked=true;
+    localStorage.setItem('ig-checklist-'+i,'1');
+    updateLabel(box);
+  });
+}
+function clearAll(){
+  boxes().forEach((box,i)=>{
+    box.checked=false;
+    localStorage.removeItem('ig-checklist-'+i);
+    updateLabel(box);
+  });
+}
+</script>
+</body>
+</html>
