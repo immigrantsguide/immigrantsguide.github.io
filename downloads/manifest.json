@@ -1,0 +1,25 @@
+{
+  "name": "Immigrants Guide",
+  "short_name": "Immigrants Guide",
+  "description": "USCIS case tracking, I-94 information, U.S. immigration resources and smart tools.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f9ff",
+  "theme_color": "#0d2b55",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/immigrants-guide-logo-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/immigrants-guide-logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
