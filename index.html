@@ -182,23 +182,14 @@ img{max-width:100%;height:auto}
 @media(max-width:1050px){.ig-smart-tools{grid-template-columns:1fr}}@media(max-width:720px){.ig-smart-grid,.ig-meta-grid,.ig-distance-stat{grid-template-columns:1fr}.ig-smart-buttons{flex-direction:column}}
 /* ================= END IMMIGRATION SMART TOOLS ================= */
 
-</style>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0d2b55">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Immigrants Guide">
-<link rel="apple-touch-icon" href="/assets/immigrants-guide-logo-icon.png">
-
-</head>
+</style></head>
 <body>
 <header class="header">
 <div class="brand">
-<img class="logo-mark" src="assets/immigrants-guide-logo-icon.png" alt="Immigrants Guide VK eagle globe USA logo" onerror="this.style.display='none'">
+<img alt="Immigrants Guide" class="brand-logo" decoding="async" fetchpriority="high" loading="eager" src="assets/immigrants-guide-logo.png" width="190" height="64"/>
 <div><div class="brand-name">Immigrants Guide</div><div class="brand-tag">Your Partner in U.S. Immigration Journey</div></div>
 </div>
-<nav class="nav"><a href="index.html">🏠Home</a><a href="about.html">🛂About</a><a href="services.html">🛠️ Services</a><a href="resources.html">📚 Resources</a><a href="checklist.html">📋 Checklist</a><a href="contact.html">🤖Contact</a></nav>
+<nav class="nav"><a href="index.html">Home</a><a href="index.html#about">About</a><a href="services.html">🛠️ Services</a><a href="resources.html">📚 Resources</a><a href="#contact">Contact</a></nav>
 <div class="header-right"><a class="dash-btn" href="#" id="dashboardBtn">🔒 Go to Dashboard →</a><div class="flag">
 <div class="ask-vijay-actions">
 <div class="ask-vijay-actions">
@@ -455,8 +446,6 @@ img{max-width:100%;height:auto}
 <button class="ask-vijay-btn" id="askVijayOpen" type="button">Ask Vijay Krishna →</button>
 </div>
 </section>
-
-
 <section class="section" id="about">
 <div class="section-head"><div style="font-size:28px">👥</div><div><h2>How Immigrants Guide Can Help</h2><p>Resources, tracking tools, and guidance for major U.S. immigration categories.</p></div></div>
 <div class="services" id="services">
@@ -479,7 +468,7 @@ img{max-width:100%;height:auto}
 <img alt="Immigrants Guide VK eagle globe USA logo" class="logo-mark" decoding="async" fetchpriority="low" loading="lazy" src="assets/immigrants-guide-logo-icon.png"/>
 <div><strong>Immigrants Guide</strong><small>Your Partner in U.S. Immigration Journey</small></div>
 </div>
-<div class="footer-nav"><a href="#home">Home</a> | <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="resources.html">Resources</a> | <a href="checklist.html">Checklist</a> | <a href="contact.html">Contact</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a> | <a href="disclaimer.html">Immigration Disclaimer</a></div>
+<div class="footer-nav"><a href="#home">Home</a> | <a href="#about">About</a> | <a href="services.html">Services</a> | <a href="resources.html">Resources</a> | <a href="#contact">Contact</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a> | <a href="disclaimer.html">Immigration Disclaimer</a></div>
 <div class="footer-contact">✉ Email us at <a href="mailto:legal@immigrantsguide.in">legal@immigrantsguide.in</a></div>
 </div>
 <div class="copyright"><span>© 2026 Immigrants Guide. All rights reserved.</span><span>Track · Plan · Stay Informed</span></div>
@@ -865,7 +854,31 @@ function normalize(t){let s=t.trim();const r=[[/\bwas responsible for\b/gi,'is r
 function ruleFor(t){const x=t.toLowerCase();let best=null,score=0;rules.forEach(r=>{let n=r.keys.reduce((a,k)=>a+(x.includes(k)?1:0),0);if(n>score){score=n;best=r}});return best}
 function render(ds,r,extra=false){let h=r?'<div class="ig-meta-grid"><div class="ig-meta-box"><div class="ig-meta-label">SOC Code</div><div class="ig-meta-value">'+esc(r.soc)+'</div></div><div class="ig-meta-box"><div class="ig-meta-label">Occupation</div><div class="ig-meta-value">'+esc(r.title)+'</div></div><div class="ig-meta-box"><div class="ig-meta-label">Experience</div><div class="ig-meta-value">'+esc(r.experience)+'</div></div></div>':'';h+='<strong>Professional Present-Tense Duties</strong><ul class="ig-duty-list">'+ds.map(d=>'<li>'+esc(d)+'</li>').join('')+'</ul>';if(r)h+='<div style="margin-top:9px"><b>Suggested Wage Level:</b> '+esc(r.wage)+'</div>';result.innerHTML=h;result.classList.add('show')}
 $('igConvertDuties')?.addEventListener('click',()=>{const raw=job.value.trim();if(!raw){result.innerHTML='<b style="color:#b91c1c">Please enter job duties first.</b>';result.classList.add('show');return}render(split(raw).map(normalize),ruleFor(raw))});
-$('igSuggestDuties')?.addEventListener('click',()=>{const raw=job.value.trim();if(!raw){result.innerHTML='<b style="color:#b91c1c">Please enter job duties first.</b>';result.classList.add('show');return}const r=ruleFor(raw);if(!r){result.innerHTML='<b>Unable to confidently identify a SOC code from these duties.</b><p>Please add technologies, responsibilities, industry, and primary day-to-day functions.</p>';result.classList.add('show');return}soc.value=r.soc;exp.value=r.experience;wage.value=r.wage;render([...split(raw).map(normalize),...r.duties],r,true)});
+$('igSuggestDuties')?.addEventListener('click',()=>{
+  const raw=job.value.trim();
+  if(!raw){result.innerHTML='<b style="color:#b91c1c">Please enter job duties first.</b>';result.classList.add('show');return}
+  // Suggest must work from the user's actual inputs. Never silently replace an entered SOC code,
+  // experience requirement, or wage level, and do not append generic duties from keyword rules.
+  const enteredSoc=soc.value.trim();
+  const enteredExp=exp.value.trim();
+  const enteredWage=wage.value.trim();
+  const matched=ruleFor(raw);
+  const matchingRule=matched && enteredSoc && matched.soc===enteredSoc ? matched : null;
+  const displaySoc=enteredSoc || (matched ? matched.soc : 'Not provided');
+  const displayTitle=matchingRule ? matchingRule.title : (enteredSoc ? 'Verify occupation for entered SOC code' : (matched ? matched.title : 'Not determined'));
+  const displayExp=enteredExp || 'Not provided';
+  const displayWage=enteredWage || 'Not provided';
+  const duties=split(raw).map(normalize);
+  let h='<div class="ig-meta-grid">'+
+    '<div class="ig-meta-box"><div class="ig-meta-label">SOC Code</div><div class="ig-meta-value">'+esc(displaySoc)+'</div></div>'+
+    '<div class="ig-meta-box"><div class="ig-meta-label">Occupation</div><div class="ig-meta-value">'+esc(displayTitle)+'</div></div>'+
+    '<div class="ig-meta-box"><div class="ig-meta-label">Experience</div><div class="ig-meta-value">'+esc(displayExp)+'</div></div></div>'+
+    '<strong>Suggested Present-Tense Duties Based on Your Input</strong><ul class="ig-duty-list">'+duties.map(d=>'<li>'+esc(d)+'</li>').join('')+'</ul>'+
+    '<div style="margin-top:9px"><b>Wage Level:</b> '+esc(displayWage)+'</div>'+
+    '<p class="ig-small-note">Your entered SOC code and wage level are preserved. Confirm that the duties, SOC classification, experience, and wage level align with official DOL/OFLC guidance.</p>';
+  result.innerHTML=h;
+  result.classList.add('show');
+});
 
 const from=$('igFromLocation'),to=$('igToLocation'),dr=$('igDistanceResult');
 function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&q='+encodeURIComponent(q),{headers:{Accept:'application/json'}}).then(r=>{if(!r.ok)throw Error('Location search failed.');return r.json()}).then(d=>{if(!d.length)throw Error('Location not found: '+q);return d[0]})}
@@ -937,16 +950,5 @@ callReminderForm?.addEventListener("submit",async e=>{
   finally{btn.disabled=false;btn.textContent="📧 Schedule 5-Minute Reminder";}
 });
 </script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("/service-worker.js").catch(function (err) {
-      console.warn("Immigrants Guide PWA service worker registration failed:", err);
-    });
-  });
-}
-</script>
-
 </body>
 </html>
