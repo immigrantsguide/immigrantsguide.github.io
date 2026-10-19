@@ -119,25 +119,73 @@ body {
   font-size: 12px;
 }
 
-/* VIJAY JOURNEY FULL-WIDTH BANNER */
+/* VIJAY JOURNEY HERO BANNER */
 .journey-banner {
+  position: relative;
   width: 100%;
-  margin: 0;
-  padding: 0;
-  background: #0d2b55;
   overflow: hidden;
-  line-height: 0;
-  text-align: center;
+  background: #0d2b55;
+  line-height: normal;
 }
 
-.journey-banner img {
+.journey-image {
   display: block;
   width: 100%;
   height: auto;
   max-width: 100%;
   object-fit: contain;
   object-position: center;
-  margin: 0 auto;
+}
+
+.journey-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 20, 42, 0.18),
+    rgba(4, 20, 42, 0.58)
+  );
+  color: #fff;
+}
+
+.journey-overlay h1 {
+  margin: 0 0 12px;
+  font-size: clamp(24px, 4.2vw, 48px);
+  line-height: 1.15;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.9);
+}
+
+.journey-overlay p {
+  margin: 0 0 22px;
+  font-size: clamp(13px, 1.8vw, 20px);
+  line-height: 1.5;
+  color: #fff;
+  text-shadow: 0 2px 8px #000;
+}
+
+.journey-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 9px;
+  background: #fff;
+  color: #0d2b55;
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.journey-button:hover {
+  background: #e8f2ff;
+  transform: translateY(-2px);
 }
 
 /* MAIN CONTENT */
@@ -171,6 +219,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: stretch;
+  scroll-margin-top: 105px;
 }
 
 .card {
@@ -242,6 +291,7 @@ body {
   border-radius: 10px;
   padding: 12px 14px;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .contact-links a:hover {
@@ -372,6 +422,7 @@ body {
   text-align: right;
   color: #d6e2f2;
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 .footer-contact a {
@@ -422,6 +473,7 @@ body {
 
   .footer-nav {
     text-align: left;
+    line-height: 2;
   }
 
   .footer-contact {
@@ -444,6 +496,30 @@ body {
     font-size: 10px;
   }
 
+  .nav a {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .journey-overlay {
+    padding: 8px;
+  }
+
+  .journey-overlay h1 {
+    font-size: clamp(18px, 5vw, 26px);
+    margin-bottom: 5px;
+  }
+
+  .journey-overlay p {
+    font-size: clamp(10px, 2.7vw, 14px);
+    margin-bottom: 8px;
+  }
+
+  .journey-button {
+    padding: 7px 13px;
+    font-size: 11px;
+  }
+
   .container {
     padding-top: 28px;
   }
@@ -462,6 +538,10 @@ body {
 
   .app-brand {
     align-items: flex-start;
+  }
+
+  .app-title {
+    font-size: 21px;
   }
 
   .copyright {
@@ -504,13 +584,24 @@ body {
   </div>
 </header>
 
-<!-- VIJAY JOURNEY POSTER BANNER -->
-<section class="journey-banner" aria-label="Vijay Journey poster">
+<!-- VIJAY JOURNEY IMAGE WITH CONTACT CONTENT OVERLAY -->
+<section class="journey-banner" aria-label="Contact Immigrants Guide">
   <img
     src="assets/file_00000000259882089ea7e4f468f825a9.png"
-    alt="Vijay Journey — Same Man. A Bigger Tomorrow."
+    alt="Vijay Journey poster"
+    class="journey-image"
     fetchpriority="high"
   >
+
+  <div class="journey-overlay">
+    <h1>Contact Immigrants Guide</h1>
+
+    <p>Your Partner in U.S. Immigration Journey</p>
+
+    <a href="#contact-information" class="journey-button">
+      Contact Us
+    </a>
+  </div>
 </section>
 
 <!-- MAIN CONTACT CONTENT -->
@@ -526,9 +617,9 @@ body {
     </p>
   </section>
 
-  <section class="contact-grid">
+  <!-- CONTACT INFORMATION AND APP -->
+  <section class="contact-grid" id="contact-information">
 
-    <!-- CONTACT INFORMATION -->
     <div class="card">
       <h2>Contact Information</h2>
 
@@ -560,7 +651,6 @@ body {
 
     <!-- ANDROID APP DOWNLOAD -->
     <div class="card app-card">
-
       <div class="app-brand">
         <img
           src="assets/immigrants-guide-logo-icon.png"
@@ -591,8 +681,8 @@ body {
         Official Immigrants Guide Android APK. Android may ask you
         to allow installation from this source.
       </div>
-
     </div>
+
   </section>
 
   <div class="back-home">
@@ -603,7 +693,6 @@ body {
 
 <!-- FOOTER -->
 <footer class="footer">
-
   <div class="footer-inner">
 
     <div class="footer-brand">
@@ -643,7 +732,6 @@ body {
     <span>© 2026 Immigrants Guide. All rights reserved.</span>
     <span>Track · Plan · Stay Informed</span>
   </div>
-
 </footer>
 
 <!-- EXISTING SERVICE WORKER REGISTRATION -->
