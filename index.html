@@ -654,32 +654,55 @@ function updateUSClocks(){
 async function loadRegionalNews(){
   const box=$("regionalNews");
   if(!box)return;
-  try{
-    const feeds=[
-      {label:'🇮🇳 Andhra Pradesh • Telangana',query:'site:thehansindia.com (Telangana OR "Andhra Pradesh") when:1d'},
-      {label:'🌍 World',query:'world news when:1d'}
+  const topics=[
+    {label:"🇮🇳 Telangana",query:"Telangana Hyderabad news"},
+    {label:"🇮🇳 Andhra Pradesh",query:"Andhra Pradesh news"},
+    {label:"🌍 World",query:"world news"}
+  ];
+  const googleRss=q=>"https://news.google.com/rss/search?q="+encodeURIComponent(q+" when:2d")+"&hl=en-IN&gl=IN&ceid=IN:en";
+  const googleSearch=q=>"https://news.google.com/search?q="+encodeURIComponent(q)+"&hl=en-IN&gl=IN&ceid=IN:en";
+  const showFallback=(message)=>{
+    box.innerHTML='<div class="news-error">'+esc(message||"Live headlines could not be loaded in this browser. Use the live topic links below.")+'</div>'+topics.map(t=>'<a class="news-item" href="'+googleSearch(t.query)+'" target="_blank" rel="noopener noreferrer"><strong>'+esc(t.label)+' — Latest headlines ↗</strong><span>Open live Google News results</span></a>').join('')+'<button type="button" class="utility-button" id="retryRegionalNews">↻ Try again</button>';
+    $("retryRegionalNews")?.addEventListener("click",loadRegionalNews);
+  };
+  box.innerHTML='<div class="news-loading">Loading Telangana, Andhra Pradesh and world headlines…</div>';
+  const parseXml=(xml,label)=>{
+    const doc=new DOMParser().parseFromString(xml,"text/xml");
+    if(doc.querySelector("parsererror"))throw new Error("Invalid RSS response");
+    return Array.from(doc.querySelectorAll("item")).slice(0,8).map(item=>({
+      title:item.querySelector("title")?.textContent?.trim()||"Latest news",
+      link:item.querySelector("link")?.textContent?.trim()||"https://news.google.com/",
+      pubDate:item.querySelector("pubDate")?.textContent?.trim()||"",
+      feedLabel:label
+    }));
+  };
+  const fetchWithTimeout=async(url,ms=9000)=>{
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),ms);
+    try{const r=await fetch(url,{cache:"no-store",signal:controller.signal});if(!r.ok)throw new Error("HTTP "+r.status);return await r.text();}
+    finally{clearTimeout(timer);}
+  };
+  const fetchFeed=async(topic)=>{
+    const rss=googleRss(topic.query);
+    const attempts=[
+      async()=>{const text=await fetchWithTimeout("https://api.rss2json.com/v1/api.json?rss_url="+encodeURIComponent(rss));const data=JSON.parse(text);if(data.status==="error"||!Array.isArray(data.items))throw new Error("RSS2JSON unavailable");return data.items.slice(0,8).map(i=>({title:i.title,link:i.link,pubDate:i.pubDate,feedLabel:topic.label}));},
+      async()=>parseXml(await fetchWithTimeout("https://api.allorigins.win/raw?url="+encodeURIComponent(rss)),topic.label),
+      async()=>parseXml(await fetchWithTimeout("https://corsproxy.io/?url="+encodeURIComponent(rss)),topic.label)
     ];
-    const all=[];
-    for(const feed of feeds){
-      const rss='https://news.google.com/rss/search?q='+encodeURIComponent(feed.query)+'&hl=en-IN&gl=IN&ceid=IN:en';
-      const api='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rss);
-      const response=await fetch(api,{cache:"no-store"});
-      if(!response.ok)continue;
-      const data=await response.json();
-      const items=Array.isArray(data.items)?data.items.slice(0,7):[];
-      items.forEach(item=>all.push({...item,feedLabel:feed.label}));
-    }
-    if(!all.length)throw new Error("No news items");
-    box.innerHTML=all.slice(0,12).map(item=>{
-      const title=esc(item.title||"Latest news");
-      const link=esc(item.link||"https://www.thehansindia.com/");
-      const published=item.pubDate?new Date(item.pubDate):null;
-      const when=published&&!isNaN(published)?published.toLocaleString("en-IN",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):"Latest";
-      return '<a class="news-item" href="'+link+'" target="_blank" rel="noopener noreferrer"><strong>'+title+'</strong><span>'+esc(item.feedLabel)+' • '+when+'</span></a>';
-    }).join("");
-  }catch(err){
-    box.innerHTML='<div class="news-error">News could not be loaded right now. <a href="https://www.thehansindia.com/" target="_blank" rel="noopener noreferrer" style="color:#1265d7;font-weight:800">Open News →</a></div>';
-  }
+    let lastError;
+    for(const attempt of attempts){try{const items=await attempt();if(items.length)return items;}catch(e){lastError=e;}}
+    throw lastError||new Error("No items");
+  };
+  const results=await Promise.allSettled(topics.map(fetchFeed));
+  const all=[];results.forEach(r=>{if(r.status==="fulfilled")all.push(...r.value);});
+  const unique=Array.from(new Map(all.filter(i=>i.title&&i.link).map(i=>[i.link,i])).values());
+  if(!unique.length){showFallback("Live news feeds are blocked or temporarily unavailable. Choose a live news topic below.");return;}
+  unique.sort((a,b)=>new Date(b.pubDate||0)-new Date(a.pubDate||0));
+  box.innerHTML=unique.slice(0,15).map(item=>{
+    const published=item.pubDate?new Date(item.pubDate):null;
+    const when=published&&!isNaN(published)?published.toLocaleString("en-IN",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):"Latest";
+    return '<a class="news-item" href="'+esc(item.link||"https://news.google.com/")+'" target="_blank" rel="noopener noreferrer"><strong>'+esc(item.title||"Latest news")+'</strong><span>'+esc(item.feedLabel||"News")+' • '+esc(when)+'</span></a>';
+  }).join("");
 }
 loadRegionalNews();
 setInterval(loadRegionalNews,300000);
@@ -739,7 +762,11 @@ init();
   const indiaGazetted2026={"2026-01-26":"Republic Day","2026-03-04":"Holi","2026-03-21":"Id-ul-Fitr","2026-03-26":"Ram Navami","2026-03-31":"Mahavir Jayanti","2026-04-03":"Good Friday","2026-05-01":"Buddha Purnima","2026-05-27":"Id-ul-Zuha (Bakrid)","2026-06-26":"Muharram","2026-08-15":"Independence Day","2026-08-26":"Milad-un-Nabi / Id-e-Milad","2026-09-04":"Janmashtami","2026-10-02":"Gandhi Jayanti","2026-10-20":"Dussehra","2026-11-08":"Diwali (Deepavali)","2026-11-24":"Guru Nanak's Birthday","2026-12-25":"Christmas Day"};
   const purnima2026=new Set(["2026-01-03","2026-02-01","2026-03-03","2026-04-02","2026-05-01","2026-05-31","2026-06-29","2026-07-29","2026-08-28","2026-09-26","2026-10-25","2026-11-24","2026-12-24"]);
   const amavasya2026=new Set(["2026-01-18","2026-02-17","2026-03-18","2026-04-17","2026-05-16","2026-06-15","2026-07-14","2026-08-12","2026-09-10","2026-10-10","2026-11-09","2026-12-09"]);
-  const panchang2026={"2026-10-01":{tithi:"Krishna Panchami until 12:35 PM; then Krishna Shashthi",nakshatra:"Rohini until 4:27 AM; then Mrigashira",special:"Shashthi Shraddha • Rohini Vrat"},"2026-10-02":{tithi:"Krishna Shashthi until 10:15 AM; then Krishna Saptami",nakshatra:"Mrigashira until 2:55 AM, Oct 3; then Ardra",special:"Hyderabad Panchang • Krishna Paksha"}};
+  const panchang2026={
+    "2026-10-25":{tithi:"Shukla Chaturdashi until 11:56 AM; then Shukla Purnima",nakshatra:"Revati until 7:22 PM; then Ashwini",special:"Hyderabad • Sharad Purnima / Kojagara Puja"},
+    "2026-10-26":{tithi:"Shukla Purnima until 9:41 AM; then Krishna Pratipada",nakshatra:"Ashwini until 5:41 PM; then Bharani",special:"Hyderabad • Purnima Tithi continues until morning"}
+  };
+  const hyderabadPanchangUrl="https://www.drikpanchang.com/telugu/panchanga/telugu-day-panchanga.html?geoname-id=1269843";
 
   function indiaKey(){
     const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
@@ -758,9 +785,19 @@ init();
     let special=p.special||"";
     if(purnima2026.has(india))special+=(special?" • ":"")+"Purnima";
     if(amavasya2026.has(india))special+=(special?" • ":"")+"Amavasya";
-    $u("utilityTithi").textContent=p.tithi||"Regional Panchang data not embedded for this date";
-    $u("utilityNakshatra").textContent=p.nakshatra||"Check your local Hyderabad Panchang";
-    $u("utilityCalendarSpecial").textContent=special||"No Purnima/Amavasya entry today";
+    $u("utilityTithi").textContent=p.tithi||"Open live Hyderabad Panchang for today's tithi";
+    $u("utilityNakshatra").textContent=p.nakshatra||"Open live Hyderabad Panchang for today's nakshatra";
+    $u("utilityCalendarSpecial").textContent=special||"See today's Hyderabad festivals and yoga";
+    const title=$u("utilityTithi")?.closest(".utility-panchang")?.parentElement;
+    if(title&&!title.querySelector(".hyderabad-panchang-link")){
+      const a=document.createElement("a");
+      a.className="hyderabad-panchang-link";
+      a.href=hyderabadPanchangUrl;
+      a.target="_blank";a.rel="noopener noreferrer";
+      a.textContent="📍 Open live Telugu Panchangam — Hyderabad";
+      a.style.cssText="display:block;margin-top:10px;font-size:12px;font-weight:800;color:#1265d7;text-decoration:underline";
+      title.appendChild(a);
+    }
   }
   updateUtilityToday();setInterval(updateUtilityToday,60000);
 
